@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.AppCompatButton;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity
 
     private void videosButtonClick()
     {
-
+        Toast.makeText(getApplicationContext(),"Playing Video",Toast.LENGTH_SHORT).show();
     }
 
     private void audioFilesButtonClick()
