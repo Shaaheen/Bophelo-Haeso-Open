@@ -1,8 +1,6 @@
 package capstone.bophelohaesoopen;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,40 +10,141 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.widget.AppCompatButton;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
+    // region Button declarations
+    AppCompatButton recordAudioButton;
+    AppCompatButton shareMediaButton;
+    AppCompatButton takePictureButton;
+    AppCompatButton audiosButton;
+    AppCompatButton videosButton;
+    AppCompatButton picturesButton;
+    // endregion
+
+    NavigationView navigationView;
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initialize UI elements
+        initialize();
+
+    }
+
+    private void initialize()
+    {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Buttons
+        recordAudioButton = (AppCompatButton) findViewById(R.id.recordAudioButton);
+        shareMediaButton = (AppCompatButton) findViewById(R.id.shareMediaButton);
+        takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
+        audiosButton = (AppCompatButton) findViewById(R.id.audiosButton);
+        videosButton = (AppCompatButton) findViewById(R.id.videosButton);
+        picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
+
+        recordAudioButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                recordAudioButtonClick();
+            }
+        });
+        shareMediaButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                shareMediaButtonClick();
+            }
+        });
+        takePictureButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                takePictureButtonClick();
+            }
+        });
+        audiosButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                audioFilesButtonClick();
+            }
+        });
+        videosButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                videosButtonClick();
+            }
+        });
+        picturesButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                picturesButtonClick();
+            }
+        });
     }
 
+    // region Click handlers
+
+    private void takePictureButtonClick()
+    {
+
+    }
+
+    private void videosButtonClick()
+    {
+
+    }
+
+    private void audioFilesButtonClick()
+    {
+
+    }
+
+    private void picturesButtonClick()
+    {
+
+    }
+
+    private void shareMediaButtonClick()
+    {
+
+    }
+
+    private void recordAudioButtonClick()
+    {
+
+    }
+
+    // endregion
+
+    // region Activity overrides
     @Override
     public void onBackPressed()
     {
@@ -91,28 +190,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera)
-        {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery)
-        {
-
-        } else if (id == R.id.nav_slideshow)
-        {
-
-        } else if (id == R.id.nav_manage)
-        {
-
-        } else if (id == R.id.nav_share)
-        {
-
-        } else if (id == R.id.nav_send)
-        {
-
-        }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    // endregion
+
+
 }
