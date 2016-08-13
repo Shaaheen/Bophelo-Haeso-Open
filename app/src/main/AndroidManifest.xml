@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="capstone.bophelohaesoopen"
-          xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="capstone.bophelohaesoopen">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -14,27 +17,26 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".VideoGalleryActivity">
-        </activity>
-        <activity android:name=".AudioGalleryActivity">
-        </activity>
-        <activity android:name=".MediaShareActivity">
-        </activity>
-        <activity android:name=".VideoPlayerActivity">
-        </activity>
-        <activity android:name=".AudioPlayerActivity">
-        </activity>
-        <activity android:name=".LogListActivity">
-        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <activity android:name=".VideoGalleryActivity"></activity>
+        <activity android:name=".AudioGalleryActivity"></activity>
+        <activity android:name=".MediaShareActivity"></activity>
+        <activity android:name=".VideoPlayerActivity"></activity>
+        <activity android:name=".AudioPlayerActivity"></activity>
+        <activity android:name=".LogListActivity"></activity>
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+       
     </application>
 
 </manifest>
