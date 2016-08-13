@@ -1,5 +1,6 @@
 package capstone.bophelohaesoopen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -135,6 +136,8 @@ public class MainActivity extends AppCompatActivity
 
     private void shareMediaButtonClick()
     {
+        Intent intent = new Intent(this, BluetoothActivity.class);
+        startActivity(intent);
 
     }
 
