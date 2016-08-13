@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import io.palaima.smoothbluetooth.Device;
@@ -21,6 +22,7 @@ import io.palaima.smoothbluetooth.SmoothBluetooth;
 public class BluetoothUtils {
     private SmoothBluetooth mSmoothBluetooth;
     private Activity activityUIClass;
+    public static final int ENABLE_BT_REQUEST = 1;
 
 
     public BluetoothUtils( Context context, Activity activity ) {
@@ -31,6 +33,19 @@ public class BluetoothUtils {
 
     public void startScanning(){
         mSmoothBluetooth.doDiscovery();
+    }
+
+    public  void handleActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ENABLE_BT_REQUEST) {
+
+            if(resultCode == activityUIClass.RESULT_OK) {
+
+                mSmoothBluetooth.tryConnection();
+
+            }
+
+        }
+
     }
 
     private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
@@ -44,17 +59,19 @@ public class BluetoothUtils {
         public void onBluetoothNotEnabled() {
             Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             Toast.makeText(activityUIClass, "Bluetooth not enabled", Toast.LENGTH_SHORT).show();
-            //startActivityForResult(enableBluetooth, ENABLE_BT__REQUEST);
+            activityUIClass.startActivityForResult(enableBluetooth, ENABLE_BT_REQUEST);
         }
 
         @Override
         public void onConnecting(Device device) {
+            Toast.makeText(activityUIClass, "Connecting to " + device.getName(), Toast.LENGTH_SHORT).show();
 //            mStateTv.setText("Connecting to");
 //            mDeviceTv.setText(device.getName());
         }
 
         @Override
         public void onConnected(Device device) {
+            Toast.makeText(activityUIClass, "Connected", Toast.LENGTH_SHORT).show();
 //            mStateTv.setText("Connected to");
 //            mDeviceTv.setText(device.getName());
 //            mConnectionLayout.setVisibility(View.GONE);
@@ -63,6 +80,7 @@ public class BluetoothUtils {
 
         @Override
         public void onDisconnected() {
+            Toast.makeText(activityUIClass, "Disconnected", Toast.LENGTH_SHORT).show();
 //            mStateTv.setText("Disconnected");
 //            mDeviceTv.setText("");
 //            mDisconnectButton.setVisibility(View.GONE);
@@ -74,9 +92,9 @@ public class BluetoothUtils {
 //            mStateTv.setText("Disconnected");
 //            mDeviceTv.setText("");
             Toast.makeText(activityUIClass, "Failed to connect to " + device.getName(), Toast.LENGTH_SHORT).show();
-//            if (device.isPaired()) {
-//                mSmoothBluetooth.doDiscovery();
-//            }
+            if (device.isPaired()) {
+                mSmoothBluetooth.doDiscovery();
+            }
         }
 
         @Override
@@ -100,23 +118,25 @@ public class BluetoothUtils {
 
             Toast.makeText(activityUIClass, "Device(s) found", Toast.LENGTH_SHORT).show();
 
-            //Adds device names to a list to display to user
+
+            //Adds BT device(Device class with toString) to a list to display to user and connect
+            final List<BTDevice> btDevices = new LinkedList<>();
             System.out.println("DEVICES FOUND");
-            String[] deviceNames = new String[deviceList.size()];
             for (int i = 0; i < deviceList.size(); i++) {
                 System.out.println(deviceList.get(i).getName());
-                deviceNames[i] = deviceList.get(i).getName();
+                btDevices.add (new BTDevice(deviceList.get(i)) );
             }
 
             //Create pop up dialogue that displays a list of all the found devices
             //All are clickable
             final MaterialDialog dialog = new MaterialDialog.Builder(activityUIClass)
                     .title("Devices")
-                    .items(deviceNames)
+                    .items(btDevices)
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            Toast.makeText(activityUIClass, "Device " + text + " selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activityUIClass, "Device No. " + which + " : " + text + " selected", Toast.LENGTH_SHORT).show();
+                            //connectionCallback.connectTo( deviceList.get(which) );
                         }
                     })
                     .show();
@@ -131,4 +151,19 @@ public class BluetoothUtils {
         }
 
     };
+}
+
+class BTDevice extends Device{
+
+    public BTDevice(String name, String address, boolean paired) {
+        super(name, address, paired);
+    }
+
+    public BTDevice(Device device) {
+        super(device.getName(),device.getAddress(),device.isPaired());
+    }
+
+    public String toString(){
+        return getName();
+    }
 }

@@ -25,13 +25,14 @@ import io.palaima.smoothbluetooth.SmoothBluetooth;
 public class BluetoothActivity extends AppCompatActivity {
 
     Button scanButton;
+    BluetoothUtils bluetoothUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +43,7 @@ public class BluetoothActivity extends AppCompatActivity {
             }
         });
         //Call BluetoothUtils to assist in bluetooth functionality
-        final BluetoothUtils bluetoothUtils = new BluetoothUtils( getApplicationContext() , BluetoothActivity.this );
+        bluetoothUtils = new BluetoothUtils( getApplicationContext() , BluetoothActivity.this );
 
         scanButton = (Button) findViewById(R.id.scanButton);
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +52,13 @@ public class BluetoothActivity extends AppCompatActivity {
                 bluetoothUtils.startScanning();
             }
         });
+    }
+
+    @Override
+    public  void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        bluetoothUtils.handleActivityResult(requestCode,resultCode,data);
+
     }
 
 }

@@ -49,6 +49,7 @@
         </activity>
         <activity android:name=".PictureGalleryActivity">
         </activity>
+        <activity android:name=".BluetoothActivity"/>
     </application>
 
 </manifest>
