@@ -12,27 +12,33 @@ import java.io.IOException;
 public class AudioRecorder {
 
     //In order to use Android MediaRecorder class, we first ned to create an instance of it.
-    MediaRecorder myAudioRecorder = new MediaRecorder();
+    //MediaRecorder myAudioRecorder = new MediaRecorder();
     private String outputFile;
+    MediaRecorder myAudioRecorder;
 
     public AudioRecorder(String OutPutFileName){
         //The name of the file being created.
         this.outputFile = OutPutFileName;
+        myAudioRecorder = new MediaRecorder();
+
     }
 
     /**
-     *
-     *
-     *
+     *Prepare the application for recording.
      */
-    public void recordAudio() throws IOException {
-        //To save time it takes for the recording to be in motion, this will later move to the constructor.
+    public void prepareForRecording() {
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        myAudioRecorder.setOutputFile(outputFile);
+        myAudioRecorder.setOutputFile(this.outputFile);
 
-        //Prepare and start recording.
+    }
+
+    /**
+     * Prepare the audioRecorder and start recording
+     * @throws IOException
+     */
+    public void startRecording() throws IOException {
         myAudioRecorder.prepare();
         myAudioRecorder.start();
     }
@@ -41,7 +47,8 @@ public class AudioRecorder {
      * Stop recording and release the audionRecorder instance.
      */
     public void stopRecording() {
-        myAudioRecorder.start();
+        myAudioRecorder.stop();
         myAudioRecorder.release();
+        myAudioRecorder = null;
     }
 }
