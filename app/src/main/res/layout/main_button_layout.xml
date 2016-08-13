@@ -62,12 +62,12 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:text="Videos"
-            android:id="@+id/videosButton"/>
+            android:id="@+id/videoGalleryButton"/>
 
         <android.support.v7.widget.AppCompatButton
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/audiosButton"
+            android:id="@+id/audioGalleryButton"
             android:layout_marginTop="20dp"
             android:text="Audio files"/>
 

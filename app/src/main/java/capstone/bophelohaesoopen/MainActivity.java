@@ -1,5 +1,6 @@
 package capstone.bophelohaesoopen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,8 +21,8 @@ public class MainActivity extends AppCompatActivity
     AppCompatButton recordAudioButton;
     AppCompatButton shareMediaButton;
     AppCompatButton takePictureButton;
-    AppCompatButton audiosButton;
-    AppCompatButton videosButton;
+    AppCompatButton audioGalleryButton;
+    AppCompatButton videoGalleryButton;
     AppCompatButton picturesButton;
     // endregion
 
@@ -57,8 +58,8 @@ public class MainActivity extends AppCompatActivity
         recordAudioButton = (AppCompatButton) findViewById(R.id.recordAudioButton);
         shareMediaButton = (AppCompatButton) findViewById(R.id.shareMediaButton);
         takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
-        audiosButton = (AppCompatButton) findViewById(R.id.audiosButton);
-        videosButton = (AppCompatButton) findViewById(R.id.videosButton);
+        audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
+        videoGalleryButton = (AppCompatButton) findViewById(R.id.videoGalleryButton);
         picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
 
         recordAudioButton.setOnClickListener(new View.OnClickListener()
@@ -85,20 +86,20 @@ public class MainActivity extends AppCompatActivity
                 takePictureButtonClick();
             }
         });
-        audiosButton.setOnClickListener(new View.OnClickListener()
+        audioGalleryButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                audioFilesButtonClick();
+                audioGalleryButtonClick();
             }
         });
-        videosButton.setOnClickListener(new View.OnClickListener()
+        videoGalleryButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                videosButtonClick();
+                videoGalleryButtonClick();
             }
         });
         picturesButton.setOnClickListener(new View.OnClickListener()
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                picturesButtonClick();
+                pictureGalleryButtonClick();
             }
         });
     }
@@ -115,32 +116,39 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-
+        Intent intent = new Intent(this, PictureActivity.class);
+        this.startActivity(intent);
     }
 
-    private void videosButtonClick()
+    private void videoGalleryButtonClick()
     {
         Toast.makeText(getApplicationContext(),"Playing Video",Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, VideoGalleryActivity.class);
+        this.startActivity(intent);
     }
 
-    private void audioFilesButtonClick()
+    private void audioGalleryButtonClick()
     {
-
+        Intent intent = new Intent(this, AudioGalleryActivity.class);
+        this.startActivity(intent);
     }
 
-    private void picturesButtonClick()
+    private void pictureGalleryButtonClick()
     {
-
+        Intent intent = new Intent(this, PictureGalleryActivity.class);
+        this.startActivity(intent);
     }
 
     private void shareMediaButtonClick()
     {
-
+        Intent intent = new Intent(this, MediaShareActivity.class);
+        this.startActivity(intent);
     }
 
     private void recordAudioButtonClick()
     {
-
+        Intent intent = new Intent(this, AudioRecorderActivity.class);
+        this.startActivity(intent);
     }
 
     // endregion
