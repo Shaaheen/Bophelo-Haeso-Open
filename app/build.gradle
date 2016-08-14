@@ -28,4 +28,5 @@ dependencies {
     compile 'io.palaima:smoothbluetooth:0.1.0'
     compile 'com.afollestad.material-dialogs:core:0.9.0.1'
     compile 'com.afollestad.material-dialogs:commons:0.9.0.1'
+    compile 'com.github.DeveloperPaul123:SimpleBluetoothLibrary:1.4.2'
 }

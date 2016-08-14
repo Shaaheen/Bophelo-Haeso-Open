@@ -2,13 +2,21 @@ package capstone.bophelohaesoopen.HaesoAPI;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.devpaul.bluetoothutillib.SimpleBluetooth;
+import com.devpaul.bluetoothutillib.handlers.BluetoothHandler;
+import com.devpaul.bluetoothutillib.utils.BluetoothUtility;
+import com.devpaul.bluetoothutillib.utils.SimpleBluetoothListener;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,28 +32,94 @@ public class BluetoothUtils {
     private Activity activityUIClass;
     public static final int ENABLE_BT_REQUEST = 1;
 
+    //Other library
+    private SimpleBluetooth simpleBluetooth;
+    private static final int SCAN_REQUEST = 119;
+    private static final int CHOOSE_SERVER_REQUEST = 120;
+
+    //Data received data structures
+    private List<Integer> mBuffer = new ArrayList<>();
+    private List<String> mResponseBuffer = new ArrayList<>();
+
 
     public BluetoothUtils( Context context, Activity activity ) {
         mSmoothBluetooth = new SmoothBluetooth(context); //Uses bluetooth library
         mSmoothBluetooth.setListener(mListener);  //for bluetooth events
         activityUIClass = activity; //The activity of the class stored
+
+        simpleBluetooth = new SimpleBluetooth(activity, activity); //
+
+        simpleBluetooth.setSimpleBluetoothListener(new SimpleBluetoothListener() {
+            @Override
+            public void onBluetoothDataReceived(byte[] bytes, String data) {
+                super.onBluetoothDataReceived(bytes, data);
+                Log.w("SIMPLEBT", "Data received");
+                Toast.makeText(activityUIClass, "Data : " + data, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDeviceConnected(BluetoothDevice device) {
+                super.onDeviceConnected(device);
+                Toast.makeText(activityUIClass, "Simple BT Connected", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDeviceDisconnected(BluetoothDevice device) {
+                super.onDeviceDisconnected(device);
+                Toast.makeText(activityUIClass, "Simple BT Disconnected", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDiscoveryStarted() {
+                super.onDiscoveryStarted();
+            }
+
+            @Override
+            public void onDiscoveryFinished() {
+                super.onDiscoveryFinished();
+            }
+
+            @Override
+            public void onDevicePaired(BluetoothDevice device) {
+                super.onDevicePaired(device);
+                Toast.makeText(activityUIClass, "Simple BT paired", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDeviceUnpaired(BluetoothDevice device) {
+                super.onDeviceUnpaired(device);
+            }
+        });
+        simpleBluetooth.initializeSimpleBluetooth();
+        simpleBluetooth.setInputStreamType(BluetoothUtility.InputStreamType.BUFFERED);
+
+        simpleBluetooth.createBluetoothServerConnection();
+
     }
 
     public void startScanning(){
         mSmoothBluetooth.doDiscovery();
     }
 
+    public void tryConnection(){
+        mSmoothBluetooth.tryConnection();
+    }
+
+    public void sendText(){
+        mSmoothBluetooth.send("Hello..");
+        simpleBluetooth.sendData("bcjdkbd");
+    }
+
+    public void createServer(){
+        simpleBluetooth.createBluetoothServerConnection();
+    }
+
     public  void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == ENABLE_BT_REQUEST) {
-
             if(resultCode == activityUIClass.RESULT_OK) {
-
                 mSmoothBluetooth.tryConnection();
-
             }
-
         }
-
     }
 
     private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
@@ -59,32 +133,23 @@ public class BluetoothUtils {
         public void onBluetoothNotEnabled() {
             Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             Toast.makeText(activityUIClass, "Bluetooth not enabled", Toast.LENGTH_SHORT).show();
+            //Enable bluetooth pop up
             activityUIClass.startActivityForResult(enableBluetooth, ENABLE_BT_REQUEST);
         }
 
         @Override
         public void onConnecting(Device device) {
             Toast.makeText(activityUIClass, "Connecting to " + device.getName(), Toast.LENGTH_SHORT).show();
-//            mStateTv.setText("Connecting to");
-//            mDeviceTv.setText(device.getName());
         }
 
         @Override
         public void onConnected(Device device) {
             Toast.makeText(activityUIClass, "Connected", Toast.LENGTH_SHORT).show();
-//            mStateTv.setText("Connected to");
-//            mDeviceTv.setText(device.getName());
-//            mConnectionLayout.setVisibility(View.GONE);
-//            mDisconnectButton.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onDisconnected() {
             Toast.makeText(activityUIClass, "Disconnected", Toast.LENGTH_SHORT).show();
-//            mStateTv.setText("Disconnected");
-//            mDeviceTv.setText("");
-//            mDisconnectButton.setVisibility(View.GONE);
-//            mConnectionLayout.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -95,6 +160,7 @@ public class BluetoothUtils {
             if (device.isPaired()) {
                 mSmoothBluetooth.doDiscovery();
             }
+            mSmoothBluetooth.send("gfgfgg");
         }
 
         @Override
@@ -135,8 +201,11 @@ public class BluetoothUtils {
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            Toast.makeText(activityUIClass, "Device No. " + which + " : " + text + " selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activityUIClass, "Device No. " + which + " : " + text + " selected " + mSmoothBluetooth.isConnected(), Toast.LENGTH_SHORT).show();
                             //connectionCallback.connectTo( deviceList.get(which) );
+                            //simpleBluetooth.connectToBluetoothDevice(deviceList.get(which).getAddress());
+                            //Connects to selected device
+                            simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
                         }
                     })
                     .show();
@@ -147,7 +216,7 @@ public class BluetoothUtils {
 
         @Override
         public void onDataReceived(int data) {
-
+            
         }
 
     };

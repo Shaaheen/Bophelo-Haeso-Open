@@ -25,6 +25,9 @@ import io.palaima.smoothbluetooth.SmoothBluetooth;
 public class BluetoothActivity extends AppCompatActivity {
 
     Button scanButton;
+    Button pairedButton;
+    Button sendButton;
+    Button serverButton;
     BluetoothUtils bluetoothUtils;
 
     @Override
@@ -52,12 +55,36 @@ public class BluetoothActivity extends AppCompatActivity {
                 bluetoothUtils.startScanning();
             }
         });
+
+        pairedButton = (Button) findViewById(R.id.pairedButton);
+        pairedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bluetoothUtils.tryConnection();
+            }
+        });
+
+        sendButton = (Button) findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bluetoothUtils.sendText();
+            }
+        });
+
+        serverButton = (Button) findViewById(R.id.BTServer);
+        serverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bluetoothUtils.createServer();
+            }
+        });
     }
 
     @Override
     public  void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        bluetoothUtils.handleActivityResult(requestCode,resultCode,data);
+        bluetoothUtils.handleActivityResult(requestCode,resultCode,data); //For switching on BT
 
     }
 
