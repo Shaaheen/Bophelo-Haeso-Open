@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyclerView"
-        >
+        android:layout_marginBottom="30dp">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -21,7 +21,7 @@
         layout="@layout/main_button_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="@dimen/main_menu_top_margin"
         android:id="@+id/mainMenu"/>
     
 

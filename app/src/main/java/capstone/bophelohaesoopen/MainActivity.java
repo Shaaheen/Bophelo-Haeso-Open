@@ -3,6 +3,7 @@ package capstone.bophelohaesoopen;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity
 {
     //region View declarations
     RelativeLayout mainMenu;
+    RelativeLayout menuToggleBar;
     RecyclerView recyclerView;
     ImageView menuToggle;
     NavigationView navigationView;
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
     // region Primitives declarations
     boolean menuHidden = false;
-    private static int MENU_ANIMATION_DURATION = 150;
+    private static int MENU_ANIMATION_DURATION = 300;
 
     ArrayList<Video> videoList = new ArrayList<>();
 
@@ -83,12 +86,19 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        System.out.println("CREATED");
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         mainMenu = (RelativeLayout)findViewById(R.id.mainMenu);
+        menuToggleBar = (RelativeLayout)findViewById(R.id.menuToggleBar);
+        menuToggleBar.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                menuToggleClick();
+            }
+        });
         menuToggle = (ImageView)findViewById(R.id.menuToggle);
         menuToggle.setOnClickListener(new View.OnClickListener()
         {
@@ -107,7 +117,7 @@ public class MainActivity extends AppCompatActivity
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         populateVideoList();
-        videoAdapter = new VideoAdapter(this, videoList);
+        videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
 
         //endregion
@@ -181,29 +191,30 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-        Intent intent = new Intent(this, PictureActivity.class);
-        this.startActivity(intent);
+        Toast.makeText(this,"Opens camera activity for user to take a picture.", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(this, PictureActivity.class);
+//        this.startActivity(intent);
     }
 
     private void videoGalleryButtonClick()
     {
-//        Toast.makeText(getApplicationContext(),"Playing Video",Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, VideoGalleryActivity.class);
-        this.startActivity(intent);
 
-
+//        Intent intent = new Intent(this, VideoGalleryActivity.class);
+//        this.startActivity(intent);
     }
 
     private void audioGalleryButtonClick()
     {
-        Intent intent = new Intent(this, AudioGalleryActivity.class);
-        this.startActivity(intent);
+        Toast.makeText(this,"Opens list / gallery of recorded audio files.", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(this, AudioGalleryActivity.class);
+//        this.startActivity(intent);
     }
 
     private void pictureGalleryButtonClick()
     {
-        Intent intent = new Intent(this, PictureGalleryActivity.class);
-        this.startActivity(intent);
+        Toast.makeText(this,"Opens gallery of pictures taken.", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(this, PictureGalleryActivity.class);
+//        this.startActivity(intent);
     }
 
     private void shareMediaButtonClick()
@@ -220,7 +231,6 @@ public class MainActivity extends AppCompatActivity
 
     private void menuToggleClick()
     {
-        System.out.println("Menu toggle clicked!");
         if(!menuHidden)
         {
             hideMenu();
@@ -229,7 +239,6 @@ public class MainActivity extends AppCompatActivity
         {
             showMenu();
         }
-
     }
 
     private void hideMenu()
@@ -251,7 +260,10 @@ public class MainActivity extends AppCompatActivity
         anim.start();
 
         menuHidden = true;
+
+        // Enable scrolling on the video list since the list is in full view
         gridLayoutManager.setScrollEnabled(true);
+        menuToggle.setImageResource(R.drawable.arrow_up);
 
     }
 
@@ -274,7 +286,24 @@ public class MainActivity extends AppCompatActivity
         anim.start();
 
         menuHidden = false;
-        gridLayoutManager.setScrollEnabled(false);
+
+        // Delay to allow the video list to scroll to the top before scrolling is disabled
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                // Disable scrolling so that the 4 videos at the top stay in view
+                gridLayoutManager.setScrollEnabled(false);
+            }
+        }, 200);
+
+
+        // Scroll video list to the top in case it was scrolled down, in order to show the 4 videos at the top
+        recyclerView.smoothScrollToPosition(0);
+
+        menuToggle.setImageResource(R.drawable.arrow_down);
 
     }
 
@@ -299,7 +328,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -311,12 +340,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-        {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -326,6 +349,7 @@ public class MainActivity extends AppCompatActivity
     {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+//        if(id == R.id.)
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -344,10 +368,11 @@ public class MainActivity extends AppCompatActivity
         Video video = videoList.get(position);
         Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getName());
-        intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getFilePath());
+        intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
-
     }
+
+
 
 
 }

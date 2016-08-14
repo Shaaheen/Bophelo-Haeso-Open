@@ -1,6 +1,7 @@
 package capstone.bophelohaesoopen.HaesoAPI;
 
 import android.content.Context;
+import android.media.PlaybackParams;
 import android.os.Environment;
 import android.text.Layout;
 import android.view.SurfaceHolder;
@@ -19,6 +20,8 @@ public class MediaPlayer extends android.media.MediaPlayer{
     String nameOfApp;
     android.media.MediaPlayer mediaPlayer;
 
+    int currentPosition = 0;
+
     public MediaPlayer(String nameOfApp) {
         this.nameOfApp = nameOfApp;
     }
@@ -29,7 +32,8 @@ public class MediaPlayer extends android.media.MediaPlayer{
      * @param mediaView - The view that the media will show on
      * @throws IOException
      */
-    public void playMedia(Media mediaFile, SurfaceView mediaView) throws IOException {
+    public void playMedia(Media mediaFile, SurfaceView mediaView) throws IOException
+    {
         String filePath = Environment.getExternalStorageDirectory() + mediaFile.filePath;
         mediaPlayer = new android.media.MediaPlayer();
         mediaPlayer.setDataSource(filePath);
@@ -38,6 +42,34 @@ public class MediaPlayer extends android.media.MediaPlayer{
         mediaPlayer.prepare();
         mediaPlayer.start();
     }
+
+    public void stopMedia()
+    {
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        mediaPlayer.release();
+        mediaPlayer = null;
+    }
+
+    public boolean isMediaPlaying()
+    {
+        return mediaPlayer.isPlaying();
+    }
+
+    public void pauseMedia() throws IllegalStateException
+    {
+        mediaPlayer.pause();
+        currentPosition = mediaPlayer.getCurrentPosition();
+    }
+
+    public void resumeMedia() throws IOException
+    {
+//        mediaPlayer.prepare();
+        mediaPlayer.start();
+        mediaPlayer.seekTo(currentPosition);
+    }
+
+
 
 }
 

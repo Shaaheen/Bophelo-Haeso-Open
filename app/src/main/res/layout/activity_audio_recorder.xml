@@ -11,20 +11,30 @@
     tools:context="capstone.bophelohaesoopen.AudioRecorderActivity">
 
     <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
-        android:id="@+id/stopButton"/>
+        android:id="@+id/stopButton"
+        android:src="@drawable/stop"
+        app:backgroundTint="#868787"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recording . . ."
-        android:id="@+id/statusText"
-        android:layout_centerVertical="true"
+        android:id="@+id/timeView"
         android:layout_centerHorizontal="true"
-        android:textSize="20sp"/>
+        android:layout_marginTop="50dp"
+        android:textSize="@dimen/time_view_text_size"/>
+
+    <ImageView
+        android:layout_width="@dimen/circle_radius"
+        android:layout_height="@dimen/circle_radius"
+        android:id="@+id/recordingIndicator"
+        android:src="@drawable/circle"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/recording_indicator"/>
 
 </RelativeLayout>

@@ -12,16 +12,19 @@ import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
-public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
+public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implements View.OnClickListener
 {
     ArrayList<Video> videoList;
     Context context;
+    RecyclerView recView;
 
-    public VideoAdapter(Context context, ArrayList<Video> videos)
+
+    public VideoAdapter(Context context, RecyclerView recView, ArrayList<Video> videos)
     {
         videoList = videos;
         Log.i(">> LOG", "Video adapter created");
         this.context = context;
+        this.recView = recView;
     }
 
     public VideoAdapter()
@@ -33,8 +36,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_item_layout, parent, false);
+        itemView.setOnClickListener(this);
         VideoViewHolder viewHolder = new VideoViewHolder(itemView);
-        Log.i(">> LOG", "View holder created");
+//        Log.i(">> LOG", "View holder created");
+
         return viewHolder;
     }
 
@@ -42,8 +47,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
     public void onBindViewHolder(VideoViewHolder holder, int position)
     {
         Video video = videoList.get(position);
-        Log.i(">> LOG: video name",video.getName());
+//        Log.i(">> LOG: video name",video.getName());
         holder.nameTextView.setText(video.getName());
+
     }
 
     @Override
@@ -61,5 +67,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
     public void setVideoList(ArrayList<Video> videos)
     {
         videoList = videos;
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        int position = recView.getChildLayoutPosition(view);
+
+        ((MainActivity)context).playVideo(position);
     }
 }

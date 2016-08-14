@@ -17,4 +17,33 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp">
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/playPauseButton"
+            android:src="@drawable/pause"
+            app:backgroundTint="#868787"
+            android:layout_margin="10dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/stopButton"
+            android:src="@drawable/stop"
+            app:backgroundTint="#868787"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+
 </RelativeLayout>

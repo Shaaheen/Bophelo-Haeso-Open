@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
-
 public class FileUtils
 {
     // Reference to calling activity
@@ -24,24 +23,16 @@ public class FileUtils
         ArrayList<Video> videos = new ArrayList<>();
 
 
+        /* The video attributes are hardcoded for the sake of the prototype
+        * however, the final implementation will read the device file directory and add videos accordingly*/
         for(int i = 0; i < 11; i++)
         {
             Video temp = new Video("Video "+i, "");
+            temp.filePath ="/video.mp4";
             videos.add(temp);
         }
 
         return videos;
     }
-
-    public boolean isExternalStorageAvailable()
-    {
-        String extStorageState = Environment.getExternalStorageState();
-        if(Environment.MEDIA_MOUNTED.equals(extStorageState))
-        {
-            return true;
-        }
-        return false;
-    }
-
 
 }
