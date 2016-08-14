@@ -21,6 +21,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     String vidName;
     String vidPath;
 
+    public static String VIDEO_NAME = "VIDEO_NAME";
+    public static String VIDEO_FILE_PATH = "VIDEO_FILE_PATH";
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

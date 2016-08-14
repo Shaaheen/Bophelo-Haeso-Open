@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="visible">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:background="@color/design_snackbar_background_color">
 
         <ImageView
             android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:id="@+id/imageView2"
-            android:layout_centerHorizontal="true"/>
+            android:layout_height="30dp"
+            android:id="@+id/menuToggle"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/abc_ic_star_black_16dp"/>
 
     </RelativeLayout>
 
@@ -21,62 +23,62 @@
         android:orientation="vertical"
         android:layout_width="160dp"
         android:layout_height="match_parent"
-        android:padding="5dp"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_alignParentLeft="true"
         android:background="#3e6c73">
 
         <android.support.v7.widget.AppCompatButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:text="Record Audio"
-            android:id="@+id/recordAudioButton"/>
+            android:id="@+id/recordAudioButton"
+            android:layout_marginTop="5dp"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:text="Share media"
             android:id="@+id/shareMediaButton"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="5dp"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:text="Take picture"
             android:id="@+id/takePictureButton"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="5dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="160dp"
         android:layout_height="match_parent"
-        android:padding="5dp"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_alignParentRight="true"
         android:background="#64777a">
 
         <android.support.v7.widget.AppCompatButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:text="Videos"
-            android:id="@+id/videoGalleryButton"/>
+            android:id="@+id/videoGalleryButton"
+            android:layout_marginTop="5dp"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:id="@+id/audioGalleryButton"
-            android:layout_marginTop="20dp"
-            android:text="Audio files"/>
+            android:text="Audio files"
+            android:layout_marginTop="5dp"/>
 
         <android.support.v7.widget.AppCompatButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:text="Pictures"
             android:id="@+id/picturesButton"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="5dp"/>
     </LinearLayout>
 
 </RelativeLayout>

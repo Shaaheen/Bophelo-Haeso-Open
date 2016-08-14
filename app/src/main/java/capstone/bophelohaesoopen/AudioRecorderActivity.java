@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import capstone.bophelohaesoopen.HaesoAPI.AudioRecorder;
+
 public class AudioRecorderActivity extends AppCompatActivity
 {
     FloatingActionButton stopButton;
@@ -15,11 +17,11 @@ public class AudioRecorderActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_recorder);
 
-        initialize();
     }
 
     private void initialize()
     {
+        initialize();
         stopButton = (FloatingActionButton)findViewById(R.id.stopButton);
         stopButton.setOnClickListener(new View.OnClickListener()
         {
