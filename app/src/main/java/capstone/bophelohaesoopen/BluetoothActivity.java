@@ -1,7 +1,5 @@
 package capstone.bophelohaesoopen;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,18 +7,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-
-import java.util.List;
 
 import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
-import io.palaima.smoothbluetooth.Device;
-import io.palaima.smoothbluetooth.SmoothBluetooth;
+import capstone.bophelohaesoopen.HaesoAPI.Video;
 
 public class BluetoothActivity extends AppCompatActivity {
 
@@ -68,7 +58,8 @@ public class BluetoothActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bluetoothUtils.sendText();
+                Video video = new Video("Wookie_Video","/VID-20160305-WA0012.mp4");
+                bluetoothUtils.sendMediaFile(video);
             }
         });
 
