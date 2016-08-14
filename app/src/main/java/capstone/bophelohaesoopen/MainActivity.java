@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity
     AppCompatButton shareMediaButton;
     AppCompatButton takePictureButton;
     AppCompatButton audioGalleryButton;
-    AppCompatButton videoGalleryButton;
     AppCompatButton picturesButton;
     // endregion
 
@@ -128,7 +127,6 @@ public class MainActivity extends AppCompatActivity
         shareMediaButton = (AppCompatButton) findViewById(R.id.shareMediaButton);
         takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
         audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
-        videoGalleryButton = (AppCompatButton) findViewById(R.id.videoGalleryButton);
         picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
 
         //endregion
@@ -167,14 +165,7 @@ public class MainActivity extends AppCompatActivity
                 audioGalleryButtonClick();
             }
         });
-        videoGalleryButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                videoGalleryButtonClick();
-            }
-        });
+
         picturesButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -193,13 +184,6 @@ public class MainActivity extends AppCompatActivity
     {
         Toast.makeText(this,"Opens camera activity for user to take a picture.", Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(this, PictureActivity.class);
-//        this.startActivity(intent);
-    }
-
-    private void videoGalleryButtonClick()
-    {
-
-//        Intent intent = new Intent(this, VideoGalleryActivity.class);
 //        this.startActivity(intent);
     }
 
@@ -349,7 +333,10 @@ public class MainActivity extends AppCompatActivity
     {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-//        if(id == R.id.)
+        if(id == R.id.nav_view_logs)
+        {
+            Toast.makeText(this, "Opens activity to show list of logs", Toast.LENGTH_SHORT).show();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

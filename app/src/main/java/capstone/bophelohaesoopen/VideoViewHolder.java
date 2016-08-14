@@ -16,6 +16,7 @@ public class VideoViewHolder extends RecyclerView.ViewHolder
         super(itemView);
 
         nameTextView = (TextView)itemView.findViewById(R.id.nameTextView);
+        thumbnail = (ImageView)itemView.findViewById(R.id.thumbnail);
     }
 
     private void itemClick()
