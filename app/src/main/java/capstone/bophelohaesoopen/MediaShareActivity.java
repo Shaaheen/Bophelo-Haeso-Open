@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
@@ -15,6 +16,8 @@ public class MediaShareActivity extends AppCompatActivity
     AppCompatButton sendButton;
 
     BluetoothUtils bluetoothUtils;
+
+    ProgressBar progressBar;
 
 
     @Override
@@ -53,6 +56,8 @@ public class MediaShareActivity extends AppCompatActivity
         });
 
         //endregion
+
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
     }
 
     private void sendButtonClick()
@@ -73,5 +78,15 @@ public class MediaShareActivity extends AppCompatActivity
 
         // For switching on Bluetooth
         bluetoothUtils.handleActivityResult(requestCode, resultCode, data);
+    }
+
+    public void showProgressBar()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar()
+    {
+        progressBar.setVisibility(View.VISIBLE);
     }
 }

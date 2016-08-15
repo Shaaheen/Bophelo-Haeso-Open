@@ -85,9 +85,11 @@ public class AudioRecorderActivity extends AppCompatActivity
         finish();
     }
 
+    /**
+     * Animates blinking indicator when recording is active
+     */
     private void animateIndicator()
     {
-
         final long startTime = System.currentTimeMillis();
         handler = new Handler();
         runnable = new Runnable()
@@ -134,6 +136,10 @@ public class AudioRecorderActivity extends AppCompatActivity
         finish();
     }
 
+    /**
+     * Updates the time counter TextView with the time given
+     * @param time - Time value to be used
+     */
     private void updateTimeView(long time)
     {
         int minutes = (int)time / 60;

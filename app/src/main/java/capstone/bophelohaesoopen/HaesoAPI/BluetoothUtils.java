@@ -40,6 +40,8 @@ public class BluetoothUtils {
     private Activity activityUIClass;
     public static final int ENABLE_BT_REQUEST = 1;
 
+    MaterialDialog scanningDialog;
+
     //Connecting and Transferring Bluetooth library
     private SimpleBluetooth simpleBluetooth;
     private static final int SCAN_REQUEST = 119;
@@ -267,6 +269,10 @@ public class BluetoothUtils {
         @Override
         public void onDiscoveryStarted() {
             Toast.makeText(activityUIClass, "Searching", Toast.LENGTH_SHORT).show();
+            scanningDialog = new MaterialDialog.Builder(activityUIClass)
+                    .title("Devices")
+                    .items("Scanning . .")
+                    .show();
         }
 
         @Override
@@ -284,6 +290,8 @@ public class BluetoothUtils {
                                    final SmoothBluetooth.ConnectionCallback connectionCallback) {
 
             Toast.makeText(activityUIClass, "Device(s) found", Toast.LENGTH_SHORT).show();
+
+            scanningDialog.hide();
 
             //Adds BT device(Device class with toString) to a list to display to user and connect
             final List<BTDevice> btDevices = new LinkedList<>();

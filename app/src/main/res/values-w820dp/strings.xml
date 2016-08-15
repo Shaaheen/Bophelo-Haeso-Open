@@ -2,4 +2,6 @@
 <resources>
     <string name="recording_indicator">Recording indicator</string>
     <string name="thumbnail">Thumbnail</string>
+    <string name="send_button_text">Send</string>
+    <string name="scan_button_text">Scan</string>
 </resources>
