@@ -10,6 +10,10 @@ import android.widget.ProgressBar;
 import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
+/**
+ * Activity for sharing selected media files with other devices via Bluetooth
+ */
+
 public class MediaShareActivity extends AppCompatActivity
 {
     AppCompatButton scanButton;
@@ -18,7 +22,6 @@ public class MediaShareActivity extends AppCompatActivity
     BluetoothUtils bluetoothUtils;
 
     ProgressBar progressBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -62,6 +65,7 @@ public class MediaShareActivity extends AppCompatActivity
 
     private void sendButtonClick()
     {
+        // Parameters hard-coded for the sake of the prototype
         Video video = new Video("Wookie_video", "/video_sample.mp4");
         bluetoothUtils.sendMediaFile(video);
     }
@@ -80,13 +84,15 @@ public class MediaShareActivity extends AppCompatActivity
         bluetoothUtils.handleActivityResult(requestCode, resultCode, data);
     }
 
+    // Future use
     public void showProgressBar()
     {
         progressBar.setVisibility(View.VISIBLE);
     }
 
+    // Future use
     public void hideProgressBar()
     {
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }

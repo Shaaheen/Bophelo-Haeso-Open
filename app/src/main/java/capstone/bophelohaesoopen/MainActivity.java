@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -18,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.AppCompatButton;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initialize()
     {
-        fileUtils = new FileUtils(this);
+        fileUtils = new FileUtils();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -301,6 +299,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
+            // Close navigation drawer
             drawer.closeDrawer(GravityCompat.START);
         } else
         {
@@ -331,7 +330,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-        // Handle navigation view item clicks here.
+        // Handle navigation view item clicks
         int id = item.getItemId();
         if(id == R.id.nav_view_logs)
         {
@@ -345,11 +344,18 @@ public class MainActivity extends AppCompatActivity
 
     // endregion
 
+    /**
+     * Populates video list with the list of videos from storage (Currently only prototype functionality)
+     */
     private void populateVideoList()
     {
         videoList = fileUtils.getVideoCollectionFromStorage();
     }
 
+    /**
+     * Starts the VideoPlayerActivity with the video at the position (in the video list) given
+     * @param position a position in the video list
+     */
     public void playVideo(int position)
     {
         Video video = videoList.get(position);

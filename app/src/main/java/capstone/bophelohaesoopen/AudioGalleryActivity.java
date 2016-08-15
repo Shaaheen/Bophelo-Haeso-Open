@@ -3,6 +3,10 @@ package capstone.bophelohaesoopen;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/**
+ * Activity where recorded audio files are listed / shown
+ * */
+
 public class AudioGalleryActivity extends AppCompatActivity
 {
 

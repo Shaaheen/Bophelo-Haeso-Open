@@ -1,9 +1,5 @@
 package capstone.bophelohaesoopen;
 
-/**
- * Class to display a given video - allows play, pause and seek functionality
- */
-
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +13,11 @@ import java.io.IOException;
 import capstone.bophelohaesoopen.HaesoAPI.MediaPlayer;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
+/**
+ * Activity for video playback - allows, play, pause, resume functionality
+ * Starts playing video automatically when activity is started
+ */
+
 public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback
 {
     SurfaceView videoView;
@@ -29,6 +30,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     FloatingActionButton stopButton;
     FloatingActionButton playPauseButton;
 
+    // Used for Intent parameters
     public static String VIDEO_NAME = "VIDEO_NAME";
     public static String VIDEO_FILE_PATH = "VIDEO_FILE_PATH";
 
@@ -41,24 +43,23 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
 
-        initialize();
+        initializeViews();
 
-        //Gets name and path of video from previous activity
+        // Gets name and path of video from previous activity
         Intent intent = getIntent();
-        vidName = intent.getStringExtra(VIDEO_NAME); //Uses these keys to get values
+        vidName = intent.getStringExtra(VIDEO_NAME); // Uses these keys to get values
         vidPath = intent.getStringExtra(VIDEO_FILE_PATH);
 
         video = new Video( vidName, vidPath );
 
         mediaPlayer = new MediaPlayer("BHO");
 
-        //Ensures the video display is loaded before the video tries to play
+        // Ensures the video display is loaded before the video tries to play
         SurfaceHolder holder = videoView.getHolder();
         holder.addCallback(this);
-
     }
 
-    private void initialize()
+    private void initializeViews()
     {
         videoView = (SurfaceView) findViewById(R.id.videoView);
         playPauseButton = (FloatingActionButton)findViewById(R.id.playPauseButton);
@@ -109,7 +110,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2)
+    {
 
     }
 
@@ -132,6 +134,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     {
         playing = false;
         stopVideo();
+
+        // Close Activity
         finish();
     }
 

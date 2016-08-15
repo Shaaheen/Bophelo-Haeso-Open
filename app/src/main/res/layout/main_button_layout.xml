@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/menu_toggle_bar_height"
         android:background="#606060"
         android:id="@+id/menuToggleBar">
 
@@ -29,7 +29,7 @@
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginTop="30dp"
         android:layout_alignParentLeft="true"
-        android:background="#FF868787">
+        android:background="@color/main_menu_background">
 
         <android.support.v7.widget.AppCompatButton
             android:layout_width="@dimen/menu_button_width"
@@ -43,14 +43,14 @@
             android:layout_height="@dimen/menu_button_height"
             android:text="Share media"
             android:id="@+id/shareMediaButton"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="@dimen/main_menu_button_top_margin"/>
 
         <android.support.v7.widget.AppCompatButton
             android:layout_width="@dimen/menu_button_width"
             android:layout_height="@dimen/menu_button_height"
             android:text="Take picture"
             android:id="@+id/takePictureButton"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="@dimen/main_menu_button_top_margin"/>
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +59,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginTop="30dp"
-        android:background="#868787"
+        android:background="@color/main_menu_background"
         android:layout_toRightOf="@+id/buttonLayout">
 
         <android.support.v7.widget.AppCompatButton
@@ -67,14 +67,14 @@
             android:layout_height="@dimen/menu_button_height"
             android:id="@+id/audioGalleryButton"
             android:text="Audio files"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="@dimen/main_menu_button_top_margin"/>
 
         <android.support.v7.widget.AppCompatButton
             android:layout_width="@dimen/menu_button_width"
             android:layout_height="@dimen/menu_button_height"
             android:text="Pictures"
             android:id="@+id/picturesButton"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="@dimen/main_menu_button_top_margin"/>
     </LinearLayout>
 
 </RelativeLayout>

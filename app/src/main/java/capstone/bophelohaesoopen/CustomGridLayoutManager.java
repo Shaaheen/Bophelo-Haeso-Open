@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 
 /**
- * Created by Omondi on 14 Aug 2016.
+ * Custom class to enable/disable scrolling on a RecyclerView
  */
 public class CustomGridLayoutManager extends GridLayoutManager
 {

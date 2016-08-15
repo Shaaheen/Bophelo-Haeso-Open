@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Custom video view holder class for the RecyclerView used to display list of videos
+ */
 
 public class VideoViewHolder extends RecyclerView.ViewHolder
 {

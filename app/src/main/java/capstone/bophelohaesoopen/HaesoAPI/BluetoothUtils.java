@@ -31,7 +31,6 @@ import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
 
 /**
- * Created by Shaaheen on 8/8/2016.
  * Class to act as interface to bluetooth functionality
  */
 public class BluetoothUtils {
@@ -40,6 +39,7 @@ public class BluetoothUtils {
     private Activity activityUIClass;
     public static final int ENABLE_BT_REQUEST = 1;
 
+    // Dialog to display while scanning for devices
     MaterialDialog scanningDialog;
 
     //Connecting and Transferring Bluetooth library

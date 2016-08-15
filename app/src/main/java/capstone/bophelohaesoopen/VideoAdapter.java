@@ -12,6 +12,10 @@ import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
+/**
+ * Data adapter for MainActivity RecyclerView (list of videos)
+ */
+
 public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implements View.OnClickListener
 {
     ArrayList<Video> videoList;
@@ -28,9 +32,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     }
 
     public VideoAdapter()
-    {
-
-    }
+    {}
 
     @Override
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -38,7 +40,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_item_layout, parent, false);
         itemView.setOnClickListener(this);
         VideoViewHolder viewHolder = new VideoViewHolder(itemView);
-//        Log.i(">> LOG", "View holder created");
 
         return viewHolder;
     }
@@ -47,7 +48,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     public void onBindViewHolder(VideoViewHolder holder, int position)
     {
         Video video = videoList.get(position);
-//        Log.i(">> LOG: video name",video.getName());
         holder.nameTextView.setText(video.getName());
 
     }

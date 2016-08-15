@@ -27,8 +27,8 @@
 
         <android.support.design.widget.FloatingActionButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/video_player_button_dimen"
+            android:layout_height="@dimen/video_player_button_dimen"
             android:layout_alignParentBottom="true"
             android:id="@+id/playPauseButton"
             android:src="@drawable/pause"
@@ -37,8 +37,8 @@
 
         <android.support.design.widget.FloatingActionButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/video_player_button_dimen"
+            android:layout_height="@dimen/video_player_button_dimen"
             android:layout_alignParentBottom="true"
             android:id="@+id/stopButton"
             android:src="@drawable/stop"

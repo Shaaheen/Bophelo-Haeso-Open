@@ -20,6 +20,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
     String nameOfApp;
     android.media.MediaPlayer mediaPlayer;
 
+    // Stores play position of video when it is paused
     int currentPosition = 0;
 
     public MediaPlayer(String nameOfApp) {
@@ -64,8 +65,8 @@ public class MediaPlayer extends android.media.MediaPlayer{
 
     public void resumeMedia() throws IOException
     {
-//        mediaPlayer.prepare();
         mediaPlayer.start();
+        // Seek to position where video was previously paused
         mediaPlayer.seekTo(currentPosition);
     }
 

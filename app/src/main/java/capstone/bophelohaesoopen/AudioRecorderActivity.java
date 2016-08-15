@@ -1,6 +1,5 @@
 package capstone.bophelohaesoopen;
 
-import android.animation.ValueAnimator;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +13,11 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import capstone.bophelohaesoopen.HaesoAPI.AudioRecorder;
+
+/**
+ * Activity for recording audio
+ * Starts recording audio automatically when activity is started
+ */
 
 public class AudioRecorderActivity extends AppCompatActivity
 {
@@ -36,10 +40,11 @@ public class AudioRecorderActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_recorder);
+        initializeViews();
 
-        String output = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
-        initialize();
-        audioRecorder = new AudioRecorder(output);
+        String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+
+        audioRecorder = new AudioRecorder(outputFile);
         audioRecorder.prepareForRecording();
         try
         {
@@ -52,7 +57,7 @@ public class AudioRecorderActivity extends AppCompatActivity
         }
     }
 
-    private void initialize()
+    private void initializeViews()
     {
         stopButton = (FloatingActionButton)findViewById(R.id.stopButton);
         stopButton.setOnClickListener(new View.OnClickListener()
