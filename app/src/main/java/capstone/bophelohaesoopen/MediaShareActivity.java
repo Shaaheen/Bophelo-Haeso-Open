@@ -32,9 +32,6 @@ public class MediaShareActivity extends AppCompatActivity
     {
         scanButton = (AppCompatButton)findViewById(R.id.scanButton);
         sendButton = (AppCompatButton)findViewById(R.id.sendButton);
-        pairedButton = (AppCompatButton)findViewById(R.id.pairedButton);
-        disconnectButton = (AppCompatButton)findViewById(R.id.disconnectButton);
-        serverButton = (AppCompatButton)findViewById(R.id.serverButton);
 
         //region Button OnClickListeners
         scanButton.setOnClickListener(new View.OnClickListener()
@@ -55,23 +52,6 @@ public class MediaShareActivity extends AppCompatActivity
             }
         });
 
-        pairedButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                pairedButtonClick();
-            }
-        });
-
-        serverButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                serverButtonClick();
-            }
-        });
         //endregion
     }
 
