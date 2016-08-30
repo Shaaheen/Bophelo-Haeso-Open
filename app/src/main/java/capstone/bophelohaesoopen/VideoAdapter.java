@@ -19,15 +19,15 @@ import capstone.bophelohaesoopen.HaesoAPI.Video;
 public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implements View.OnClickListener
 {
     ArrayList<Video> videoList;
-    Context context;
+    MainActivity mainActivity;
     RecyclerView recView;
 
 
-    public VideoAdapter(Context context, RecyclerView recView, ArrayList<Video> videos)
+    public VideoAdapter(MainActivity mainActivity, RecyclerView recView, ArrayList<Video> videos)
     {
         videoList = videos;
         Log.i(">> LOG", "Video adapter created");
-        this.context = context;
+        this.mainActivity = mainActivity;
         this.recView = recView;
     }
 
@@ -49,7 +49,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     {
         Video video = videoList.get(position);
         holder.nameTextView.setText(video.getName());
-
     }
 
     @Override
@@ -74,6 +73,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     {
         int position = recView.getChildLayoutPosition(view);
 
-        ((MainActivity)context).playVideo(position);
+        if(mainActivity.inSelectionMode)
+        {
+            mainActivity.shareVideo(position);
+        }
+        else
+        {
+            mainActivity.playVideo(position);
+        }
     }
 }

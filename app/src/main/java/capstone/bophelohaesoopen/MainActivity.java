@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     // region Primitives declarations
     boolean menuHidden = false;
     private static int MENU_ANIMATION_DURATION = 300;
-    boolean inSelectionMode = false;
+    public boolean inSelectionMode = false;
 
     ArrayList<Video> videoList = new ArrayList<>();
 
@@ -220,10 +220,26 @@ public class MainActivity extends AppCompatActivity
     {
 //        Intent intent = new Intent(this, MediaShareActivity.class);
 //        this.startActivity(intent);
-        hideMenu();
-        shareIcon.setImageResource(R.drawable.cancel);
-        shareText.setText("Cancel");
-        inSelectionMode = true;
+        if(inSelectionMode)
+        {
+            if(menuHidden)
+            {
+                showMenu();
+            }
+            shareIcon.setImageResource(R.drawable.share);
+            shareText.setText("Share");
+            inSelectionMode = false;
+        }
+        else
+        {
+            if(!menuHidden)
+            {
+                hideMenu();
+            }
+            shareIcon.setImageResource(R.drawable.cancel);
+            shareText.setText("Cancel");
+            inSelectionMode = true;
+        }
     }
 
     private void recordAudioButtonClick()
@@ -243,6 +259,8 @@ public class MainActivity extends AppCompatActivity
             showMenu();
         }
     }
+
+    // endregion
 
     private void hideMenu()
     {
@@ -310,7 +328,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    // endregion
+    public void shareVideo(int position)
+    {
+        Video video = videoList.get(position);
+        // TODO: Send video
+    }
 
     // region Activity overrides
 
