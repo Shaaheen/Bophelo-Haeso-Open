@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity
 
     // region Button declarations
     AppCompatButton recordAudioButton;
-    AppCompatButton shareMediaButton;
     AppCompatButton takePictureButton;
     AppCompatButton audioGalleryButton;
     AppCompatButton picturesButton;
@@ -139,7 +138,6 @@ public class MainActivity extends AppCompatActivity
         //region Buttons initializations
 
         recordAudioButton = (AppCompatButton) findViewById(R.id.recordAudioButton);
-        shareMediaButton = (AppCompatButton) findViewById(R.id.shareMediaButton);
         takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
         audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
         picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
@@ -156,14 +154,7 @@ public class MainActivity extends AppCompatActivity
                 recordAudioButtonClick();
             }
         });
-        shareMediaButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                shareMediaButtonClick();
-            }
-        });
+
         takePictureButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
