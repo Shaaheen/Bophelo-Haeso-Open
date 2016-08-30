@@ -1,14 +1,11 @@
 package capstone.bophelohaesoopen.HaesoAPI;
 
-import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -23,7 +20,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,11 +53,22 @@ public class BluetoothUtils {
 
     public BluetoothUtils( Context context, Activity activity ) {
         mSmoothBluetooth = new SmoothBluetooth(context); //Uses bluetooth library
-        mSmoothBluetooth.setListener(mListener);  //for bluetooth events
         activityUIClass = activity; //The activity of the class stored
 
+        if ( !mSmoothBluetooth.isBluetoothEnabled() ){
+            enableBT();
+        }
+        else {
+            setupBTUtilities();
+        }
+
+    }
+
+    private void setupBTUtilities() {
+        mSmoothBluetooth.setListener(mListener);  //for bluetooth events
+
         //Library to handle connecting and transferring through bluetooth
-        simpleBluetooth = new SimpleBluetooth(activity, activity);
+        simpleBluetooth = new SimpleBluetooth(activityUIClass, activityUIClass);
 
         currSizeOfRecFile = 0;
         intialOffset = 0;
@@ -73,8 +80,15 @@ public class BluetoothUtils {
 
         //Initializes device as server in case another device attempts to connect to it
         simpleBluetooth.createBluetoothServerConnection();
-
     }
+
+    private void enableBT(){
+        Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        Toast.makeText(activityUIClass, "Bluetooth not enabled", Toast.LENGTH_SHORT).show();
+        //Enable bluetooth pop up
+        activityUIClass.startActivityForResult(enableBluetooth, ENABLE_BT_REQUEST);
+    }
+
 
     /**
      * Initializes scanning and pops up with dialogue of available devices
@@ -131,7 +145,9 @@ public class BluetoothUtils {
     public  void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == ENABLE_BT_REQUEST) {
             if(resultCode == activityUIClass.RESULT_OK) {
-                mSmoothBluetooth.tryConnection();
+                Log.v("BT","BT ENABLED NOW");
+                setupBTUtilities();
+                //mSmoothBluetooth.tryConnection();
             }
         }
     }
@@ -244,10 +260,10 @@ public class BluetoothUtils {
 
         @Override
         public void onBluetoothNotEnabled() {
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            Toast.makeText(activityUIClass, "Bluetooth not enabled", Toast.LENGTH_SHORT).show();
-            //Enable bluetooth pop up
-            activityUIClass.startActivityForResult(enableBluetooth, ENABLE_BT_REQUEST);
+//            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            Toast.makeText(activityUIClass, "Bluetooth not enabled", Toast.LENGTH_SHORT).show();
+//            //Enable bluetooth pop up
+//            activityUIClass.startActivityForResult(enableBluetooth, ENABLE_BT_REQUEST);
         }
 
         @Override
