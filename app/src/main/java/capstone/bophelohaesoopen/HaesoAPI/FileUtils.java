@@ -1,36 +1,55 @@
 package capstone.bophelohaesoopen.HaesoAPI;
 
 import android.os.Environment;
+import android.util.Log;
+
 import java.io.*;
 import java.util.ArrayList;
-
-import capstone.bophelohaesoopen.HaesoAPI.Video;
 
 public class FileUtils
 {
 
-    public FileUtils()
-    {}
+    public FileUtils() {}
 
     /**
-     * Scans device file directory for video files and creates an array of Video objects from the videos found
-     * @return An array of Video objects
+     * Scans device file directory for media files and creates an array of Media objects from the videos found
+     * @param prefix - prefix to specify files that are retrieved
+     * @param extension - specifies the type of media to retrieve
+     * @return An array of Media objects
      */
-    public ArrayList<Video> getVideoCollectionFromStorage()
+    public ArrayList<? extends Media> getMediaCollectionFromStorage(String prefix,String extension)
     {
-        ArrayList<Video> videos = new ArrayList<>();
+        Log.v("Media","Searching for media files...");
+        ArrayList<Media> mediaFiles = new ArrayList<>(); //Stores array of retrieved media
 
-        /* The video attributes are hardcoded for the sake of the prototype
-        * however, the final implementation will read the device file directory and add videos found accordingly
-        * */
-        for(int i = 1; i < 11; i++)
-        {
-            Video temp = new Video("Video "+i, "");
-            temp.filePath ="/video.mp4";
-            videos.add(temp);
+        //Gets list of files/subdir at root lvl
+        File[] files = Environment.getExternalStorageDirectory().listFiles();
+
+        getMediaFromDirectory( files , prefix ,extension , mediaFiles);
+
+        Log.v("Media","Done searching.");
+
+        return mediaFiles;
+    }
+
+    /**
+     * Checks all files and subdir in a given directory for mp4 files with specified prefix
+     * @param directory list of files/subdir
+     * @param prefix specifies specific files
+     * @param extension specifies type of media files to retrieve
+     * @param mediaFiles array of media objects retrieved
+     */
+    private void getMediaFromDirectory(File[] directory , String prefix , String extension , ArrayList<Media> mediaFiles){
+        for (File f : directory){
+            if (f.isDirectory()){
+                getMediaFromDirectory( f.listFiles(), prefix ,extension, mediaFiles);
+            }
+            //Adds file to container if has appropriate extension and prefix
+            else if (f.isFile() && f.getPath().endsWith(extension) && f.getName().startsWith(prefix) ) {
+                Log.v("Media","Found : " + f.getName() + " " + f.getPath()  );
+                mediaFiles.add(  new Video( f.getName() , f.getAbsolutePath() )  );
+            }
         }
-
-        return videos;
     }
 
 }
