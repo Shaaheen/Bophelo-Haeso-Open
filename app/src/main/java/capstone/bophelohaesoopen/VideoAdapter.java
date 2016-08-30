@@ -1,7 +1,5 @@
 package capstone.bophelohaesoopen;
 
-import android.content.Context;
-
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +19,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     ArrayList<Video> videoList;
     MainActivity mainActivity;
     RecyclerView recView;
+    VideoViewHolder currentHolder;
 
 
     public VideoAdapter(MainActivity mainActivity, RecyclerView recView, ArrayList<Video> videos)
@@ -40,6 +39,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_item_layout, parent, false);
         itemView.setOnClickListener(this);
         VideoViewHolder viewHolder = new VideoViewHolder(itemView);
+        currentHolder = viewHolder;
 
         return viewHolder;
     }
@@ -49,6 +49,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     {
         Video video = videoList.get(position);
         holder.nameTextView.setText(video.getName());
+
+        currentHolder = holder;
     }
 
     @Override
@@ -75,6 +77,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
 
         if(mainActivity.inSelectionMode)
         {
+            currentHolder.selectionOverlay.setVisibility(View.VISIBLE);
             mainActivity.shareVideo(position);
         }
         else
