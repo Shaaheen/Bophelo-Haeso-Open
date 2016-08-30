@@ -35,7 +35,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
      */
     public void playMedia(Media mediaFile, SurfaceView mediaView) throws IOException
     {
-        String filePath = Environment.getExternalStorageDirectory() + mediaFile.filePath;
+        String filePath =  mediaFile.filePath;
         mediaPlayer = new android.media.MediaPlayer();
         mediaPlayer.setDataSource(filePath);
         mediaPlayer.setScreenOnWhilePlaying(true);
