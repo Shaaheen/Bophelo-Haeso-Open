@@ -6,12 +6,11 @@ package capstone.bophelohaesoopen.HaesoAPI;
 public class Media {
     String name;
     String filePath;
-    String mediaExtension;
+    public static String mediaExtension = "";
 
     public Media(String name, String filePath) {
         this.name = name;
         this.filePath = filePath;
-        this.mediaExtension = "";
     }
 
     public String getName() {
