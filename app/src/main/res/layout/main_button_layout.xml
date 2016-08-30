@@ -7,12 +7,29 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/menu_toggle_bar_height"
+        android:background="#a4a4a4"
+        android:id="@+id/shareMediaButton"
+        android:layout_marginTop="40dp">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/imageView2"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/share"
+            android:scaleType="centerCrop"
+            android:padding="12dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/menu_toggle_bar_height"
         android:background="#606060"
         android:id="@+id/menuToggleBar">
 
         <ImageView
             android:layout_width="60dp"
-            android:layout_height="30dp"
+            android:layout_height="60dp"
             android:id="@+id/menuToggle"
             android:layout_centerHorizontal="true"
             android:src="@drawable/arrow_down"
@@ -27,7 +44,7 @@
         android:layout_width="@dimen/button_column_width"
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="80dp"
         android:layout_alignParentLeft="true"
         android:background="@color/main_menu_background">
 
@@ -37,13 +54,6 @@
             android:text="Record Audio"
             android:id="@+id/recordAudioButton"
             android:layout_marginTop="5dp"/>
-
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="@dimen/menu_button_width"
-            android:layout_height="@dimen/menu_button_height"
-            android:text="Share media"
-            android:id="@+id/shareMediaButton"
-            android:layout_marginTop="@dimen/main_menu_button_top_margin"/>
 
         <android.support.v7.widget.AppCompatButton
             android:layout_width="@dimen/menu_button_width"
@@ -58,7 +68,7 @@
         android:layout_width="@dimen/button_column_width"
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="80dp"
         android:background="@color/main_menu_background"
         android:layout_toRightOf="@+id/buttonLayout">
 
