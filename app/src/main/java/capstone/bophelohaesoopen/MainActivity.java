@@ -19,6 +19,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,8 +33,11 @@ public class MainActivity extends AppCompatActivity
     //region View declarations
     RelativeLayout mainMenu;
     RelativeLayout menuToggleBar;
+    RelativeLayout shareMediaBar;
     RecyclerView recyclerView;
     ImageView menuToggle;
+    ImageView shareIcon;
+    TextView shareText;
     NavigationView navigationView;
     DrawerLayout drawer;
 
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     // region Primitives declarations
     boolean menuHidden = false;
     private static int MENU_ANIMATION_DURATION = 300;
+    boolean inSelectionMode = false;
 
     ArrayList<Video> videoList = new ArrayList<>();
 
@@ -105,6 +110,18 @@ public class MainActivity extends AppCompatActivity
                 menuToggleClick();
             }
         });
+
+        shareMediaBar = (RelativeLayout)findViewById(R.id.shareMediaBar);
+        shareMediaBar.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                shareMediaButtonClick();
+            }
+        });
+        shareIcon = (ImageView)findViewById(R.id.shareIcon);
+        shareText = (TextView)findViewById(R.id.shareText);
 
         //region RecyclerView initialization
 
@@ -201,8 +218,12 @@ public class MainActivity extends AppCompatActivity
 
     private void shareMediaButtonClick()
     {
-        Intent intent = new Intent(this, MediaShareActivity.class);
-        this.startActivity(intent);
+//        Intent intent = new Intent(this, MediaShareActivity.class);
+//        this.startActivity(intent);
+        hideMenu();
+        shareIcon.setImageResource(R.drawable.cancel);
+        shareText.setText("Cancel");
+        inSelectionMode = true;
     }
 
     private void recordAudioButtonClick()
@@ -226,7 +247,7 @@ public class MainActivity extends AppCompatActivity
     private void hideMenu()
     {
         float yPos = mainMenu.getY();
-        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
+        float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos+yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
@@ -252,7 +273,7 @@ public class MainActivity extends AppCompatActivity
     private void showMenu()
     {
         float yPos = mainMenu.getY();
-        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
+        float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos-yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);

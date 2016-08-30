@@ -8,17 +8,30 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/menu_toggle_bar_height"
         android:background="#a4a4a4"
-        android:id="@+id/shareMediaButton"
+        android:id="@+id/shareMediaBar"
         android:layout_marginTop="40dp">
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:id="@+id/imageView2"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/share"
-            android:scaleType="centerCrop"
-            android:padding="12dp"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/shareIcon"
+                android:src="@drawable/share"
+                android:scaleType="centerCrop"
+                android:padding="14dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Share"
+                android:id="@+id/shareText"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/shareIcon"/>
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
