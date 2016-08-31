@@ -50,6 +50,7 @@ public class BluetoothUtils {
     ByteArrayOutputStream fileBytes;
     int sizeOfFileRec; //Size of File being received
     int currSizeOfRecFile; //stores size of file transferred so far
+    double receivingProgress; //percentage of file received so far
     int intialOffset; //Offset to ensure file size message not in resulting file bytes
     String nameOfTransferredFile;
     private static int NUMBER_OF_COLONS = 4;
@@ -174,6 +175,8 @@ public class BluetoothUtils {
                 // when to stop reading in bytes that are being received
                 if (data.contains("file_size:")){
                     Toast.makeText(activityUIClass, "Receving File...", Toast.LENGTH_SHORT).show();
+                    haesoBTListener.onStartReceiving();
+                    receivingProgress = 0.0;
                     fileBytes = new ByteArrayOutputStream();
                     String[] splitFileInfo = data.split(":");
                     sizeOfFileRec = Integer.parseInt( splitFileInfo[1] );
@@ -192,6 +195,13 @@ public class BluetoothUtils {
                     fileBytes.write( bytes , intialOffset, bytes.length - intialOffset);
                     currSizeOfRecFile += bytes.length ;
                     currSizeOfRecFile -= intialOffset;
+                    double currProg = ( (currSizeOfRecFile+0.0) /(sizeOfFileRec+0.0) );
+                    currProg = currProg *100;
+                    if (currProg - receivingProgress > 1.0){
+                        receivingProgress = currProg;
+                        haesoBTListener.onReceivingProgress(receivingProgress);
+                    }
+                    //Log.v("BLUETOOTH","Gets HERE");
                     intialOffset = 0;
 
                     //Stop taking in bytes and export file

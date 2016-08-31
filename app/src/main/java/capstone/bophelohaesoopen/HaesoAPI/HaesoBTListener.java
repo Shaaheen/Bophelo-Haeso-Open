@@ -8,4 +8,6 @@ public interface HaesoBTListener{
     void onStartScan();
     void onStopScan();
     void onBTDevicesFound(List<BluetoothUtils.BTDevice> btDevices);
+    void onStartReceiving();
+    void onReceivingProgress(double progress);
 }
