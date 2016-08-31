@@ -16,4 +16,9 @@ public class Video extends Media {
         this.thumbnailPath = thumbnailPath;
     }
 
+    public String getFileName(){
+        return (identifierPrefix + name + mediaExtension);
+    }
+
+
 }
