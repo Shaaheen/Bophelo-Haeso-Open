@@ -30,13 +30,16 @@ import io.palaima.smoothbluetooth.SmoothBluetooth;
  * Class to act as interface to bluetooth functionality
  */
 public class BluetoothUtils {
+
+    public HaesoBTListener haesoBTListener;
+
     //Bluetooth Scanning and enabling library
     private SmoothBluetooth mSmoothBluetooth;
     private Activity activityUIClass;
     public static final int ENABLE_BT_REQUEST = 1;
 
     // Dialog to display while scanning for devices
-    MaterialDialog scanningDialog;
+    //MaterialDialog scanningDialog;
 
     //Connecting and Transferring Bluetooth library
     private SimpleBluetooth simpleBluetooth;
@@ -129,7 +132,7 @@ public class BluetoothUtils {
             e.printStackTrace();
         }
         //Must specify the file size to receiver so receiver knows how many bytes to expect
-        String sendFileSize = "chw_file_size:" + baos.size() + ":file_name:" + mediaFile.name + mediaFile.mediaExtension + ":";
+        String sendFileSize = "file_size:" + baos.size() + ":file_name:" + mediaFile.getFileName() + ":";
         simpleBluetooth.sendData(sendFileSize);
 
         Log.w("Sending size", baos.size() +"" );
@@ -169,7 +172,7 @@ public class BluetoothUtils {
 
                 //Initial message received indicates the file size so we know
                 // when to stop reading in bytes that are being received
-                if (data.contains("chw_file_size:")){
+                if (data.contains("file_size:")){
                     Toast.makeText(activityUIClass, "Receving File...", Toast.LENGTH_SHORT).show();
                     fileBytes = new ByteArrayOutputStream();
                     String[] splitFileInfo = data.split(":");
@@ -193,7 +196,7 @@ public class BluetoothUtils {
 
                     //Stop taking in bytes and export file
                     if ( currSizeOfRecFile >= sizeOfFileRec ){
-                        out =  new FileOutputStream( Environment.getExternalStorageDirectory() + "/chw_" + nameOfTransferredFile );
+                        out =  new FileOutputStream( Environment.getExternalStorageDirectory() + "/" + nameOfTransferredFile );
                         out.write( fileBytes.toByteArray() );
                         out.close();
                         Log.w( "Rec File","Done receiving file" );
@@ -260,10 +263,6 @@ public class BluetoothUtils {
 
         @Override
         public void onBluetoothNotEnabled() {
-//            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            Toast.makeText(activityUIClass, "Bluetooth not enabled", Toast.LENGTH_SHORT).show();
-//            //Enable bluetooth pop up
-//            activityUIClass.startActivityForResult(enableBluetooth, ENABLE_BT_REQUEST);
         }
 
         @Override
@@ -285,14 +284,12 @@ public class BluetoothUtils {
         @Override
         public void onDiscoveryStarted() {
             Toast.makeText(activityUIClass, "Searching", Toast.LENGTH_SHORT).show();
-            scanningDialog = new MaterialDialog.Builder(activityUIClass)
-                    .title("Devices")
-                    .items("Scanning . .")
-                    .show();
+            haesoBTListener.onStartScan();
         }
 
         @Override
         public void onDiscoveryFinished() {
+            haesoBTListener.onStopScan();
             Toast.makeText(activityUIClass, "Done Searching", Toast.LENGTH_SHORT).show();
         }
 
@@ -307,8 +304,6 @@ public class BluetoothUtils {
 
             Toast.makeText(activityUIClass, "Device(s) found", Toast.LENGTH_SHORT).show();
 
-            scanningDialog.hide();
-
             //Adds BT device(Device class with toString) to a list to display to user and connect
             final List<BTDevice> btDevices = new LinkedList<>();
             System.out.println("DEVICES FOUND");
@@ -317,22 +312,7 @@ public class BluetoothUtils {
                 btDevices.add ( new BTDevice(deviceList.get(i)) );
             }
 
-            //Create pop up dialogue that displays a list of all the found devices
-            //All are clickable
-            final MaterialDialog dialog = new MaterialDialog.Builder(activityUIClass)
-                    .title("Devices")
-                    .items(btDevices)
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            Toast.makeText(activityUIClass, "Device No. " + which + " : " + text + " selected " + mSmoothBluetooth.isConnected(), Toast.LENGTH_SHORT).show();
-                            //Connects to selected device
-                            simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
-                        }
-                    })
-                    .show();
-
-            dialog.show();
+            haesoBTListener.onBTDevicesFound(btDevices);
 
         }
 
@@ -341,16 +321,23 @@ public class BluetoothUtils {
         }
 
     };
-}
 
-//Class that adds a toString method to Device class
-class BTDevice extends Device{
-
-    public BTDevice(Device device) {
-        super(device.getName(),device.getAddress(),device.isPaired());
+    public void connectToAddress(String macAddr){
+        simpleBluetooth.connectToBluetoothServer(macAddr);
     }
 
-    public String toString(){
-        return getName();
+    //Class that adds a toString method to Device class
+    public class BTDevice extends Device{
+
+        public BTDevice(Device device) {
+            super(device.getName(),device.getAddress(),device.isPaired());
+        }
+
+        public String toString(){
+            return getName();
+        }
     }
 }
+
+
+
