@@ -49,7 +49,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     public void onBindViewHolder(VideoViewHolder holder, int position)
     {
         Video video = videoList.get(position);
-        String name = video.getName();
+        String name = video.getName().substring(0,video.getName().length()-4);
         if(name.substring(0,4).equals(Media.identifierPrefix))
         {
             holder.nameTextView.setText(name.substring(4));
