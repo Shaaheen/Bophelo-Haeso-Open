@@ -9,12 +9,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="video_item_width">70dp</dimen>
     <dimen name="video_item_height">90dp</dimen>
-    <dimen name="video_text_size">12sp</dimen>
-    <dimen name="main_menu_top_margin">190dp</dimen>
     <dimen name="button_column_width">160dp</dimen>
     <dimen name="menu_button_width">110dp</dimen>
     <dimen name="menu_button_height">60dp</dimen>
     <dimen name="time_view_text_size">25sp</dimen>
     <dimen name="menu_toggle_bar_height">40dp</dimen>
+    <dimen name="video_text_size">12sp</dimen>
+    <dimen name="main_menu_top_margin">190dp</dimen>
     <dimen name="share_button_height">40dp</dimen>
 </resources>
