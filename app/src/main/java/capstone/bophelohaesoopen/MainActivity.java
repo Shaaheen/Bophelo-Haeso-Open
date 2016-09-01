@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void populateVideoList()
     {
-        videoList = fileUtils.getVideoCollectionFromStorage();
+        videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("", "");
     }
 
     /**
