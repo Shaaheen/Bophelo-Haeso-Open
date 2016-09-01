@@ -398,8 +398,4 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
     }
-
-
-
-
 }
