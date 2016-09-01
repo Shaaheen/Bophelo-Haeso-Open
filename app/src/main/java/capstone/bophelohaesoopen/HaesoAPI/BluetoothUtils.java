@@ -1,7 +1,6 @@
 package capstone.bophelohaesoopen.HaesoAPI;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -9,10 +8,7 @@ import android.content.Intent;
 import android.os.Environment;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.devpaul.bluetoothutillib.SimpleBluetooth;
 import com.devpaul.bluetoothutillib.handlers.BluetoothHandler;
 import com.devpaul.bluetoothutillib.utils.BluetoothUtility;
@@ -34,7 +30,7 @@ import io.palaima.smoothbluetooth.SmoothBluetooth;
  */
 public class BluetoothUtils {
 
-    public HaesoBTListener haesoBTListener;
+    public BluetoothListener bluetoothListener;
 
     //Bluetooth Scanning and enabling library
     private SmoothBluetooth mSmoothBluetooth;
@@ -183,7 +179,7 @@ public class BluetoothUtils {
                 //Initial message received indicates the file size so we know
                 // when to stop reading in bytes that are being received
                 if (data.contains("file_size:")){
-                    haesoBTListener.onStartReceiving();
+                    bluetoothListener.onStartReceiving();
                     receivingProgress = 0.0;
                     fileBytes = new ByteArrayOutputStream();
                     String[] splitFileInfo = data.split(":");
@@ -207,7 +203,7 @@ public class BluetoothUtils {
                     currProg = currProg *100;
                     if (currProg - receivingProgress > 1.0){
                         receivingProgress = currProg;
-                        haesoBTListener.onReceivingProgress(receivingProgress);
+                        bluetoothListener.onReceivingProgress(receivingProgress);
                     }
                     intialOffset = 0;
 
@@ -239,14 +235,14 @@ public class BluetoothUtils {
         @Override
         public void onDeviceConnected(BluetoothDevice device) {
             super.onDeviceConnected(device);
-            haesoBTListener.onConnected();
+            bluetoothListener.onConnected();
             Log.v("BT","Connected");
         }
 
         @Override
         public void onDeviceDisconnected(BluetoothDevice device) {
             super.onDeviceDisconnected(device);
-            haesoBTListener.onDisconnected();
+            bluetoothListener.onDisconnected();
             Log.v("BT","Disconnected");
         }
 
@@ -273,17 +269,17 @@ public class BluetoothUtils {
     private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
         @Override
         public void onDiscoveryStarted() {
-            haesoBTListener.onStartScan();
+            bluetoothListener.onStartScan();
         }
 
         @Override
         public void onDiscoveryFinished() {
-            haesoBTListener.onStopScan();
+            bluetoothListener.onStopScan();
         }
 
         @Override
         public void onNoDevicesFound() {
-            haesoBTListener.onBTDevicesFound(null);
+            bluetoothListener.onBTDevicesFound(null);
         }
 
         @Override
@@ -298,7 +294,7 @@ public class BluetoothUtils {
                 btDevices.add ( new BTDevice(deviceList.get(i)) );
             }
 
-            haesoBTListener.onBTDevicesFound(btDevices);
+            bluetoothListener.onBTDevicesFound(btDevices);
 
         }
 
