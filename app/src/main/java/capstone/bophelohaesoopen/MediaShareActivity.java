@@ -4,10 +4,17 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import java.util.List;
 
 import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
+import capstone.bophelohaesoopen.HaesoAPI.BluetoothListener;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
 /**
@@ -23,6 +30,10 @@ public class MediaShareActivity extends AppCompatActivity
 
     ProgressBar progressBar;
 
+    // Dialog to display while scanning for devices
+    MaterialDialog scanningDialog;
+    MediaShareActivity activityM;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -30,8 +41,71 @@ public class MediaShareActivity extends AppCompatActivity
         setContentView(R.layout.activity_media_share);
 
         initializeViews();
+        activityM = this;
 
         bluetoothUtils = new BluetoothUtils(this, MediaShareActivity.this);
+
+        bluetoothUtils.bluetoothListener = new BluetoothListener() {
+            @Override
+            public void onStartScan() {
+                Toast.makeText(getApplicationContext(), "SCANNNINNINININ", Toast.LENGTH_SHORT).show();
+                scanningDialog = new MaterialDialog.Builder(activityM)
+                        .title("Devices")
+                        .items("Scanning . . .")
+                        .show();
+            }
+
+            @Override
+            public void onStopScan() {
+                scanningDialog.hide();
+            }
+
+            @Override
+            public void onBTDevicesFound(final List<BluetoothUtils.BTDevice> btDevices) {
+
+                if (btDevices == null || btDevices.isEmpty()){
+                    return;
+                }
+                //Create pop up dialogue that displays a list of all the found devices
+                //All are clickable
+                final MaterialDialog dialog = new MaterialDialog.Builder(activityM)
+                        .title("Devices")
+                        .items(btDevices)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                Toast.makeText(getApplicationContext(), "Device No. " + which + " : " + text + " selected ", Toast.LENGTH_SHORT).show();
+                                //Connects to selected device
+                                //simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
+                                bluetoothUtils.connectToAddress(btDevices.get(which).getAddress());
+                            }
+                        })
+                        .show();
+
+                dialog.show();
+            }
+
+            @Override
+            public void onConnected() {
+
+            }
+
+            @Override
+            public void onDisconnected() {
+
+            }
+
+            @Override
+            public void onStartReceiving() {
+                Toast.makeText(getApplicationContext(), "RecEIVING", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onReceivingProgress(double progress) {
+                Log.v("BT","Received " + progress + "% ");
+            }
+
+        };
     }
 
     private void initializeViews()
@@ -66,7 +140,7 @@ public class MediaShareActivity extends AppCompatActivity
     private void sendButtonClick()
     {
         // Parameters hard-coded for the sake of the prototype
-        Video video = new Video("Wookie_video", "/video_sample.mp4");
+        Video video = new Video("Sample_video", "/video_sample.mp4");
         bluetoothUtils.sendMediaFile(video);
     }
 

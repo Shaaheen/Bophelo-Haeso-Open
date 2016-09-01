@@ -11,9 +11,14 @@ public class Video extends Media {
         super(name, filePath);
     }
 
-    public Video(String name, String filePath,String thumbnailPath) {
+    public Video(String name, String filePath, String thumbnailPath) {
         super(name, filePath);
         this.thumbnailPath = thumbnailPath;
     }
+
+    public String getFileName(){
+        return (identifierPrefix + name + mediaExtension);
+    }
+
 
 }
