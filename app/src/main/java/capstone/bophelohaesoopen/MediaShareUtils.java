@@ -81,6 +81,11 @@ public class MediaShareUtils {
             public void onConnected() {
                 Toast.makeText(ctx,"Connected, Send : " + sendMedia,Toast.LENGTH_SHORT).show();
                 if (sendMedia){
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     bluetoothUtils.sendMediaFile(toSendMedia);
                     sendMedia = false;
                 }
@@ -93,6 +98,7 @@ public class MediaShareUtils {
             }
 
             @Override
+
             public void onStartReceiving() {
                 Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
             }
