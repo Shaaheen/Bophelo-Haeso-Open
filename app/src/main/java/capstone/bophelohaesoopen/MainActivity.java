@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import capstone.bophelohaesoopen.HaesoAPI.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
 
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity
 
     ArrayList<Video> videoList = new ArrayList<>();
 
+    //TAKE OUT
+    MediaShareUtils mediaShareUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -76,7 +80,11 @@ public class MainActivity extends AppCompatActivity
 
     private void initialize()
     {
+        Media.identifierPrefix = "chw_";
         fileUtils = new FileUtils();
+
+        //Should have here?????
+        mediaShareUtils = new MediaShareUtils(getApplicationContext(),this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -203,34 +211,40 @@ public class MainActivity extends AppCompatActivity
     private void pictureGalleryButtonClick()
     {
         Toast.makeText(this,"Opens gallery of pictures taken.", Toast.LENGTH_SHORT).show();
+
 //        Intent intent = new Intent(this, PictureGalleryActivity.class);
 //        this.startActivity(intent);
     }
 
     private void shareMediaButtonClick()
     {
+        Video video = new Video("Sample_video", "/video_sample.mp4");
+        if (mediaShareUtils != null){
+            mediaShareUtils.sendMedia(video);
+        }
+
 //        Intent intent = new Intent(this, MediaShareActivity.class);
 //        this.startActivity(intent);
-        if(inSelectionMode)
-        {
-            if(menuHidden)
-            {
-                showMenu();
-            }
-            shareIcon.setImageResource(R.drawable.share);
-            shareText.setText("Share");
-            inSelectionMode = false;
-        }
-        else
-        {
-            if(!menuHidden)
-            {
-                hideMenu();
-            }
-            shareIcon.setImageResource(R.drawable.cancel);
-            shareText.setText("Cancel");
-            inSelectionMode = true;
-        }
+//        if(inSelectionMode)
+//        {
+//            if(menuHidden)
+//            {
+//                showMenu();
+//            }
+//            shareIcon.setImageResource(R.drawable.share);
+//            shareText.setText("Share");
+//            inSelectionMode = false;
+//        }
+//        else
+//        {
+//            if(!menuHidden)
+//            {
+//                hideMenu();
+//            }
+//            shareIcon.setImageResource(R.drawable.cancel);
+//            shareText.setText("Cancel");
+//            inSelectionMode = true;
+//        }
     }
 
     private void recordAudioButtonClick()
@@ -383,7 +397,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void populateVideoList()
     {
-        videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("", "");
+        videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("chw_",Video.mediaExtension);
     }
 
     /**
@@ -398,4 +412,8 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
     }
+
+
+
+
 }
