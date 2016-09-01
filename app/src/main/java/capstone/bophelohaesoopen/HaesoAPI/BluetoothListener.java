@@ -4,7 +4,8 @@ import android.bluetooth.BluetoothAdapter;
 
 import java.util.List;
 
-public interface HaesoBTListener{
+public interface BluetoothListener
+{
     void onStartScan();
     void onStopScan();
     void onBTDevicesFound(List<BluetoothUtils.BTDevice> btDevices);

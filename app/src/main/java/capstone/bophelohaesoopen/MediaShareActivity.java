@@ -14,7 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.List;
 
 import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
-import capstone.bophelohaesoopen.HaesoAPI.HaesoBTListener;
+import capstone.bophelohaesoopen.HaesoAPI.BluetoothListener;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
 /**
@@ -45,7 +45,7 @@ public class MediaShareActivity extends AppCompatActivity
 
         bluetoothUtils = new BluetoothUtils(this, MediaShareActivity.this);
 
-        bluetoothUtils.haesoBTListener = new HaesoBTListener() {
+        bluetoothUtils.bluetoothListener = new BluetoothListener() {
             @Override
             public void onStartScan() {
                 Toast.makeText(getApplicationContext(), "SCANNNINNINININ", Toast.LENGTH_SHORT).show();
