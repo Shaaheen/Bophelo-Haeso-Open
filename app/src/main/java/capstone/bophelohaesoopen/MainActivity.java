@@ -1,11 +1,13 @@
 package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,20 +18,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.AppCompatButton;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import capstone.bophelohaesoopen.HaesoAPI.BluetoothListener;
+import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
+        implements NavigationView.OnNavigationItemSelectedListener, BluetoothListener
 {
     //region View declarations
     RelativeLayout mainMenu;
@@ -41,6 +48,9 @@ public class MainActivity extends AppCompatActivity
     TextView shareText;
     NavigationView navigationView;
     DrawerLayout drawer;
+
+    ProgressDialog indeterminatePD;
+    ProgressDialog determinatePD;
 
     // region Button declarations
     AppCompatButton recordAudioButton;
@@ -55,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     VideoAdapter videoAdapter;
     FileUtils fileUtils;
     CustomGridLayoutManager gridLayoutManager;
+    Video videoToSend;
     //endregion
 
     // region Primitives declarations
@@ -84,7 +95,7 @@ public class MainActivity extends AppCompatActivity
         fileUtils = new FileUtils();
 
         //Should have here?????
-        mediaShareUtils = new MediaShareUtils(getApplicationContext(),this);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -218,13 +229,7 @@ public class MainActivity extends AppCompatActivity
 
     private void shareMediaButtonClick()
     {
-        Video video = new Video("Sample_video", "/video_sample.mp4");
-        if (mediaShareUtils != null){
-            mediaShareUtils.sendMedia(video);
-        }
 
-        Intent intent = new Intent(this, MediaShareActivity.class);
-        this.startActivity(intent);
         if(inSelectionMode)
         {
             if(menuHidden)
@@ -237,6 +242,14 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
+//            Video video = new Video("Sample_video", "/video_sample.mp4");
+//            if (mediaShareUtils != null){
+//                mediaShareUtils.sendMedia(video);
+//            }
+
+//            Intent intent = new Intent(this, MediaShareActivity.class);
+//            this.startActivity(intent);
+
             if(!menuHidden)
             {
                 hideMenu();
@@ -274,7 +287,7 @@ public class MainActivity extends AppCompatActivity
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos+yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.setInterpolator(new DecelerateInterpolator());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
@@ -300,7 +313,7 @@ public class MainActivity extends AppCompatActivity
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos-yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.setInterpolator(new DecelerateInterpolator());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
@@ -335,8 +348,12 @@ public class MainActivity extends AppCompatActivity
 
     public void shareVideo(int position)
     {
-        Video video = videoList.get(position);
-        // TODO: Send video
+        videoToSend = videoList.get(position);
+
+        mediaShareUtils = new MediaShareUtils(getApplicationContext(),this);
+
+        mediaShareUtils.scanForDevices();
+
     }
 
     // region Activity overrides
@@ -414,6 +431,87 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void onStartScan()
+    {
+        indeterminatePD = new ProgressDialog(this);
+        indeterminatePD.setMessage("Scanning for devices");
+        indeterminatePD.setCancelable(false);
+        indeterminatePD.setIndeterminate(true);
+        indeterminatePD.show();
+    }
+
+    @Override
+    public void onStopScan()
+    {
+        indeterminatePD.dismiss();
+    }
+
+    @Override
+    public void onBTDevicesFound(final List<BluetoothUtils.BTDevice> btDevices)
+    {
+        if (btDevices == null || btDevices.isEmpty()){
+            return;
+        }
+        //Create pop up dialogue that displays a list of all the found devices
+        //All are clickable
+        final MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title("Devices")
+                .items(btDevices)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        Toast.makeText(getApplicationContext(), "Device No. " + which + " : " + text + " selected ", Toast.LENGTH_SHORT).show();
+                        //Connects to selected device
+                        //simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
+                        mediaShareUtils.bluetoothUtils.connectToAddress(btDevices.get(which).getAddress());
+
+                        // Delay before sending
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                mediaShareUtils.bluetoothUtils.sendMediaFile(videoToSend);
+                            }
+                        }, 300);
 
 
+                    }
+                })
+                .show();
+
+        dialog.show();
+    }
+
+    @Override
+    public void onConnected()
+    {
+
+    }
+
+    @Override
+    public void onDisconnected()
+    {
+
+    }
+
+    @Override
+    public void onStartReceiving()
+    {
+        Toast.makeText(getApplicationContext(), "Receiving", Toast.LENGTH_SHORT).show();
+        determinatePD = new ProgressDialog(this);
+        determinatePD.setTitle("Receiving file");
+        determinatePD.setIndeterminate(false);
+        determinatePD.show();
+        determinatePD.setProgress(0);
+    }
+
+    @Override
+    public void onReceivingProgress(double progress)
+    {
+        Log.v("BT","Received " + progress + "% ");
+        determinatePD.setProgress((int)progress);
+    }
 }

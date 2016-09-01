@@ -1,6 +1,7 @@
 package capstone.bophelohaesoopen;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -19,16 +20,19 @@ import capstone.bophelohaesoopen.HaesoAPI.Media;
  */
 public class MediaShareUtils {
 
-    private BluetoothUtils bluetoothUtils;
+    public BluetoothUtils bluetoothUtils;
 
     private boolean sendMedia;
     private Media toSendMedia;
+
+    ProgressDialog indeterminatePD;
+    ProgressDialog determinatePD;
 
     // Dialog to display while scanning for devices
     private MaterialDialog scanningDialog;
     private Activity activityM;
 
-    public MediaShareUtils(final Context ctx, Activity activity) {
+    public MediaShareUtils(final Context ctx, final Activity activity) {
         toSendMedia = null;
         sendMedia = false;
         bluetoothUtils = new BluetoothUtils(ctx, activity);
@@ -36,18 +40,21 @@ public class MediaShareUtils {
 
         bluetoothUtils.bluetoothListener = new BluetoothListener() {
             @Override
-            public void onStartScan() {
-                //Toast.makeText(ctx, "SCANNNINNINININ", Toast.LENGTH_SHORT).show();
-                scanningDialog = new MaterialDialog.Builder(activityM)
-                        .title("Devices")
-                        .items("Scanning . . .")
-                        .show();
+            public void onStartScan()
+            {
+                indeterminatePD = new ProgressDialog(activity);
+                indeterminatePD.setMessage("Scanning for devices");
+                indeterminatePD.setCancelable(false);
+                indeterminatePD.setIndeterminate(true);
+                indeterminatePD.show();
             }
 
             @Override
             public void onStopScan() {
-                scanningDialog.hide();
+//                scanningDialog.hide();
+                indeterminatePD.dismiss();
             }
+
 
             @Override
             public void onBTDevicesFound(final List<BluetoothUtils.BTDevice> btDevices) {

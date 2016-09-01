@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import capstone.bophelohaesoopen.HaesoAPI.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
 /**
@@ -48,7 +49,16 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     public void onBindViewHolder(VideoViewHolder holder, int position)
     {
         Video video = videoList.get(position);
-        holder.nameTextView.setText(video.getName());
+        String name = video.getName();
+        if(name.substring(0,4).equals(Media.mediaExtension))
+        {
+            holder.nameTextView.setText(name.substring(4));
+        }
+        else
+        {
+            holder.nameTextView.setText(name);
+        }
+
 
         currentHolder = holder;
     }
