@@ -223,28 +223,28 @@ public class MainActivity extends AppCompatActivity
             mediaShareUtils.sendMedia(video);
         }
 
-//        Intent intent = new Intent(this, MediaShareActivity.class);
-//        this.startActivity(intent);
-//        if(inSelectionMode)
-//        {
-//            if(menuHidden)
-//            {
-//                showMenu();
-//            }
-//            shareIcon.setImageResource(R.drawable.share);
-//            shareText.setText("Share");
-//            inSelectionMode = false;
-//        }
-//        else
-//        {
-//            if(!menuHidden)
-//            {
-//                hideMenu();
-//            }
-//            shareIcon.setImageResource(R.drawable.cancel);
-//            shareText.setText("Cancel");
-//            inSelectionMode = true;
-//        }
+        Intent intent = new Intent(this, MediaShareActivity.class);
+        this.startActivity(intent);
+        if(inSelectionMode)
+        {
+            if(menuHidden)
+            {
+                showMenu();
+            }
+            shareIcon.setImageResource(R.drawable.share);
+            shareText.setText("Share");
+            inSelectionMode = false;
+        }
+        else
+        {
+            if(!menuHidden)
+            {
+                hideMenu();
+            }
+            shareIcon.setImageResource(R.drawable.cancel);
+            shareText.setText("Cancel");
+            inSelectionMode = true;
+        }
     }
 
     private void recordAudioButtonClick()
