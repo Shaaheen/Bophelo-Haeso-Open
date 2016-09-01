@@ -94,8 +94,7 @@ public class MainActivity extends AppCompatActivity
         Media.setIdentifierPrefix("chw_");
         fileUtils = new FileUtils();
 
-        //Should have here?????
-
+        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -232,6 +231,9 @@ public class MainActivity extends AppCompatActivity
 
         if (inSelectionMode)
         {
+            String appName = getResources().getString(R.string.app_name);
+            getActionBar().setTitle(appName);
+            getSupportActionBar().setTitle(appName);
             if (menuHidden)
             {
                 showMenu();
@@ -242,14 +244,12 @@ public class MainActivity extends AppCompatActivity
             inSelectionMode = false;
         } else
         {
-//            Video video = new Video("Sample_video", "/video_sample.mp4");
-//            if (mediaShareUtils != null){
-//                mediaShareUtils.sendMedia(video);
-//            }
 
-//            Intent intent = new Intent(this, MediaShareActivity.class);
-//            this.startActivity(intent);
 
+            // Set
+
+            getActionBar().setTitle("Select video");
+            getSupportActionBar().setTitle("Select video");
             if (!menuHidden)
             {
                 hideMenu();
@@ -349,11 +349,7 @@ public class MainActivity extends AppCompatActivity
     {
         videoToSend = videoList.get(position);
 
-        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
-
-        mediaShareUtils.setMediaToSend(videoToSend);
-
-        mediaShareUtils.scanForDevices();
+        mediaShareUtils.sendMedia(videoToSend);
 
     }
 
