@@ -39,7 +39,7 @@ public class Media {
         this.filePath = filePath;
     }
 
-    public void setIdentifierPrefix(String identifierPrefix) {
+    public static void setIdentifierPrefix(String identifierPrefix) {
         Media.identifierPrefix = identifierPrefix;
     }
 }

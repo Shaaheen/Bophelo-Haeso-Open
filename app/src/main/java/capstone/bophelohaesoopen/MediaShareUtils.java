@@ -1,7 +1,9 @@
 package capstone.bophelohaesoopen;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -19,16 +21,20 @@ import capstone.bophelohaesoopen.HaesoAPI.Media;
  */
 public class MediaShareUtils {
 
-    private BluetoothUtils bluetoothUtils;
+    public BluetoothUtils bluetoothUtils;
 
     private boolean sendMedia;
     private Media toSendMedia;
+    private Media mediaToSend;
+
+    ProgressDialog indeterminatePD;
+    ProgressDialog determinatePD;
 
     // Dialog to display while scanning for devices
     private MaterialDialog scanningDialog;
     private Activity activityM;
 
-    public MediaShareUtils(final Context ctx, Activity activity) {
+    public MediaShareUtils(final Context ctx, final Activity activity) {
         toSendMedia = null;
         sendMedia = false;
         bluetoothUtils = new BluetoothUtils(ctx, activity);
@@ -36,18 +42,21 @@ public class MediaShareUtils {
 
         bluetoothUtils.bluetoothListener = new BluetoothListener() {
             @Override
-            public void onStartScan() {
-                //Toast.makeText(ctx, "SCANNNINNINININ", Toast.LENGTH_SHORT).show();
-                scanningDialog = new MaterialDialog.Builder(activityM)
-                        .title("Devices")
-                        .items("Scanning . . .")
-                        .show();
+            public void onStartScan()
+            {
+                indeterminatePD = new ProgressDialog(activity);
+                indeterminatePD.setMessage("Scanning for devices");
+                indeterminatePD.setCancelable(false);
+                indeterminatePD.setIndeterminate(true);
+                indeterminatePD.show();
             }
 
             @Override
             public void onStopScan() {
-                scanningDialog.hide();
+//                scanningDialog.hide();
+                indeterminatePD.dismiss();
             }
+
 
             @Override
             public void onBTDevicesFound(final List<BluetoothUtils.BTDevice> btDevices) {
@@ -70,6 +79,8 @@ public class MediaShareUtils {
                                 //Connects to selected device
                                 //simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
                                 bluetoothUtils.connectToAddress(btDevices.get(which).getAddress());
+
+
                             }
                         })
                         .show();
@@ -86,7 +97,7 @@ public class MediaShareUtils {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    bluetoothUtils.sendMediaFile(toSendMedia);
+                    bluetoothUtils.sendMediaFile(mediaToSend);
                     sendMedia = false;
                 }
             }
@@ -101,6 +112,12 @@ public class MediaShareUtils {
 
             public void onStartReceiving() {
                 Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
+                determinatePD = new ProgressDialog(activity);
+                determinatePD.setTitle("Receiving file");
+                determinatePD.setIndeterminate(false);
+                determinatePD.show();
+                determinatePD.setProgress(0);
             }
 
             @Override
@@ -110,6 +127,9 @@ public class MediaShareUtils {
                     sendMedia = false;
                     Toast.makeText(ctx, "Received file", Toast.LENGTH_SHORT).show();
                 }
+
+                Log.v("BT","Received " + progress + "% ");
+                determinatePD.setProgress((int)progress);
             }
 
         };
@@ -129,11 +149,17 @@ public class MediaShareUtils {
      * set in this method
      * @param media media file to be sent via Bluetooth
      */
-    public void sendMedia(Media media){
-        this.toSendMedia = media;
+    public void sendMedia(Media media)
+    {
+//        this.toSendMedia = media;
         //bluetoothUtils.sendMediaFile(toSendMedia);
         sendMedia = true;
         scanForDevices();
+    }
+
+    public void setMediaToSend(Media media)
+    {
+        mediaToSend = media;
     }
 
 

@@ -8,7 +8,7 @@ public interface BluetoothListener
 {
     void onStartScan();
     void onStopScan();
-    void onBTDevicesFound(List<BluetoothUtils.BTDevice> btDevices);
+    void onBTDevicesFound(final List<BluetoothUtils.BTDevice> btDevices);
     void onConnected();
     void onDisconnected();
     void onStartReceiving();
