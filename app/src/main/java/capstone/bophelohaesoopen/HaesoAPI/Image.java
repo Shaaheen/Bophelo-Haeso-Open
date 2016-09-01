@@ -9,4 +9,8 @@ public class Image extends Media {
     public Image(String name, String filePath) {
         super(name, filePath);
     }
+
+    public String getFileName(){
+        return (identifierPrefix + name + mediaExtension);
+    }
 }
