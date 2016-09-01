@@ -95,4 +95,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
             mainActivity.playVideo(position);
         }
     }
+
+    public void removeOverlay()
+    {
+        currentHolder.selectionOverlay.setVisibility(View.INVISIBLE);
+    }
 }

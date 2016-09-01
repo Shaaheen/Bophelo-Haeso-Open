@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity
             {
                 showMenu();
             }
+            removeSelectedVideoItemOverlay();
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");
             inSelectionMode = false;
@@ -429,5 +430,10 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getName());
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
+    }
+
+    public void removeSelectedVideoItemOverlay()
+    {
+        videoAdapter.removeOverlay();
     }
 }
