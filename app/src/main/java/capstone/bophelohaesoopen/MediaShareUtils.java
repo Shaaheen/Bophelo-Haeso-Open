@@ -108,13 +108,21 @@ public class MediaShareUtils {
 
         };
 
-        //scanForDevices();
     }
 
+    /**
+     * Scans for devices
+     */
     public void scanForDevices(){
         bluetoothUtils.startScanning();
     }
 
+    /**
+     * Sets the media file that will be sent scans for devices
+     * When device connected, then listener will catch connection event and send media that was
+     * set in this method
+     * @param media media file to be sent via Bluetooth
+     */
     public void sendMedia(Media media){
         this.toSendMedia = media;
         //bluetoothUtils.sendMediaFile(toSendMedia);
