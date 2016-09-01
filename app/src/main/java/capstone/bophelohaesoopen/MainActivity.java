@@ -36,7 +36,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Video;
 import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, BluetoothListener
+        implements NavigationView.OnNavigationItemSelectedListener
 {
     //region View declarations
     RelativeLayout mainMenu;
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mainMenu = (RelativeLayout)findViewById(R.id.mainMenu);
-        menuToggleBar = (RelativeLayout)findViewById(R.id.menuToggleBar);
+        mainMenu = (RelativeLayout) findViewById(R.id.mainMenu);
+        menuToggleBar = (RelativeLayout) findViewById(R.id.menuToggleBar);
         menuToggleBar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity
                 menuToggleClick();
             }
         });
-        menuToggle = (ImageView)findViewById(R.id.menuToggle);
+        menuToggle = (ImageView) findViewById(R.id.menuToggle);
         menuToggle.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        shareMediaBar = (RelativeLayout)findViewById(R.id.shareMediaBar);
+        shareMediaBar = (RelativeLayout) findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -138,12 +138,12 @@ public class MainActivity extends AppCompatActivity
                 shareMediaButtonClick();
             }
         });
-        shareIcon = (ImageView)findViewById(R.id.shareIcon);
-        shareText = (TextView)findViewById(R.id.shareText);
+        shareIcon = (ImageView) findViewById(R.id.shareIcon);
+        shareText = (TextView) findViewById(R.id.shareText);
 
         //region RecyclerView initialization
 
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         gridLayoutManager = new CustomGridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
@@ -207,21 +207,21 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-        Toast.makeText(this,"Opens camera activity for user to take a picture.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Opens camera activity for user to take a picture.", Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(this, PictureActivity.class);
 //        this.startActivity(intent);
     }
 
     private void audioGalleryButtonClick()
     {
-        Toast.makeText(this,"Opens list / gallery of recorded audio files.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Opens list / gallery of recorded audio files.", Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(this, AudioGalleryActivity.class);
 //        this.startActivity(intent);
     }
 
     private void pictureGalleryButtonClick()
     {
-        Toast.makeText(this,"Opens gallery of pictures taken.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Opens gallery of pictures taken.", Toast.LENGTH_SHORT).show();
 
 //        Intent intent = new Intent(this, PictureGalleryActivity.class);
 //        this.startActivity(intent);
@@ -230,17 +230,16 @@ public class MainActivity extends AppCompatActivity
     private void shareMediaButtonClick()
     {
 
-        if(inSelectionMode)
+        if (inSelectionMode)
         {
-            if(menuHidden)
+            if (menuHidden)
             {
                 showMenu();
             }
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");
             inSelectionMode = false;
-        }
-        else
+        } else
         {
 //            Video video = new Video("Sample_video", "/video_sample.mp4");
 //            if (mediaShareUtils != null){
@@ -250,7 +249,7 @@ public class MainActivity extends AppCompatActivity
 //            Intent intent = new Intent(this, MediaShareActivity.class);
 //            this.startActivity(intent);
 
-            if(!menuHidden)
+            if (!menuHidden)
             {
                 hideMenu();
             }
@@ -268,11 +267,10 @@ public class MainActivity extends AppCompatActivity
 
     private void menuToggleClick()
     {
-        if(!menuHidden)
+        if (!menuHidden)
         {
             hideMenu();
-        }
-        else
+        } else
         {
             showMenu();
         }
@@ -285,7 +283,7 @@ public class MainActivity extends AppCompatActivity
         float yPos = mainMenu.getY();
         float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
 
-        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos+yDelta);
+        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos + yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
         anim.setInterpolator(new DecelerateInterpolator());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
@@ -293,7 +291,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator)
             {
-                mainMenu.setY((Float)valueAnimator.getAnimatedValue());
+                mainMenu.setY((Float) valueAnimator.getAnimatedValue());
             }
         });
         anim.start();
@@ -311,7 +309,7 @@ public class MainActivity extends AppCompatActivity
         float yPos = mainMenu.getY();
         float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
 
-        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos-yDelta);
+        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos - yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
         anim.setInterpolator(new DecelerateInterpolator());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
@@ -319,7 +317,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator)
             {
-                mainMenu.setY((Float)valueAnimator.getAnimatedValue());
+                mainMenu.setY((Float) valueAnimator.getAnimatedValue());
             }
         });
         anim.start();
@@ -350,7 +348,9 @@ public class MainActivity extends AppCompatActivity
     {
         videoToSend = videoList.get(position);
 
-        mediaShareUtils = new MediaShareUtils(getApplicationContext(),this);
+        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
+
+        mediaShareUtils.setMediaToSend(videoToSend);
 
         mediaShareUtils.scanForDevices();
 
@@ -397,7 +397,7 @@ public class MainActivity extends AppCompatActivity
     {
         // Handle navigation view item clicks
         int id = item.getItemId();
-        if(id == R.id.nav_view_logs)
+        if (id == R.id.nav_view_logs)
         {
             Toast.makeText(this, "Opens activity to show list of logs", Toast.LENGTH_SHORT).show();
         }
@@ -414,11 +414,12 @@ public class MainActivity extends AppCompatActivity
      */
     private void populateVideoList()
     {
-        videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("chw_",Video.mediaExtension);
+        videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("chw_", Video.mediaExtension);
     }
 
     /**
      * Starts the VideoPlayerActivity with the video at the position (in the video list) given
+     *
      * @param position a position in the video list
      */
     public void playVideo(int position)
@@ -428,90 +429,5 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getName());
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
-    }
-
-
-    @Override
-    public void onStartScan()
-    {
-        indeterminatePD = new ProgressDialog(this);
-        indeterminatePD.setMessage("Scanning for devices");
-        indeterminatePD.setCancelable(false);
-        indeterminatePD.setIndeterminate(true);
-        indeterminatePD.show();
-    }
-
-    @Override
-    public void onStopScan()
-    {
-        indeterminatePD.dismiss();
-    }
-
-    @Override
-    public void onBTDevicesFound(final List<BluetoothUtils.BTDevice> btDevices)
-    {
-        if (btDevices == null || btDevices.isEmpty()){
-            return;
-        }
-        //Create pop up dialogue that displays a list of all the found devices
-        //All are clickable
-        final MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .title("Devices")
-                .items(btDevices)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        Toast.makeText(getApplicationContext(), "Device No. " + which + " : " + text + " selected ", Toast.LENGTH_SHORT).show();
-                        //Connects to selected device
-                        //simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
-                        mediaShareUtils.bluetoothUtils.connectToAddress(btDevices.get(which).getAddress());
-
-                        // Delay before sending
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                mediaShareUtils.bluetoothUtils.sendMediaFile(videoToSend);
-                            }
-                        }, 300);
-
-
-                    }
-                })
-                .show();
-
-        dialog.show();
-    }
-
-    @Override
-    public void onConnected()
-    {
-
-    }
-
-    @Override
-    public void onDisconnected()
-    {
-
-    }
-
-    @Override
-    public void onStartReceiving()
-    {
-        Toast.makeText(getApplicationContext(), "Receiving", Toast.LENGTH_SHORT).show();
-        determinatePD = new ProgressDialog(this);
-        determinatePD.setTitle("Receiving file");
-        determinatePD.setIndeterminate(false);
-        determinatePD.show();
-        determinatePD.setProgress(0);
-    }
-
-    @Override
-    public void onReceivingProgress(double progress)
-    {
-        Log.v("BT","Received " + progress + "% ");
-        determinatePD.setProgress((int)progress);
     }
 }
