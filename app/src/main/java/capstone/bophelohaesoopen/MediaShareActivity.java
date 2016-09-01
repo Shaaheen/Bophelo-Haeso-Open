@@ -97,7 +97,7 @@ public class MediaShareActivity extends AppCompatActivity
 
             @Override
             public void onStartReceiving() {
-                Toast.makeText(getApplicationContext(), "RecEIVING", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Receiving", Toast.LENGTH_SHORT).show();
             }
 
             @Override
