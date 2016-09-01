@@ -3,7 +3,6 @@ package capstone.bophelohaesoopen;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -19,12 +18,12 @@ import capstone.bophelohaesoopen.HaesoAPI.Media;
 /**
  * Handles connecting to BT device and sending off media files
  */
-public class MediaShareUtils {
+public class MediaShareUtils
+{
 
     public BluetoothUtils bluetoothUtils;
 
     private boolean sendMedia;
-    private Media toSendMedia;
     private Media mediaToSend;
 
     ProgressDialog indeterminatePD;
@@ -34,13 +33,15 @@ public class MediaShareUtils {
     private MaterialDialog scanningDialog;
     private Activity activityM;
 
-    public MediaShareUtils(final Context ctx, final Activity activity) {
-        toSendMedia = null;
+    public MediaShareUtils(final Context ctx, final Activity activity)
+    {
+        mediaToSend = null;
         sendMedia = false;
         bluetoothUtils = new BluetoothUtils(ctx, activity);
         activityM = activity;
 
-        bluetoothUtils.bluetoothListener = new BluetoothListener() {
+        bluetoothUtils.bluetoothListener = new BluetoothListener()
+        {
             @Override
             public void onStartScan()
             {
@@ -52,29 +53,34 @@ public class MediaShareUtils {
             }
 
             @Override
-            public void onStopScan() {
+            public void onStopScan()
+            {
 //                scanningDialog.hide();
                 indeterminatePD.dismiss();
             }
 
 
             @Override
-            public void onBTDevicesFound(final List<BluetoothUtils.BTDevice> btDevices) {
+            public void onBTDevicesFound(final List<BluetoothUtils.BTDevice> btDevices)
+            {
 
-                if (btDevices == null || btDevices.isEmpty()){
-                    Toast.makeText(ctx,"No devices found",Toast.LENGTH_SHORT).show();
+                if (btDevices == null || btDevices.isEmpty())
+                {
+                    Toast.makeText(ctx, "No devices found", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Toast.makeText(ctx,"Devices found",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx, "Devices found", Toast.LENGTH_SHORT).show();
                 //Create pop up dialogue that displays a list of all the found devices
                 //All are clickable
                 final MaterialDialog dialog = new MaterialDialog.Builder(activityM)
                         .title("Devices")
                         .items(btDevices)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
+                        .itemsCallback(new MaterialDialog.ListCallback()
+                        {
                             @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text)
+                            {
                                 Toast.makeText(ctx, "Device No. " + which + " : " + text + " selected ", Toast.LENGTH_SHORT).show();
                                 //Connects to selected device
                                 //simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
@@ -89,12 +95,16 @@ public class MediaShareUtils {
             }
 
             @Override
-            public void onConnected() {
-                Toast.makeText(ctx,"Connected, Send : " + sendMedia,Toast.LENGTH_SHORT).show();
-                if (sendMedia){
-                    try {
+            public void onConnected()
+            {
+                Toast.makeText(ctx, "Connected, Send : " + sendMedia, Toast.LENGTH_SHORT).show();
+                if (sendMedia)
+                {
+                    try
+                    {
                         Thread.sleep(300);
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException e)
+                    {
                         e.printStackTrace();
                     }
                     bluetoothUtils.sendMediaFile(mediaToSend);
@@ -103,14 +113,16 @@ public class MediaShareUtils {
             }
 
             @Override
-            public void onDisconnected() {
-                Toast.makeText(ctx,"Disconnected",Toast.LENGTH_SHORT).show();
+            public void onDisconnected()
+            {
+                Toast.makeText(ctx, "Disconnected", Toast.LENGTH_SHORT).show();
                 //sendMedia = false;
             }
 
             @Override
 
-            public void onStartReceiving() {
+            public void onStartReceiving()
+            {
                 Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
                 Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
                 determinatePD = new ProgressDialog(activity);
@@ -121,15 +133,17 @@ public class MediaShareUtils {
             }
 
             @Override
-            public void onReceivingProgress(double progress) {
-                Log.v("BT","Received " + progress + "% ");
-                if (progress>=99.0){
+            public void onReceivingProgress(double progress)
+            {
+                Log.v("BT", "Received " + progress + "% ");
+                if (progress >= 99.0)
+                {
                     sendMedia = false;
                     Toast.makeText(ctx, "Received file", Toast.LENGTH_SHORT).show();
                 }
 
-                Log.v("BT","Received " + progress + "% ");
-                determinatePD.setProgress((int)progress);
+                Log.v("BT", "Received " + progress + "% ");
+                determinatePD.setProgress((int) progress);
             }
 
         };
@@ -139,7 +153,8 @@ public class MediaShareUtils {
     /**
      * Scans for devices
      */
-    public void scanForDevices(){
+    private void scanForDevices()
+    {
         bluetoothUtils.startScanning();
     }
 
@@ -147,20 +162,15 @@ public class MediaShareUtils {
      * Sets the media file that will be sent scans for devices
      * When device connected, then listener will catch connection event and send media that was
      * set in this method
+     *
      * @param media media file to be sent via Bluetooth
      */
     public void sendMedia(Media media)
     {
-//        this.toSendMedia = media;
-        //bluetoothUtils.sendMediaFile(toSendMedia);
+        this.mediaToSend = media;
+
         sendMedia = true;
         scanForDevices();
     }
-
-    public void setMediaToSend(Media media)
-    {
-        mediaToSend = media;
-    }
-
 
 }
