@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
         gridLayoutManager = new CustomGridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        populateVideoList();
+        //populateVideoList();
         videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
 
@@ -381,10 +381,10 @@ public class MainActivity extends AppCompatActivity
     /**
      * Populates video list with the list of videos from storage (Currently only prototype functionality)
      */
-    private void populateVideoList()
-    {
-        videoList = fileUtils.getVideoCollectionFromStorage();
-    }
+    //private void populateVideoList()
+//    {
+//        videoList = fileUtils.getVideoCollectionFromStorage();
+//    }
 
     /**
      * Starts the VideoPlayerActivity with the video at the position (in the video list) given
