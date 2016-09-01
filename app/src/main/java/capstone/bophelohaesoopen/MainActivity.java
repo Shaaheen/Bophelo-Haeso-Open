@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initialize()
     {
-        Media.identifierPrefix = "chw_";
+        Media.setIdentifierPrefix("chw_");
         fileUtils = new FileUtils();
 
         //Should have here?????
