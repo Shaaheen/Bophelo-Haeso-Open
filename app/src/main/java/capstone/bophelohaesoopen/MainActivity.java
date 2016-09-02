@@ -3,8 +3,11 @@ package capstone.bophelohaesoopen;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -72,6 +75,10 @@ public class MainActivity extends AppCompatActivity
     boolean menuHidden = false;
     private static int MENU_ANIMATION_DURATION = 300;
     public boolean inSelectionMode = false;
+
+    private String actionBarSelectModeColor = "#606060";
+    private String actionBarDefaultColor = "#000000";
+
 
     ArrayList<Video> videoList = new ArrayList<>();
 
@@ -236,28 +243,20 @@ public class MainActivity extends AppCompatActivity
 
     private void shareMediaButtonClick()
     {
-
         if (inSelectionMode)
         {
             String appName = getResources().getString(R.string.app_name);
-//            getActionBar().setTitle(appName);
-//            getSupportActionBar().setTitle(appName);
-            if (menuHidden)
-            {
-//                showMenu();
-            }
+
+            setTitle(appName);
+
             removeSelectedVideoItemOverlay();
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");
             inSelectionMode = false;
-        } else
+        }
+        else
         {
-
-
-            // Set
-
-//            getActionBar().setTitle("Select video");
-//            getSupportActionBar().setTitle("Select video");
+            setTitle("Select video");
             if (!menuHidden)
             {
                 hideMenu();
