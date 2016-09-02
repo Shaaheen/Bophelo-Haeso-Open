@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Bophelo Haeso</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Main Menu</string>
+    <string name="title_activity_audio_gallery">Audio files</string>
+    <string name="title_activity_picture_gallery">Pictures</string>
+    <string name="title_activity_audio_recording">Recording . .</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

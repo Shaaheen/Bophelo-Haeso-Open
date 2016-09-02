@@ -213,32 +213,21 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-        Toast.makeText(this, "Opens camera activity for user to take a picture.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Opens camera to take picture.", Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(this, PictureActivity.class);
 //        this.startActivity(intent);
     }
 
     private void audioGalleryButtonClick()
     {
-        Toast.makeText(this, "Opens list / gallery of recorded audio files.", Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(this, AudioGalleryActivity.class);
-//        this.startActivity(intent);
-        determinatePD.dismiss();
+        Intent intent = new Intent(this, AudioGalleryActivity.class);
+        this.startActivity(intent);
     }
 
     private void pictureGalleryButtonClick()
     {
-        Toast.makeText(this, "Opens gallery of pictures taken.", Toast.LENGTH_SHORT).show();
-
-//        Intent intent = new Intent(this, PictureGalleryActivity.class);
-//        this.startActivity(intent);
-
-        determinatePD = new ProgressDialog(this);
-        determinatePD.setTitle("Receiving file");
-        determinatePD.setIndeterminate(false);
-        determinatePD.show();
-        determinatePD.incrementProgressBy(50);
-        determinatePD.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        Intent intent = new Intent(this, PictureGalleryActivity.class);
+        this.startActivity(intent);
     }
 
     private void shareMediaButtonClick()

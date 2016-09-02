@@ -24,7 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".AudioGalleryActivity">
+        <activity
+            android:name=".AudioGalleryActivity"
+            android:label="@string/title_activity_audio_gallery">
         </activity>
         <activity android:name=".MediaShareActivity">
         </activity>
@@ -34,6 +36,10 @@
         </activity>
         <activity android:name=".LogListActivity">
         </activity>
+        <activity
+            android:name=".PictureGalleryActivity"
+            android:label="@string/title_activity_picture_gallery">
+        </activity>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -42,11 +48,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
 
-        <activity android:name=".AudioRecorderActivity">
+        <activity
+            android:name=".AudioRecorderActivity"
+            android:label="@string/title_activity_audio_recording">
         </activity>
         <activity android:name=".PictureActivity">
-        </activity>
-        <activity android:name=".PictureGalleryActivity">
         </activity>
     </application>
 
