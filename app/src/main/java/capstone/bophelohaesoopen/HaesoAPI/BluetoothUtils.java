@@ -135,7 +135,13 @@ public class BluetoothUtils {
         simpleBluetooth.sendData(mediaBytes); //Send file as bytes
     }
 
+    /**
+     * Sends a progress measure back to sender device indicating current progress on
+     * receiving file
+     * @param progress percentage of progress made so far
+     */
     private void sendProgressToOtherDevice(int progress){
+        //Add leading zeros as need string to be exact length (Max length is 100)
         String prog = "_Progress_;" +("000" + progress).substring( ("" + progress).length() );
         simpleBluetooth.sendData(prog);
     }
@@ -183,9 +189,9 @@ public class BluetoothUtils {
 
                 if (data.contains("_Progress_;")){
                     String[] splitte = data.split(";");
-                    String progress = splitte[1];
+                    String progress = splitte[1]; //Gets progress number
+                    progress.replaceFirst("^0+(?!$)", ""); //Removes leading zeros
                     bluetoothListener.onSendingProgress(progress);
-                    //intialOffset += 14;
                 }
                 else{
                     //Initial message received indicates the file size so we know
