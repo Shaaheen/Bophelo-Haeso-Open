@@ -13,8 +13,8 @@ public class AudioRecorder {
 
     //In order to use Android MediaRecorder class, we first ned to create an instance of it.
     //MediaRecorder myAudioRecorder = new MediaRecorder();
-    private String outputFile;
-    MediaRecorder myAudioRecorder;
+    public String outputFile;
+    public MediaRecorder myAudioRecorder;
 
     public AudioRecorder(String OutPutFileName){
         //The name of the file being created.
