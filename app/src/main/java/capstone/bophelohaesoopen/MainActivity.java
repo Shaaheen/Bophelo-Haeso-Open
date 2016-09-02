@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         Media.setIdentifierPrefix("chw_");
         fileUtils = new FileUtils(this);
 
-        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
+        //mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -154,9 +154,23 @@ public class MainActivity extends AppCompatActivity
         gridLayoutManager = new CustomGridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
+        videoList = new ArrayList<>();
         populateVideoList();
         videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
+//        Thread thread = new Thread(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                populateVideoList();
+//
+//            }
+//        });
+//        thread.start();
+//
+//        videoAdapter.setVideoList(videoList);
+//        videoAdapter.notifyDataSetChanged();
 
         //endregion
 
@@ -245,7 +259,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            setTitle("Select video");
+            setTitle("Select video to send");
             if (!menuHidden)
             {
                 hideMenu();
@@ -267,9 +281,19 @@ public class MainActivity extends AppCompatActivity
         if (!menuHidden)
         {
             hideMenu();
-        } else
+        }
+        else
         {
             showMenu();
+            if(inSelectionMode)
+            {
+                inSelectionMode = false;
+                shareIcon.setImageResource(R.drawable.share);
+                shareText.setText("Share");
+                String appName = getResources().getString(R.string.app_name);
+                setTitle(appName);
+                removeSelectedVideoItemOverlay();
+            }
         }
     }
 
@@ -343,9 +367,11 @@ public class MainActivity extends AppCompatActivity
 
     public void shareVideo(int position)
     {
-        videoToSend = videoList.get(position);
+//        videoToSend = videoList.get(position);
+//
+//        mediaShareUtils.sendMedia(videoToSend);
 
-        mediaShareUtils.sendMedia(videoToSend);
+        Toast.makeText(this, "Sends the video clicked", Toast.LENGTH_SHORT).show();
 
     }
 

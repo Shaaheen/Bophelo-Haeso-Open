@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.R;
@@ -78,5 +79,4 @@ public class FileUtils
             }
         }
     }
-
 }
