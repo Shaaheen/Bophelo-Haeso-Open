@@ -102,7 +102,7 @@ public class MediaShareUtils
                 {
                     try
                     {
-                        Thread.sleep(300);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e)
                     {
                         e.printStackTrace();
@@ -143,7 +143,16 @@ public class MediaShareUtils
                 }
 
                 Log.v("BT", "Received " + progress + "% ");
-                determinatePD.setProgress((int) progress);
+
+
+                if(progress == 100)
+                {
+                    determinatePD.dismiss();
+                }
+                else
+                {
+                    determinatePD.setProgress((int) progress);
+                }
             }
 
         };

@@ -22,6 +22,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     RecyclerView recView;
     VideoViewHolder currentHolder;
 
+    private static int nameCharCount = 12;
 
     public VideoAdapter(MainActivity mainActivity, RecyclerView recView, ArrayList<Video> videos)
     {
@@ -49,16 +50,20 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     public void onBindViewHolder(VideoViewHolder holder, int position)
     {
         Video video = videoList.get(position);
-        String name = video.getName().substring(0,video.getName().length()-4);
-        if(name.substring(0,4).equals(Media.identifierPrefix))
+        String name = video.getName();
+        if(name.length() > nameCharCount)
         {
-            holder.nameTextView.setText(name.substring(4));
+            name = name.substring(0, nameCharCount);
+            name+="..";
+            holder.nameTextView.setText(name);
         }
         else
         {
             holder.nameTextView.setText(name);
+
         }
 
+        holder.thumbnail.setImageBitmap(video.thumb);
 
         currentHolder = holder;
     }

@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
     private void initialize()
     {
         Media.setIdentifierPrefix("chw_");
-        fileUtils = new FileUtils();
+        fileUtils = new FileUtils(this);
 
         mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
 
@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "Opens list / gallery of recorded audio files.", Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(this, AudioGalleryActivity.class);
 //        this.startActivity(intent);
+        determinatePD.dismiss();
     }
 
     private void pictureGalleryButtonClick()
@@ -224,6 +225,13 @@ public class MainActivity extends AppCompatActivity
 
 //        Intent intent = new Intent(this, PictureGalleryActivity.class);
 //        this.startActivity(intent);
+
+        determinatePD = new ProgressDialog(this);
+        determinatePD.setTitle("Receiving file");
+        determinatePD.setIndeterminate(false);
+        determinatePD.show();
+        determinatePD.incrementProgressBy(50);
+        determinatePD.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     }
 
     private void shareMediaButtonClick()
@@ -232,11 +240,11 @@ public class MainActivity extends AppCompatActivity
         if (inSelectionMode)
         {
             String appName = getResources().getString(R.string.app_name);
-            getActionBar().setTitle(appName);
-            getSupportActionBar().setTitle(appName);
+//            getActionBar().setTitle(appName);
+//            getSupportActionBar().setTitle(appName);
             if (menuHidden)
             {
-                showMenu();
+//                showMenu();
             }
             removeSelectedVideoItemOverlay();
             shareIcon.setImageResource(R.drawable.share);
@@ -248,8 +256,8 @@ public class MainActivity extends AppCompatActivity
 
             // Set
 
-            getActionBar().setTitle("Select video");
-            getSupportActionBar().setTitle("Select video");
+//            getActionBar().setTitle("Select video");
+//            getSupportActionBar().setTitle("Select video");
             if (!menuHidden)
             {
                 hideMenu();

@@ -1,15 +1,27 @@
 package capstone.bophelohaesoopen.HaesoAPI;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.*;
 import java.util.ArrayList;
 
+import capstone.bophelohaesoopen.R;
+
 public class FileUtils
 {
 
-    public FileUtils() {}
+    Activity activity;
+    public FileUtils(Activity activity)
+    {
+        this.activity = activity;
+    }
 
     /**
      * Scans device file directory for media files and creates an array of Media objects from the videos found
@@ -47,7 +59,22 @@ public class FileUtils
             //Adds file to container if has appropriate extension and prefix
             else if (f.isFile() && f.getPath().endsWith(extension) && f.getName().startsWith(prefix) ) {
                 Log.v("Media","Found : " + f.getName() + " " + f.getPath()  );
-                mediaFiles.add(  new Video( f.getName() , f.getAbsolutePath() )  );
+                if(extension.equals(Video.mediaExtension))
+                {
+                    Video video = new Video(f.getName(), f.getAbsolutePath());
+                    Bitmap thumbTemp = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND);
+
+                    int width = (int)activity.getResources().getDimension(R.dimen.video_item_width);
+                    int height = (int)activity.getResources().getDimension(R.dimen.video_item_height);
+                    Bitmap thumb = ThumbnailUtils.extractThumbnail(thumbTemp, width, height);
+                    video.thumb = thumb;
+                    mediaFiles.add(video);
+                }
+                else
+                {
+                    mediaFiles.add( new Media(f.getName(), f.getAbsolutePath()));
+                }
+
             }
         }
     }

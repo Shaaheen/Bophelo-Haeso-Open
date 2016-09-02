@@ -106,7 +106,7 @@ public class BluetoothUtils {
      */
     public void sendMediaFile(Media mediaFile){
         //verifyStoragePermissions(activityUIClass);
-        File file = new File(Environment.getExternalStorageDirectory() + mediaFile.filePath);
+        File file = new File(mediaFile.getFilePath());
         System.out.println(file.getName());
         ByteArrayOutputStream baos = new ByteArrayOutputStream(); //To accumulate file bytes
         FileInputStream fis = null;
