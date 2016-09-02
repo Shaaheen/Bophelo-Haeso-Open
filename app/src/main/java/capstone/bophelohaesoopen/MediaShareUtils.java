@@ -20,7 +20,6 @@ import capstone.bophelohaesoopen.HaesoAPI.Media;
  */
 public class MediaShareUtils
 {
-
     public BluetoothUtils bluetoothUtils;
 
     private boolean sendMedia;
@@ -45,7 +44,7 @@ public class MediaShareUtils
             @Override
             public void onStartScan()
             {
-                indeterminatePD = new ProgressDialog(activity);
+                indeterminatePD = new ProgressDialog(activityM);
                 indeterminatePD.setMessage("Scanning for devices");
                 indeterminatePD.setCancelable(false);
                 indeterminatePD.setIndeterminate(true);
@@ -102,7 +101,7 @@ public class MediaShareUtils
                 {
                     try
                     {
-                        Thread.sleep(300);
+                        Thread.sleep(700);
                     } catch (InterruptedException e)
                     {
                         e.printStackTrace();
@@ -124,8 +123,8 @@ public class MediaShareUtils
             public void onStartReceiving()
             {
                 Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
-                Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
-                determinatePD = new ProgressDialog(activity);
+                //Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
+                determinatePD = new ProgressDialog(activityM);
                 determinatePD.setTitle("Receiving file");
                 determinatePD.setIndeterminate(false);
                 determinatePD.show();
@@ -144,6 +143,11 @@ public class MediaShareUtils
 
                 Log.v("BT", "Received " + progress + "% ");
                 determinatePD.setProgress((int) progress);
+            }
+
+            @Override
+            public void onSendingProgress(String progress) {
+                Log.v("BT","Sending " + progress + "%");
             }
 
         };
@@ -168,7 +172,6 @@ public class MediaShareUtils
     public void sendMedia(Media media)
     {
         this.mediaToSend = media;
-
         sendMedia = true;
         scanForDevices();
     }

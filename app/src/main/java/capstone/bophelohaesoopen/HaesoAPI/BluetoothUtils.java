@@ -106,7 +106,7 @@ public class BluetoothUtils {
      */
     public void sendMediaFile(Media mediaFile){
         //verifyStoragePermissions(activityUIClass);
-        File file = new File(Environment.getExternalStorageDirectory() + mediaFile.filePath);
+        File file = new File(mediaFile.getFilePath());
         System.out.println(file.getName());
         ByteArrayOutputStream baos = new ByteArrayOutputStream(); //To accumulate file bytes
         FileInputStream fis = null;
@@ -133,6 +133,11 @@ public class BluetoothUtils {
         Log.w("Byte size of string",sendFileSize.getBytes().length + "");
 
         simpleBluetooth.sendData(mediaBytes); //Send file as bytes
+    }
+
+    private void sendProgressToOtherDevice(int progress){
+        String prog = "_Progress_;" +("000" + progress).substring( ("" + progress).length() );
+        simpleBluetooth.sendData(prog);
     }
 
     public  void handleActivityResult(int requestCode, int resultCode, Intent data) {
@@ -176,55 +181,65 @@ public class BluetoothUtils {
             //Log.w("Byte array length ",bytes.length+"");
             if (data != null){
 
-                //Initial message received indicates the file size so we know
-                // when to stop reading in bytes that are being received
-                if (data.contains("file_size:")){
-                    bluetoothListener.onStartReceiving();
-                    receivingProgress = 0.0;
-                    fileBytes = new ByteArrayOutputStream();
-                    String[] splitFileInfo = data.split(":");
-                    sizeOfFileRec = Integer.parseInt( splitFileInfo[1] );
-                    nameOfTransferredFile = splitFileInfo[3];
-                    Log.w("Size of File",sizeOfFileRec + "");
-                    intialOffset = (splitFileInfo[0] + splitFileInfo[1] + splitFileInfo[2] + splitFileInfo[3]).getBytes().length + NUMBER_OF_COLONS;
-                    Log.w( "Byte size ", intialOffset + "" );
-
-                    currSizeOfRecFile = 0;
+                if (data.contains("_Progress_;")){
+                    String[] splitte = data.split(";");
+                    String progress = splitte[1];
+                    bluetoothListener.onSendingProgress(progress);
+                    //intialOffset += 14;
                 }
-                FileOutputStream out = null;
-                try {
+                else{
+                    //Initial message received indicates the file size so we know
+                    // when to stop reading in bytes that are being received
+                    if (data.contains("file_size:")){
+                        bluetoothListener.onStartReceiving();
+                        receivingProgress = 0.0;
+                        fileBytes = new ByteArrayOutputStream();
+                        String[] splitFileInfo = data.split(":");
+                        sizeOfFileRec = Integer.parseInt( splitFileInfo[1] );
+                        nameOfTransferredFile = splitFileInfo[3];
+                        Log.w("Size of File",sizeOfFileRec + "");
+                        intialOffset = (splitFileInfo[0] + splitFileInfo[1] + splitFileInfo[2] + splitFileInfo[3]).getBytes().length + NUMBER_OF_COLONS;
+                        Log.w( "Byte size ", intialOffset + "" );
 
-                    //Writes bytes just received into accumalating array of bytes
-                    //Will accumulate all bytes received and export all bytes into one file
-                    fileBytes.write( bytes , intialOffset, bytes.length - intialOffset);
-                    currSizeOfRecFile += bytes.length ;
-                    currSizeOfRecFile -= intialOffset;
-                    double currProg = ( (currSizeOfRecFile+0.0) /(sizeOfFileRec+0.0) );
-                    currProg = currProg *100;
-                    if (currProg - receivingProgress > 1.0){
-                        receivingProgress = currProg;
-                        bluetoothListener.onReceivingProgress(receivingProgress);
-                    }
-                    intialOffset = 0;
-
-                    //Stop taking in bytes and export file
-                    if ( currSizeOfRecFile >= sizeOfFileRec ){
-                        out =  new FileOutputStream( Environment.getExternalStorageDirectory() + "/" + nameOfTransferredFile );
-                        out.write( fileBytes.toByteArray() );
-                        out.close();
-                        Log.w( "Rec File","Done receiving file" );
-                        Log.w( "File Size","File size: " + fileBytes.toByteArray().length + " Diff is: " + (fileBytes.toByteArray().length - sizeOfFileRec)  );
-
-                        //Reset all variables for next file
-                        fileBytes = null;
-                        sizeOfFileRec = 0;
                         currSizeOfRecFile = 0;
-                        intialOffset = 0;
-                        nameOfTransferredFile = "Media";
                     }
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    FileOutputStream out = null;
+                    try {
+
+                        //Writes bytes just received into accumalating array of bytes
+                        //Will accumulate all bytes received and export all bytes into one file
+                        fileBytes.write( bytes , intialOffset, bytes.length - intialOffset);
+                        currSizeOfRecFile += bytes.length ;
+                        currSizeOfRecFile -= intialOffset;
+                        double currProg = ( (currSizeOfRecFile+0.0) /(sizeOfFileRec+0.0) );
+                        currProg = currProg *100;
+                        if (currProg - receivingProgress > 1.0){
+                            receivingProgress = currProg;
+                            bluetoothListener.onReceivingProgress(receivingProgress);
+                            sendProgressToOtherDevice((int) receivingProgress);
+                        }
+                        intialOffset = 0;
+
+                        //Stop taking in bytes and export file
+                        if ( currSizeOfRecFile >= sizeOfFileRec ){
+                            out =  new FileOutputStream( Environment.getExternalStorageDirectory() + "/" + nameOfTransferredFile );
+                            out.write( fileBytes.toByteArray() );
+                            out.close();
+                            Log.w( "Rec File","Done receiving file" );
+                            Log.w( "File Size","File size: " + fileBytes.toByteArray().length + " Diff is: " + (fileBytes.toByteArray().length - sizeOfFileRec)  );
+
+                            //Reset all variables for next file
+                            fileBytes = null;
+                            sizeOfFileRec = 0;
+                            currSizeOfRecFile = 0;
+                            intialOffset = 0;
+                            nameOfTransferredFile = "Media";
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             else{
