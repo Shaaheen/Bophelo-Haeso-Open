@@ -1,43 +1,43 @@
 package capstone.bophelohaesoopen;
 
-import android.app.Activity;
-import android.support.test.InstrumentationRegistry;
+
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.runner.AndroidJUnitRunner;
-import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertNotNull;
+
 /**
- * Created by ntesang on 9/1/2016.
+ * Created by Jacob Ntesang on 9/1/2016.
+ * This class tests that al the components expected in our MainActivity are there when the activity is run.
  */
 
 
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MainActivityTest {
 
     Button recordAudio, viewAudio, capturePicture, viewPicture;
     private MainActivity mActivity;
 
-    public MainActivityTest() {
-        super(MainActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        mActivity = getActivity();
+        mActivity = mActivityRule.getActivity();
     }
 
+
+    //Check that all the UI buttons are present.
     @Test
     public void testButtons() {
-        //Check that all the UI buttons are present.
         recordAudio = (Button) mActivity.findViewById(R.id.recordAudioButton);
         capturePicture = (Button) mActivity.findViewById(R.id.takePictureButton);
         viewAudio = (Button) mActivity.findViewById(R.id.audioGalleryButton);
@@ -51,6 +51,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     @After
     public void tearDown() throws Exception {
-        super.tearDown();
+        mActivity = null;
     }
 }
