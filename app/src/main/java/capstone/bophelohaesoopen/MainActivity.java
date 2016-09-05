@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     // region Primitives declarations
     boolean menuHidden = false;
+    boolean firstRun = true;
     private static int MENU_ANIMATION_DURATION = 300;
     public boolean inSelectionMode = false;
 
@@ -237,10 +238,14 @@ public class MainActivity extends AppCompatActivity
 
             setTitle(appName);
 
-            removeSelectedVideoItemOverlay();
+
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");
             inSelectionMode = false;
+
+            // Hide video item tick overlay
+            videoAdapter.setItemClicked(false);
+            videoAdapter.notifyDataSetChanged();
         }
         else
         {
@@ -421,10 +426,5 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getName());
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
-    }
-
-    public void removeSelectedVideoItemOverlay()
-    {
-        videoAdapter.removeOverlay();
     }
 }

@@ -28,6 +28,7 @@ public class VideoViewHolder extends RecyclerView.ViewHolder
     private void itemClick()
     {
 //        MainActivity.playVideo();
+
     }
 
 }
