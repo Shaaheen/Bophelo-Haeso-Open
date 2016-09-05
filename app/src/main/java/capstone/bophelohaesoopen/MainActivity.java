@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity
 
         // Initialize UI elements
         initialize();
-
     }
 
     private void initialize()
