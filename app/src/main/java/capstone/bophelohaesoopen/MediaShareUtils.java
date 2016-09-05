@@ -16,11 +16,10 @@ import capstone.bophelohaesoopen.HaesoAPI.BluetoothListener;
 import capstone.bophelohaesoopen.HaesoAPI.Media;
 
 /**
- * Handles connecting to BT device and sending off media files
+ * Handles connecting to BT device and sending of media files
  */
 public class MediaShareUtils
 {
-
     public BluetoothUtils bluetoothUtils;
 
     private boolean sendMedia;
@@ -159,7 +158,6 @@ public class MediaShareUtils
                     determinatePD.setProgress((int) progress);
                 }
             }
-
         };
 
     }

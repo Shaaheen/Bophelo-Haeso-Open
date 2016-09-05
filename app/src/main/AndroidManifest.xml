@@ -28,8 +28,6 @@
             android:name=".AudioGalleryActivity"
             android:label="@string/title_activity_audio_gallery">
         </activity>
-        <activity android:name=".MediaShareActivity">
-        </activity>
         <activity android:name=".VideoPlayerActivity">
         </activity>
         <activity android:name=".AudioPlayerActivity">

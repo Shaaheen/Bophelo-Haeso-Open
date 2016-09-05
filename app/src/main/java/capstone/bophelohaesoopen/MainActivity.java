@@ -76,10 +76,6 @@ public class MainActivity extends AppCompatActivity
     private static int MENU_ANIMATION_DURATION = 300;
     public boolean inSelectionMode = false;
 
-    private String actionBarSelectModeColor = "#606060";
-    private String actionBarDefaultColor = "#000000";
-
-
     ArrayList<Video> videoList = new ArrayList<>();
 
     //TAKE OUT
