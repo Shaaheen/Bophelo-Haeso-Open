@@ -98,7 +98,8 @@ public class MainActivity extends AppCompatActivity
 
     private void initialize()
     {
-        Media.setIdentifierPrefix("chw_");
+        String identifierPrefix = getResources().getString(R.string.identifier_prefix);
+        Media.setIdentifierPrefix(identifierPrefix);
         fileUtils = new FileUtils(this);
 
         mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
