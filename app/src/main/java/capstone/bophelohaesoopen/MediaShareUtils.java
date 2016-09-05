@@ -126,10 +126,15 @@ public class MediaShareUtils
                 Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
                 Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
                 determinatePD = new ProgressDialog(activity);
-                determinatePD.setTitle("Receiving file");
+
+                String receivingDialogTitle = activity.getResources().getString(R.string.receiving_dialog_title);
+                determinatePD.setTitle(receivingDialogTitle);
+                determinatePD.setCancelable(false);
+                determinatePD.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 determinatePD.setIndeterminate(false);
-                determinatePD.show();
                 determinatePD.setProgress(0);
+                determinatePD.setMax(100);
+                determinatePD.show();
             }
 
             @Override
