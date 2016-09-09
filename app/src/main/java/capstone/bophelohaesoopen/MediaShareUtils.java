@@ -152,6 +152,16 @@ public class MediaShareUtils
             @Override
             public void onSendingProgress(String progress) {
                 Log.v("BT","Sending " + progress + "%");
+
+                int p = Integer.valueOf(progress);
+                if(p == 100)
+                {
+                    determinatePD.dismiss();
+                }
+                else
+                {
+                    determinatePD.setProgress(p);
+                }
             }
 
         };
