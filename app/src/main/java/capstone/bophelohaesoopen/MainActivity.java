@@ -3,8 +3,11 @@ package capstone.bophelohaesoopen;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     // region Primitives declarations
     boolean menuHidden = false;
+    boolean firstRun = true;
     private static int MENU_ANIMATION_DURATION = 300;
     public boolean inSelectionMode = false;
 
@@ -86,13 +90,13 @@ public class MainActivity extends AppCompatActivity
 
         // Initialize UI elements
         initialize();
-
     }
 
     private void initialize()
     {
-        Media.setIdentifierPrefix("chw_");
-        fileUtils = new FileUtils();
+        String identifierPrefix = getResources().getString(R.string.identifier_prefix);
+        Media.setIdentifierPrefix(identifierPrefix);
+        fileUtils = new FileUtils(this);
 
         mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
 
@@ -206,50 +210,46 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-        Toast.makeText(this, "Opens camera activity for user to take a picture.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Opens camera to take picture.", Toast.LENGTH_SHORT).show();
+
 //        Intent intent = new Intent(this, PictureActivity.class);
 //        this.startActivity(intent);
     }
 
     private void audioGalleryButtonClick()
     {
-        Toast.makeText(this, "Opens list / gallery of recorded audio files.", Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(this, AudioGalleryActivity.class);
 //        this.startActivity(intent);
+
+        determinatePD.dismiss();
     }
 
     private void pictureGalleryButtonClick()
     {
-        Toast.makeText(this, "Opens gallery of pictures taken.", Toast.LENGTH_SHORT).show();
-
-//        Intent intent = new Intent(this, PictureGalleryActivity.class);
-//        this.startActivity(intent);
+        Intent intent = new Intent(this, PictureGalleryActivity.class);
+        this.startActivity(intent);
     }
 
     private void shareMediaButtonClick()
     {
-
         if (inSelectionMode)
         {
             String appName = getResources().getString(R.string.app_name);
-            getActionBar().setTitle(appName);
-            getSupportActionBar().setTitle(appName);
-            if (menuHidden)
-            {
-                showMenu();
-            }
-            removeSelectedVideoItemOverlay();
+
+            setTitle(appName);
+
+
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");
             inSelectionMode = false;
-        } else
+
+            // Hide video item tick overlay
+            videoAdapter.setItemClicked(false);
+            videoAdapter.notifyDataSetChanged();
+        }
+        else
         {
-
-
-            // Set
-
-            getActionBar().setTitle("Select video");
-            getSupportActionBar().setTitle("Select video");
+            setTitle("Select video");
             if (!menuHidden)
             {
                 hideMenu();
@@ -426,10 +426,5 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getName());
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
-    }
-
-    public void removeSelectedVideoItemOverlay()
-    {
-        videoAdapter.removeOverlay();
     }
 }

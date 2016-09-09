@@ -20,7 +20,20 @@ public class Media {
     }
 
     public String getName() {
-        return name;
+        int index = filePath.lastIndexOf("/");
+        String filename = filePath.substring(index);
+        if(identifierPrefix != "")
+        {
+            if(filename.contains(identifierPrefix))
+            {
+                int prefixlength = identifierPrefix.length();
+                filename = filename.substring(prefixlength+1);
+            }
+        }
+
+        int extensionLength = mediaExtension.length();
+        filename = filename.substring(0,(filename.length() - extensionLength));
+        return filename;
     }
 
     public String getFilePath() {

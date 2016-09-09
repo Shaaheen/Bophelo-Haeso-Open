@@ -178,7 +178,7 @@ public class AudioRecorderActivity extends AppCompatActivity
     private void showToast()
     {
         handler.removeCallbacks(runnable);
-        Toast toast = Toast.makeText(this, "Recording saved", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, "Recording saved as \"recording.3gp\"", Toast.LENGTH_SHORT);
         toast.show();
     }
 }

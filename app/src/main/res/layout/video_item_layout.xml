@@ -15,6 +15,13 @@
             android:layout_height="match_parent"
             android:background="#838181">
 
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/thumbnail"
+                android:contentDescription="@string/thumbnail"
+                android:visibility="visible"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
@@ -32,18 +39,13 @@
                 </TextView>
             </RelativeLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/thumbnail"
-                android:contentDescription="@string/thumbnail"/>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/green"
                 android:id="@+id/selectionOverlay"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                android:alpha="0.7">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
