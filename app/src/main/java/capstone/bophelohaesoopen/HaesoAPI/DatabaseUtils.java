@@ -47,5 +47,16 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         onCreate(sqLiteDatabase);
     }
 
+    // Adding new log entry
+    public void addLog(LogEntry logEntry) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_TYPE, String.valueOf(logEntry.getLogEntryType())); // LogEntry Name
+        values.put(KEY_ACTION, logEntry.getLoggedAction()); // LogEntry Phone Number
+        // Inserting Row
+        db.insert(TABLE_Video, null, values);
+        db.close(); // Closing database connection
+    }
+
     
 }
