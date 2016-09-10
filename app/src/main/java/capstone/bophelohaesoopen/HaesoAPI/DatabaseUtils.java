@@ -58,5 +58,25 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         db.close(); // Closing database connection
     }
 
-    
+    // Getting All LogEntrys
+    public List<LogEntry> getAllLogEntrys() {
+        List<LogEntry> LogEntryList = new ArrayList<LogEntry>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + TABLE_Video;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                LogEntry LogEntry = new LogEntry(
+                        capstone.bophelohaesoopen.HaesoAPI.LogEntry.LogType.valueOf(cursor.getString(1))
+                        , cursor.getString(2));
+                // Adding log to list
+                LogEntryList.add(LogEntry);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        // return contact list
+        return LogEntryList;
+    }
 }
