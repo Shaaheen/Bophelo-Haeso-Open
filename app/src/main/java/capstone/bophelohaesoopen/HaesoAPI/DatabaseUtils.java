@@ -75,8 +75,45 @@ public class DatabaseUtils extends SQLiteOpenHelper{
                 LogEntryList.add(LogEntry);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         db.close();
         // return contact list
         return LogEntryList;
     }
+
+    // Getting All LogEntrys FOR A SPECIFIED TYPE
+    public List<LogEntry> getLogEntrysForType(LogEntry.LogType logType) {
+        List<LogEntry> LogEntryList = new ArrayList<LogEntry>();
+        String nam = logType.name();
+        // Select All Query
+        //String selectQuery = "SELECT * FROM " + TABLE_Video + " WHERE " + KEY_TYPE + "=" + logType.name();
+        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = db.query(TABLE_Video, new String[]{KEY_ID,
+//                KEY_TYPE, KEY_ACTION}, KEY_ACTION + "=?",
+//        new String[]{logType.name()}, null, null, null, null);
+
+        Cursor cursor = db.query(TABLE_Video, new String[]{KEY_ID,
+                        KEY_TYPE, KEY_ACTION}, KEY_TYPE + "=?",
+                new String[]{logType.name()}, null, null, null, null);
+
+        //Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                LogEntry LogEntry = new LogEntry(
+                        capstone.bophelohaesoopen.HaesoAPI.LogEntry.LogType.valueOf(cursor.getString(1))
+                        , cursor.getString(2));
+                // Adding log to list
+                LogEntryList.add(LogEntry);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        // return contact list
+        return LogEntryList;
+    }
+
+
+
+
 }
