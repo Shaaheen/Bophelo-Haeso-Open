@@ -20,7 +20,6 @@ public class AudioRecorder {
         //The name of the file being created.
         this.outputFile = OutPutFileName;
         myAudioRecorder = new MediaRecorder();
-
     }
 
     /**
@@ -41,6 +40,11 @@ public class AudioRecorder {
     public void startRecording() throws IOException {
         myAudioRecorder.prepare();
         myAudioRecorder.start();
+
+        //Log playing of video
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
     }
 
     /**
@@ -48,6 +52,12 @@ public class AudioRecorder {
      */
     public void stopRecording() {
         myAudioRecorder.stop();
+
+        //Log playing of video
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
+
         myAudioRecorder.release();
         myAudioRecorder = null;
     }
