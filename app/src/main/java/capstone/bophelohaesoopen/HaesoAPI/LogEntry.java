@@ -9,12 +9,20 @@ public class LogEntry {
 
     public static enum LogType {VIDEO, RECORDING, BLUETOOTH, PAGE_VISITS}
 
-    LogType logEntryType;
-    String loggedAction;
+    private LogType logEntryType;
+    private String loggedAction;
     //Timestamp
 
     public LogEntry(LogType logType, String action) {
         this.logEntryType = logType;
         this.loggedAction = action;
+    }
+
+    public LogType getLogEntryType() {
+        return logEntryType;
+    }
+
+    public String getLoggedAction() {
+        return loggedAction;
     }
 }
