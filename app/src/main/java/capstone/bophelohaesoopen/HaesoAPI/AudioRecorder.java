@@ -16,10 +16,9 @@ public class AudioRecorder {
     private String outputFile;
     MediaRecorder myAudioRecorder;
 
-    public AudioRecorder(String OutPutFileName){
-        //The name of the file being created.
-        this.outputFile = OutPutFileName;
+    public AudioRecorder(){
         myAudioRecorder = new MediaRecorder();
+        this.outputFile = FileUtils.getAudioRecordingFileName();
     }
 
     /**
@@ -29,7 +28,8 @@ public class AudioRecorder {
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        myAudioRecorder.setOutputFile(this.outputFile);
+
+        myAudioRecorder.setOutputFile(outputFile);
 
     }
 
@@ -43,6 +43,7 @@ public class AudioRecorder {
 
         //Log playing of video
         if ( DatabaseUtils.isDatabaseSetup() ){
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.RECORDING,"Started recording");
             DatabaseUtils.getInstance().addLog(logEntry);
         }
     }
@@ -55,6 +56,7 @@ public class AudioRecorder {
 
         //Log playing of video
         if ( DatabaseUtils.isDatabaseSetup() ){
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.RECORDING,"Stopped recording");
             DatabaseUtils.getInstance().addLog(logEntry);
         }
 

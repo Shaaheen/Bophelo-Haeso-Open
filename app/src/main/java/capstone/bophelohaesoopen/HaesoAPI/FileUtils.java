@@ -10,7 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import capstone.bophelohaesoopen.R;
 
@@ -77,6 +80,12 @@ public class FileUtils
 
             }
         }
+    }
+
+    public static String getAudioRecordingFileName(){
+        DateFormat dateFormat = new SimpleDateFormat("dd\\MM\\yyyy_HH:mm:ss");
+        String dateTimeNow =  dateFormat.format(new Date());
+        return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"Aud_Report_" +  dateTimeNow + ".3gp");
     }
 
 }
