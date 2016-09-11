@@ -241,6 +241,12 @@ public class BluetoothUtils {
                             Log.w( "Rec File","Done receiving file" );
                             Log.w( "File Size","File size: " + fileBytes.toByteArray().length + " Diff is: " + (fileBytes.toByteArray().length - sizeOfFileRec)  );
 
+                            //Log to database
+                            LogEntry logEntry = new LogEntry(LogEntry.LogType.BLUETOOTH,"Received Media",nameOfTransferredFile);
+                            if ( DatabaseUtils.isDatabaseSetup() ){
+                                DatabaseUtils.getInstance().addLog(logEntry);
+                            }
+
                             //Reset all variables for next file
                             fileBytes = null;
                             sizeOfFileRec = 0;
