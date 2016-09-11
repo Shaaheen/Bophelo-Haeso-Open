@@ -132,6 +132,12 @@ public class BluetoothUtils {
         Log.w("Sending size", baos.size() +"" );
         Log.w("Byte size of string",sendFileSize.getBytes().length + "");
 
+        //Log to database
+        LogEntry logEntry = new LogEntry(LogEntry.LogType.BLUETOOTH,"Share Media",mediaFile.getFileName());
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
+
         simpleBluetooth.sendData(mediaBytes); //Send file as bytes
     }
 
