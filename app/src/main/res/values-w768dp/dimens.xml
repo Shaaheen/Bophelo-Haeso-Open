@@ -10,6 +10,8 @@
     <dimen name="circle_radius">40dp</dimen>
     <dimen name="video_item_width">10dp</dimen>
     <dimen name="video_item_height">90dp</dimen>
+    <dimen name="image_item_width">100dp</dimen>
+    <dimen name="image_item_height">100dp</dimen>
     <dimen name="video_text_size">12sp</dimen>
     <dimen name="main_menu_top_margin">220dp</dimen>
     <dimen name="button_column_width">190dp</dimen>

@@ -1,10 +1,8 @@
 package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -96,12 +94,12 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
 
-                if (mediaLoadService.videosLoaded)
+                if (mediaLoadService.mediaLoaded)
                 {
                     System.out.println("videos loaded!");
                     videoList = mediaLoadService.getVideoList();
                     videosLoadingScreen.setVisibility(View.INVISIBLE);
-                    videoAdapter.setVideoList(videoList);
+                    videoAdapter.setVideos(videoList);
                     videoAdapter.notifyDataSetChanged();
                     handler.removeCallbacks(this);
                 }
@@ -384,7 +382,6 @@ public class MainActivity extends AppCompatActivity
         videoToSend = videoList.get(position);
 
         mediaShareUtils.sendMedia(videoToSend);
-
     }
 
     // region Activity overrides

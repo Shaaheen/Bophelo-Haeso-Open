@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.HaesoAPI.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
 /**
@@ -113,7 +112,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setVideoList(ArrayList<Video> videos)
+    public void setVideos(ArrayList<Video> videos)
     {
         videoList = videos;
     }

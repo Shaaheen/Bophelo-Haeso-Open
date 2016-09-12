@@ -3,6 +3,7 @@ package capstone.bophelohaesoopen.HaesoAPI;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,7 +30,7 @@ public class FileUtils
      * @param extension - specifies the type of media to retrieve
      * @return An array of Media objects
      */
-    public ArrayList<? extends Media> getMediaCollectionFromStorage(String prefix,String extension)
+    public ArrayList<? extends Media> getMediaCollectionFromStorage(String prefix, String extension)
     {
         Log.v("Media","Searching for media files...");
         ArrayList<Media> mediaFiles = new ArrayList<>(); //Stores array of retrieved media
@@ -69,6 +70,16 @@ public class FileUtils
                     Bitmap thumb = ThumbnailUtils.extractThumbnail(thumbTemp, width, height);
                     video.thumb = thumb;
                     mediaFiles.add(video);
+                }
+                else if(extension.equals(Image.mediaExtension))
+                {
+                    Image image = new Image(f.getName(), f.getAbsolutePath());
+
+                    int width = (int)activity.getResources().getDimension(R.dimen.image_item_width);
+                    int height = (int)activity.getResources().getDimension(R.dimen.image_item_height);
+                    Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(f.getAbsolutePath()), width, height);
+                    image.thumb = thumb;
+                    mediaFiles.add(image);
                 }
                 else
                 {
