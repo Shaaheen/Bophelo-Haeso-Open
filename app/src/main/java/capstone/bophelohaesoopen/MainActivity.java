@@ -49,15 +49,6 @@ public class MainActivity extends AppCompatActivity
 
     MediaLoadService mediaLoadService;
 
-    ProgressDialog indeterminatePD;
-    ProgressDialog determinatePD;
-
-    // region Button declarations
-//    AppCompatButton recordAudioButton;
-//    AppCompatButton takePictureButton;
-//    AppCompatButton audioGalleryButton;
-//    AppCompatButton picturesButton;
-
     CardView recordAudioButton;
     CardView takePictureButton;
     CardView recordingsButton;
@@ -204,11 +195,6 @@ public class MainActivity extends AppCompatActivity
 
         //region Buttons initializations
 
-//        recordAudioButton = (AppCompatButton) findViewById(R.id.recordAudioButton);
-//        takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
-//        audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
-//        picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
-
         recordAudioButton = (CardView) findViewById(R.id.recordAudioButton);
         takePictureButton = (CardView) findViewById(R.id.takePictureButton);
         recordingsButton = (CardView) findViewById(R.id.recordingsButton);
@@ -270,8 +256,6 @@ public class MainActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, AudioGalleryActivity.class);
         this.startActivity(intent);
-
-//        determinatePD.dismiss();
     }
 
     private void pictureGalleryButtonClick()
