@@ -1,38 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:visibility="visible">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/menu_toggle_bar_height"
-        android:background="#a4a4a4"
-        android:id="@+id/shareMediaBar"
-        android:layout_marginTop="40dp">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:id="@+id/shareIcon"
-                android:src="@drawable/share"
-                android:scaleType="centerCrop"
-                android:padding="14dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Share"
-                android:id="@+id/shareText"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/shareIcon"/>
-        </RelativeLayout>
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -51,60 +23,295 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="fill_parent">
 
-        <LinearLayout
-            android:id="@+id/buttonLayout"
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_marginTop="80dp"
-            android:layout_alignParentLeft="false"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/menu_toggle_bar_height"
             android:background="@color/main_menu_background"
-            android:layout_weight="1">
+            >
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="@dimen/menu_button_width"
-                android:layout_height="@dimen/menu_button_height"
-                android:text="Record Audio"
-                android:id="@+id/recordAudioButton"
-                android:layout_marginTop="5dp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingBottom="18dp">
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="@dimen/menu_button_width"
-                android:layout_height="@dimen/menu_button_height"
-                android:text="Take picture"
-                android:id="@+id/takePictureButton"
-                android:layout_marginTop="@dimen/main_menu_button_top_margin"/>
-        </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/buttonContainer"
+                    android:paddingBottom="10dp">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_marginTop="80dp"
-            android:background="@color/main_menu_background"
-            android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/buttonLayout"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:layout_alignParentLeft="false"
+                        android:background="@color/main_menu_background"
+                        android:layout_weight="1"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp">
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="@dimen/menu_button_width"
-                android:layout_height="@dimen/menu_button_height"
-                android:id="@+id/audioGalleryButton"
-                android:text="Audio files"
-                android:layout_marginTop="@dimen/main_menu_button_top_margin"/>
+                        <android.support.v7.widget.AppCompatButton
+                            android:layout_width="@dimen/menu_button_width"
+                            android:layout_height="@dimen/menu_button_height"
+                            android:text="Record Audio"
+                            android:id="@+id/recordAudioButton1"
+                            android:layout_marginTop="5dp"
+                            android:visibility="gone"/>
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="@dimen/menu_button_width"
-                android:layout_height="@dimen/menu_button_height"
-                android:text="Pictures"
-                android:id="@+id/picturesButton"
-                android:layout_marginTop="@dimen/main_menu_button_top_margin"/>
-        </LinearLayout>
-    </LinearLayout>
+                        <android.support.v7.widget.AppCompatButton
+                            android:layout_width="@dimen/menu_button_width"
+                            android:layout_height="@dimen/menu_button_height"
+                            android:text="Take picture"
+                            android:id="@+id/takePictureButton1"
+                            android:layout_marginTop="@dimen/main_menu_button_top_margin"
+                            android:visibility="gone"/>
+
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="@dimen/menu_button_width"
+                            android:layout_height="@dimen/menu_button_height"
+                            card_view:cardBackgroundColor="@color/button_color"
+                            card_view:cardElevation="@dimen/card_elevation"
+                            android:layout_margin="5dp"
+                            android:id="@+id/recordAudioButton">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:layout_margin="5dp"
+                                >
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:layout_centerHorizontal="true">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:id="@+id/imageView2"
+                                        android:src="@drawable/record"
+                                        android:padding="7dp"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Record"
+                                        android:id="@+id/textView3"/>
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </android.support.v7.widget.CardView>
+
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="@dimen/menu_button_width"
+                            android:layout_height="@dimen/menu_button_height"
+                            card_view:cardBackgroundColor="@color/button_color"
+                            card_view:cardElevation="@dimen/card_elevation"
+                            android:layout_margin="5dp"
+                            android:id="@+id/takePictureButton">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#a4a4a4"
+                                android:layout_margin="5dp"
+                                >
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:layout_centerHorizontal="true">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:id="@+id/imageView3"
+                                        android:src="@drawable/camera"
+                                        android:padding="7dp"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Take\npicture"
+                                        android:id="@+id/textView4"/>
+                                </LinearLayout>
+                            </RelativeLayout>
+                            </android.support.v7.widget.CardView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:background="@color/main_menu_background"
+                        android:layout_weight="1"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp">
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="@dimen/menu_button_width"
+                            android:layout_height="@dimen/menu_button_height"
+                            card_view:cardBackgroundColor="@color/button_color"
+
+                            card_view:cardElevation="@dimen/card_elevation"
+                            android:layout_margin="5dp"
+                            android:id="@+id/recordingsButton">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#a4a4a4"
+
+                                >
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:layout_centerHorizontal="true">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:id="@+id/imageView4"
+                                        android:src="@drawable/recordings"
+                                        android:padding="5dp"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Recordings"
+                                        android:id="@+id/textView5"/>
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </android.support.v7.widget.CardView>
+
+
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="@dimen/menu_button_width"
+                            android:layout_height="@dimen/menu_button_height"
+                            android:padding="5dp"
+                            card_view:cardBackgroundColor="@color/button_color"
+                            card_view:cardElevation="@dimen/card_elevation"
+                            android:layout_margin="5dp"
+                            android:id="@+id/picturesButton">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#a4a4a4"
+                                android:layout_margin="5dp"
+                                >
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:layout_centerHorizontal="true">
+
+                                    <ImageView
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:id="@+id/imageView5"
+                                        android:src="@drawable/gallery"
+                                        android:padding="7dp"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Pictures"
+                                        android:id="@+id/textView6"/>
+                                </LinearLayout>
+                            </RelativeLayout>
+                            </android.support.v7.widget.CardView>
+
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:layout_width="@dimen/menu_button_width"
+                            android:layout_height="@dimen/menu_button_height"
+                            android:id="@+id/recordingsButton1"
+                            android:text="Audio files"
+                            android:layout_marginTop="@dimen/main_menu_button_top_margin"
+                            android:visibility="gone"/>
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:layout_width="@dimen/menu_button_width"
+                            android:layout_height="@dimen/menu_button_height"
+                            android:text="Pictures"
+                            android:id="@+id/picturesButton1"
+                            android:layout_marginTop="@dimen/main_menu_button_top_margin"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/share_button_height"
+                    android:padding="5dp"
+                    android:id="@+id/shareMediaBar"
+                    android:layout_below="@+id/buttonContainer"
+                    card_view:cardBackgroundColor="@color/button_color"
+                    android:layout_centerHorizontal="true"
+                    card_view:cardElevation="@dimen/card_elevation"
+                    android:layout_marginLeft="@dimen/share_button_margin"
+                    android:layout_marginBottom="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/share_button_height"
+                        >
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true">
+
+                            <ImageView
+                                android:layout_width="55dp"
+                                android:layout_height="55dp"
+                                android:id="@+id/shareIcon"
+                                android:src="@drawable/share"
+                                android:scaleType="centerCrop"
+                                android:padding="14dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Share"
+                                android:id="@+id/shareText"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/shareIcon"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -8,19 +8,22 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.HaesoAPI.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 
 /**
  * Data adapter for MainActivity RecyclerView (list of videos)
  */
 
-public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implements View.OnClickListener
+public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
 {
     ArrayList<Video> videoList;
     MainActivity mainActivity;
     RecyclerView recView;
     VideoViewHolder currentHolder;
+
+    int selectedPosition = 0;
+
+    boolean itemClicked = false;
 
     private static int nameCharCount = 12;
 
@@ -43,7 +46,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_item_layout, parent, false);
-        itemView.setOnClickListener(this);
         VideoViewHolder viewHolder = new VideoViewHolder(itemView);
         currentHolder = viewHolder;
 
@@ -51,7 +53,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
     }
 
     @Override
-    public void onBindViewHolder(VideoViewHolder holder, int position)
+    public void onBindViewHolder(final VideoViewHolder holder, final int position)
     {
         Video video = videoList.get(position);
         String name = video.getName();
@@ -69,7 +71,37 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
 
         holder.thumbnail.setImageBitmap(video.thumb);
 
-        currentHolder = holder;
+        if(selectedPosition == position && itemClicked)
+        {
+            holder.selectionOverlay.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            holder.selectionOverlay.setVisibility(View.INVISIBLE);
+        }
+
+        final VideoViewHolder tempHolder = holder;
+        holder.itemView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                setItemClicked(true);
+                if(mainActivity.inSelectionMode)
+                {
+                    notifyItemChanged(selectedPosition);
+                    selectedPosition = position;
+                    notifyItemChanged(selectedPosition);
+                    mainActivity.shareVideo(position);
+                }
+                else
+                {
+                    mainActivity.playVideo(position);
+                }
+
+            }
+        });
     }
 
     @Override
@@ -84,29 +116,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder> implemen
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setVideoList(ArrayList<Video> videos)
+    public void setVideos(ArrayList<Video> videos)
     {
         videoList = videos;
     }
 
-    @Override
-    public void onClick(View view)
+    public void setItemClicked(boolean clicked)
     {
-        int position = recView.getChildLayoutPosition(view);
-
-        if(mainActivity.inSelectionMode)
-        {
-            currentHolder.selectionOverlay.setVisibility(View.VISIBLE);
-            mainActivity.shareVideo(position);
-        }
-        else
-        {
-            mainActivity.playVideo(position);
-        }
-    }
-
-    public void removeOverlay()
-    {
-        currentHolder.selectionOverlay.setVisibility(View.INVISIBLE);
+        itemClicked = clicked;
     }
 }

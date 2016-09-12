@@ -8,6 +8,43 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imagesLoadingScreen">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:gravity="center_vertical">
+
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/progressBar"
+                android:indeterminate="true"
+                android:indeterminateBehavior="repeat"
+                android:indeterminateOnly="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading images"
+                android:id="@+id/textView7"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="@dimen/share_button_height"
         android:layout_alignParentBottom="true"
         android:background="#a4a4a4"
@@ -39,9 +76,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gallery of pictrues with the app"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
+        android:id="@+id/noMediaText"
         android:layout_centerHorizontal="true"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:text="No pictures found"
+        android:layout_marginTop="70dp"
+        android:visibility="gone"/>
 </RelativeLayout>

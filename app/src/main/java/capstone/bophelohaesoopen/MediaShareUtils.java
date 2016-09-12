@@ -16,11 +16,10 @@ import capstone.bophelohaesoopen.HaesoAPI.BluetoothListener;
 import capstone.bophelohaesoopen.HaesoAPI.Media;
 
 /**
- * Handles connecting to BT device and sending off media files
+ * Handles connecting to BT device and sending of media files
  */
 public class MediaShareUtils
 {
-
     public BluetoothUtils bluetoothUtils;
 
     private boolean sendMedia;
@@ -40,6 +39,14 @@ public class MediaShareUtils
         bluetoothUtils = new BluetoothUtils(ctx, activity);
         activityM = activity;
 
+        determinatePD = new ProgressDialog(activity);
+        determinatePD.setCancelable(false);
+        determinatePD.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        determinatePD.setIndeterminate(false);
+        determinatePD.setProgress(0);
+        determinatePD.setMax(100);
+
+
         bluetoothUtils.bluetoothListener = new BluetoothListener()
         {
             @Override
@@ -55,7 +62,6 @@ public class MediaShareUtils
             @Override
             public void onStopScan()
             {
-//                scanningDialog.hide();
                 indeterminatePD.dismiss();
             }
 
@@ -109,6 +115,12 @@ public class MediaShareUtils
                     }
                     bluetoothUtils.sendMediaFile(mediaToSend);
                     sendMedia = false;
+
+//                    String sendingDialogTitle = activity.getResources().getString(R.string.sending_dialog_title);
+//                    determinatePD.setTitle(sendingDialogTitle);
+//                    determinatePD.setProgress(0);
+//                    determinatePD.setMax(100);
+//                    determinatePD.show();
                 }
             }
 
@@ -125,11 +137,11 @@ public class MediaShareUtils
             {
                 Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
                 Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
-                determinatePD = new ProgressDialog(activity);
-                determinatePD.setTitle("Receiving file");
-                determinatePD.setIndeterminate(false);
-                determinatePD.show();
-                determinatePD.setProgress(0);
+
+
+                String receivingDialogTitle = activity.getResources().getString(R.string.receiving_dialog_title);
+                determinatePD.setTitle(receivingDialogTitle);
+
             }
 
             @Override
@@ -145,7 +157,8 @@ public class MediaShareUtils
                 Log.v("BT", "Received " + progress + "% ");
 
 
-                if(progress == 100)
+                // 99 is a bug
+                if(progress == 99)
                 {
                     determinatePD.dismiss();
                 }
@@ -155,6 +168,19 @@ public class MediaShareUtils
                 }
             }
 
+            @Override
+            public void onSendingProgress(String progress)
+            {
+                int p = Integer.valueOf(progress);
+//                if(p == 100)
+//                {
+//                    determinatePD.dismiss();
+//                }
+//                else
+//                {
+//                    determinatePD.setProgress(p);
+//                }
+            }
         };
 
     }

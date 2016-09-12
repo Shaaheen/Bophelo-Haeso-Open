@@ -1,16 +1,12 @@
 package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.ActionBar;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,21 +16,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.widget.AppCompatButton;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import java.util.ArrayList;
-import java.util.List;
 
-import capstone.bophelohaesoopen.HaesoAPI.BluetoothListener;
-import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Media;
+import capstone.bophelohaesoopen.HaesoAPI.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
 
@@ -44,7 +35,7 @@ public class MainActivity extends AppCompatActivity
     //region View declarations
     RelativeLayout mainMenu;
     RelativeLayout menuToggleBar;
-    RelativeLayout shareMediaBar;
+    CardView shareMediaBar;
     RecyclerView recyclerView;
     ImageView menuToggle;
     ImageView shareIcon;
@@ -52,14 +43,15 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     DrawerLayout drawer;
 
-    ProgressDialog indeterminatePD;
-    ProgressDialog determinatePD;
+    TextView noMediaText;
+    RelativeLayout videosLoadingScreen;
 
-    // region Button declarations
-    AppCompatButton recordAudioButton;
-    AppCompatButton takePictureButton;
-    AppCompatButton audioGalleryButton;
-    AppCompatButton picturesButton;
+    MediaLoadService mediaLoadService;
+
+    CardView recordAudioButton;
+    CardView takePictureButton;
+    CardView recordingsButton;
+    CardView picturesButton;
     // endregion
 
     //endregion
@@ -73,35 +65,80 @@ public class MainActivity extends AppCompatActivity
 
     // region Primitives declarations
     boolean menuHidden = false;
+    boolean firstRun = true;
     private static int MENU_ANIMATION_DURATION = 300;
+    private static int CHECK_DURATION = 1000;
     public boolean inSelectionMode = false;
 
-    private String actionBarSelectModeColor = "#606060";
-    private String actionBarDefaultColor = "#000000";
-
+    public boolean videosLoaded = false;
 
     ArrayList<Video> videoList = new ArrayList<>();
 
-    //TAKE OUT
     MediaShareUtils mediaShareUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        long time = System.currentTimeMillis();
+
         setContentView(R.layout.activity_main);
 
         // Initialize UI elements
         initialize();
 
+        mediaLoadService.start();
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+
+                if (mediaLoadService.mediaLoaded)
+                {
+//                    System.out.println("videos loaded!");
+                    videoList = mediaLoadService.getVideoList();
+                    videosLoadingScreen.setVisibility(View.INVISIBLE);
+                    if(!videoList.isEmpty())
+                    {
+                        videoAdapter.setVideos(videoList);
+                        videoAdapter.notifyDataSetChanged();
+                    }
+                    else
+                    {
+                        noMediaText.setVisibility(View.VISIBLE);
+                    }
+
+                    handler.removeCallbacks(this);
+                }
+                else
+                {
+                    handler.postDelayed(this, CHECK_DURATION);
+                }
+
+            }
+        };
+        handler.postDelayed(runnable, CHECK_DURATION);
+        long endtime = System.currentTimeMillis();
+        System.out.println("Start up time = "+((endtime - time)/1000));
+
+
     }
+
 
     private void initialize()
     {
-        Media.setIdentifierPrefix("chw_");
+        mediaLoadService = new MediaLoadService(this);
+        startService(new Intent(this, MediaLoadService.class));
+
+        videosLoadingScreen = (RelativeLayout)findViewById(R.id.videosLoadingScreen);
+
+        String identifierPrefix = getResources().getString(R.string.identifier_prefix);
+        Media.setIdentifierPrefix(identifierPrefix);
         fileUtils = new FileUtils(this);
 
-        //mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
+        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,6 +148,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        noMediaText = (TextView)findViewById(R.id.noMediaText);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -135,7 +174,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        shareMediaBar = (RelativeLayout) findViewById(R.id.shareMediaBar);
+        shareMediaBar = (CardView) findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -154,32 +193,21 @@ public class MainActivity extends AppCompatActivity
         gridLayoutManager = new CustomGridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        videoList = new ArrayList<>();
-        populateVideoList();
+
+//        populateVideoList();
         videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
-//        Thread thread = new Thread(new Runnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                populateVideoList();
-//
-//            }
-//        });
-//        thread.start();
-//
-//        videoAdapter.setVideoList(videoList);
-//        videoAdapter.notifyDataSetChanged();
+
+
 
         //endregion
 
         //region Buttons initializations
 
-        recordAudioButton = (AppCompatButton) findViewById(R.id.recordAudioButton);
-        takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
-        audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
-        picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
+        recordAudioButton = (CardView) findViewById(R.id.recordAudioButton);
+        takePictureButton = (CardView) findViewById(R.id.takePictureButton);
+        recordingsButton = (CardView) findViewById(R.id.recordingsButton);
+        picturesButton = (CardView) findViewById(R.id.picturesButton);
 
         //endregion
 
@@ -202,12 +230,12 @@ public class MainActivity extends AppCompatActivity
                 takePictureButtonClick();
             }
         });
-        audioGalleryButton.setOnClickListener(new View.OnClickListener()
+        recordingsButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                audioGalleryButtonClick();
+                recordingsButtonClick();
             }
         });
 
@@ -228,11 +256,12 @@ public class MainActivity extends AppCompatActivity
     private void takePictureButtonClick()
     {
         Toast.makeText(this, "Opens camera to take picture.", Toast.LENGTH_SHORT).show();
+
 //        Intent intent = new Intent(this, PictureActivity.class);
 //        this.startActivity(intent);
     }
 
-    private void audioGalleryButtonClick()
+    private void recordingsButtonClick()
     {
         Intent intent = new Intent(this, AudioGalleryActivity.class);
         this.startActivity(intent);
@@ -252,14 +281,18 @@ public class MainActivity extends AppCompatActivity
 
             setTitle(appName);
 
-            removeSelectedVideoItemOverlay();
+
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");
             inSelectionMode = false;
+
+            // Hide video item tick overlay
+            videoAdapter.setItemClicked(false);
+            videoAdapter.notifyDataSetChanged();
         }
         else
         {
-            setTitle("Select video to send");
+            setTitle("Select video");
             if (!menuHidden)
             {
                 hideMenu();
@@ -281,19 +314,9 @@ public class MainActivity extends AppCompatActivity
         if (!menuHidden)
         {
             hideMenu();
-        }
-        else
+        } else
         {
             showMenu();
-            if(inSelectionMode)
-            {
-                inSelectionMode = false;
-                shareIcon.setImageResource(R.drawable.share);
-                shareText.setText("Share");
-                String appName = getResources().getString(R.string.app_name);
-                setTitle(appName);
-                removeSelectedVideoItemOverlay();
-            }
         }
     }
 
@@ -302,7 +325,7 @@ public class MainActivity extends AppCompatActivity
     private void hideMenu()
     {
         float yPos = mainMenu.getY();
-        float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
+        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos + yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
@@ -328,7 +351,7 @@ public class MainActivity extends AppCompatActivity
     private void showMenu()
     {
         float yPos = mainMenu.getY();
-        float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
+        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos - yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
@@ -367,12 +390,9 @@ public class MainActivity extends AppCompatActivity
 
     public void shareVideo(int position)
     {
-//        videoToSend = videoList.get(position);
-//
-//        mediaShareUtils.sendMedia(videoToSend);
+        videoToSend = videoList.get(position);
 
-        Toast.makeText(this, "Sends the video clicked", Toast.LENGTH_SHORT).show();
-
+        mediaShareUtils.sendMedia(videoToSend);
     }
 
     // region Activity overrides
@@ -426,6 +446,27 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        videosLoaded = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        videosLoaded = false;
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        videosLoaded = false;
+        super.onResume();
+    }
+
     // endregion
 
     /**
@@ -448,10 +489,5 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getName());
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
-    }
-
-    public void removeSelectedVideoItemOverlay()
-    {
-        videoAdapter.removeOverlay();
     }
 }
