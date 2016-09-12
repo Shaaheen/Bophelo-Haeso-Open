@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     DrawerLayout drawer;
 
+    TextView noMediaText;
     RelativeLayout videosLoadingScreen;
 
     MediaLoadService mediaLoadService;
@@ -96,11 +97,19 @@ public class MainActivity extends AppCompatActivity
 
                 if (mediaLoadService.mediaLoaded)
                 {
-                    System.out.println("videos loaded!");
+//                    System.out.println("videos loaded!");
                     videoList = mediaLoadService.getVideoList();
                     videosLoadingScreen.setVisibility(View.INVISIBLE);
-                    videoAdapter.setVideos(videoList);
-                    videoAdapter.notifyDataSetChanged();
+                    if(!videoList.isEmpty())
+                    {
+                        videoAdapter.setVideos(videoList);
+                        videoAdapter.notifyDataSetChanged();
+                    }
+                    else
+                    {
+                        noMediaText.setVisibility(View.VISIBLE);
+                    }
+
                     handler.removeCallbacks(this);
                 }
                 else
@@ -139,6 +148,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        noMediaText = (TextView)findViewById(R.id.noMediaText);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

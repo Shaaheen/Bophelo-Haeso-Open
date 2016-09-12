@@ -6,5 +6,6 @@
     <dimen name="video_item_width">120dp</dimen>
     <dimen name="video_item_height">140dp</dimen>
     <dimen name="time_view_text_size">30sp</dimen>
+    <dimen name="audio_item_height">90dp</dimen>
     <dimen name="card_elevation">5dp</dimen>
 </resources>

@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ public class PictureGalleryActivity extends AppCompatActivity
     RecyclerView recyclerView;
     ImageAdapter imageAdapter;
 
+    ImageView shareIcon;
+    TextView shareText;
+
     RelativeLayout imagesLoadingScreen;
 
     ArrayList<Image> imageList = new ArrayList<>();
@@ -32,6 +37,8 @@ public class PictureGalleryActivity extends AppCompatActivity
     MediaShareUtils mediaShareUtils;
 
     MediaLoadService mediaLoadService;
+
+    TextView noMediaText;
 
     boolean inSelectionMode = false;
     private static int CHECK_DURATION = 1000;
@@ -54,11 +61,19 @@ public class PictureGalleryActivity extends AppCompatActivity
 
                 if (mediaLoadService.mediaLoaded)
                 {
-                    System.out.println("images loaded!");
+//                    System.out.println("images loaded!");
                     imageList = mediaLoadService.getImageList();
                     imagesLoadingScreen.setVisibility(View.INVISIBLE);
-                    imageAdapter.setImages(imageList);
-                    imageAdapter.notifyDataSetChanged();
+                    if(!imageList.isEmpty())
+                    {
+                        imageAdapter.setImages(imageList);
+                        imageAdapter.notifyDataSetChanged();
+                    }
+                    else
+                    {
+                        noMediaText.setVisibility(View.VISIBLE);
+                    }
+
                     handler.removeCallbacks(this);
                 }
                 else
@@ -87,6 +102,10 @@ public class PictureGalleryActivity extends AppCompatActivity
                 shareMediaButtonClick();
             }
         });
+        shareIcon = (ImageView) findViewById(R.id.shareIcon);
+        shareText = (TextView) findViewById(R.id.shareText);
+
+        noMediaText = (TextView)findViewById(R.id.noMediaText);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -100,7 +119,28 @@ public class PictureGalleryActivity extends AppCompatActivity
 
     private void shareMediaButtonClick()
     {
-        Toast.makeText(this, "Sends a selected picture", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Sends a selected picture", Toast.LENGTH_SHORT).show();
+        if (inSelectionMode)
+        {
+            String appName = getResources().getString(R.string.app_name);
+
+            setTitle(appName);
+
+            shareIcon.setImageResource(R.drawable.share);
+            shareText.setText("Share");
+            inSelectionMode = false;
+
+            // Hide video item tick overlay
+            imageAdapter.setItemClicked(false);
+            imageAdapter.notifyDataSetChanged();
+        }
+        else
+        {
+            setTitle("Select picture");
+            shareIcon.setImageResource(R.drawable.cancel);
+            shareText.setText("Cancel");
+            inSelectionMode = true;
+        }
     }
 
     public void shareImage(int position)

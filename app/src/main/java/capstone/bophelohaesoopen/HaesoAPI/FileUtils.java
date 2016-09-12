@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadata;
+import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -83,7 +85,14 @@ public class FileUtils
                 }
                 else
                 {
-                    mediaFiles.add( new Media(f.getName(), f.getAbsolutePath()));
+                    Audio audio = new Audio(f.getName(), f.getAbsolutePath());
+                    MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+                    metaRetriever.setDataSource(f.getAbsolutePath());
+                    String durationString = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                    long duration = Long.valueOf(durationString);
+                    audio.duration = duration;
+                    metaRetriever.release();
+                    mediaFiles.add(audio);
                 }
 
             }

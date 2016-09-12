@@ -76,8 +76,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
+        android:id="@+id/noMediaText"
         android:layout_centerHorizontal="true"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:text="No pictures found"
+        android:layout_marginTop="70dp"
+        android:visibility="gone"/>
 </RelativeLayout>
