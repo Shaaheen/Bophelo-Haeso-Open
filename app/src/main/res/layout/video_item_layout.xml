@@ -45,7 +45,7 @@
                 android:background="@color/green"
                 android:id="@+id/selectionOverlay"
                 android:visibility="invisible"
-                android:alpha="0.7">
+                android:alpha="1">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

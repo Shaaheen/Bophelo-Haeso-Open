@@ -12,11 +12,12 @@
     <dimen name="circle_radius">40dp</dimen>
     <dimen name="main_menu_top_margin">220dp</dimen>
     <dimen name="button_column_width">160dp</dimen>
-    <dimen name="menu_button_width">110dp</dimen>
-    <dimen name="menu_button_height">60dp</dimen>
+    <dimen name="menu_button_width">125dp</dimen>
+    <dimen name="menu_button_height">50dp</dimen>
     <dimen name="time_view_text_size">25sp</dimen>
     <dimen name="menu_toggle_bar_height">40dp</dimen>
-    <dimen name="share_button_height">40dp</dimen>
+    <dimen name="share_button_height">35dp</dimen>
     <dimen name="main_menu_button_top_margin">5dp</dimen>
     <dimen name="video_player_button_dimen">50dp</dimen>
+    <dimen name="share_button_margin">35dp</dimen>
 </resources>

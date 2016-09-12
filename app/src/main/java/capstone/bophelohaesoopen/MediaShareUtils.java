@@ -62,7 +62,6 @@ public class MediaShareUtils
             @Override
             public void onStopScan()
             {
-//                scanningDialog.hide();
                 indeterminatePD.dismiss();
             }
 

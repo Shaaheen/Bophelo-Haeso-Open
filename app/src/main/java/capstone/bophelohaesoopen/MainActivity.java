@@ -3,14 +3,10 @@ package capstone.bophelohaesoopen;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,20 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.widget.AppCompatButton;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import java.util.ArrayList;
-import java.util.List;
 
-import capstone.bophelohaesoopen.HaesoAPI.BluetoothListener;
-import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
@@ -56,10 +46,15 @@ public class MainActivity extends AppCompatActivity
     ProgressDialog determinatePD;
 
     // region Button declarations
-    AppCompatButton recordAudioButton;
-    AppCompatButton takePictureButton;
-    AppCompatButton audioGalleryButton;
-    AppCompatButton picturesButton;
+//    AppCompatButton recordAudioButton;
+//    AppCompatButton takePictureButton;
+//    AppCompatButton audioGalleryButton;
+//    AppCompatButton picturesButton;
+
+    RelativeLayout recordAudioButton;
+    RelativeLayout takePictureButton;
+    RelativeLayout recordingsButton;
+    RelativeLayout picturesButton;
     // endregion
 
     //endregion
@@ -79,7 +74,6 @@ public class MainActivity extends AppCompatActivity
 
     ArrayList<Video> videoList = new ArrayList<>();
 
-    //TAKE OUT
     MediaShareUtils mediaShareUtils;
 
     @Override
@@ -159,10 +153,15 @@ public class MainActivity extends AppCompatActivity
 
         //region Buttons initializations
 
-        recordAudioButton = (AppCompatButton) findViewById(R.id.recordAudioButton);
-        takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
-        audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
-        picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
+//        recordAudioButton = (AppCompatButton) findViewById(R.id.recordAudioButton);
+//        takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
+//        audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
+//        picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
+
+        recordAudioButton = (RelativeLayout) findViewById(R.id.recordAudioButton);
+        takePictureButton = (RelativeLayout) findViewById(R.id.takePictureButton);
+        recordingsButton = (RelativeLayout) findViewById(R.id.recordingsButton);
+        picturesButton = (RelativeLayout) findViewById(R.id.picturesButton);
 
         //endregion
 
@@ -185,12 +184,12 @@ public class MainActivity extends AppCompatActivity
                 takePictureButtonClick();
             }
         });
-        audioGalleryButton.setOnClickListener(new View.OnClickListener()
+        recordingsButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                audioGalleryButtonClick();
+                recordingsButtonClick();
             }
         });
 
@@ -216,7 +215,7 @@ public class MainActivity extends AppCompatActivity
 //        this.startActivity(intent);
     }
 
-    private void audioGalleryButtonClick()
+    private void recordingsButtonClick()
     {
 //        Intent intent = new Intent(this, AudioGalleryActivity.class);
 //        this.startActivity(intent);
