@@ -116,11 +116,11 @@ public class MediaShareUtils
                     bluetoothUtils.sendMediaFile(mediaToSend);
                     sendMedia = false;
 
-                    String sendingDialogTitle = activity.getResources().getString(R.string.sending_dialog_title);
-                    determinatePD.setTitle(sendingDialogTitle);
-                    determinatePD.setProgress(0);
-                    determinatePD.setMax(100);
-                    determinatePD.show();
+//                    String sendingDialogTitle = activity.getResources().getString(R.string.sending_dialog_title);
+//                    determinatePD.setTitle(sendingDialogTitle);
+//                    determinatePD.setProgress(0);
+//                    determinatePD.setMax(100);
+//                    determinatePD.show();
                 }
             }
 
@@ -172,14 +172,14 @@ public class MediaShareUtils
             public void onSendingProgress(String progress)
             {
                 int p = Integer.valueOf(progress);
-                if(p == 100)
-                {
-                    determinatePD.dismiss();
-                }
-                else
-                {
-                    determinatePD.setProgress(p);
-                }
+//                if(p == 100)
+//                {
+//                    determinatePD.dismiss();
+//                }
+//                else
+//                {
+//                    determinatePD.setProgress(p);
+//                }
             }
         };
 

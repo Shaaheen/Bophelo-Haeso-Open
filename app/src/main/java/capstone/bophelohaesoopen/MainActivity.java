@@ -217,10 +217,10 @@ public class MainActivity extends AppCompatActivity
 
     private void recordingsButtonClick()
     {
-//        Intent intent = new Intent(this, AudioGalleryActivity.class);
-//        this.startActivity(intent);
+        Intent intent = new Intent(this, AudioGalleryActivity.class);
+        this.startActivity(intent);
 
-        determinatePD.dismiss();
+//        determinatePD.dismiss();
     }
 
     private void pictureGalleryButtonClick()
