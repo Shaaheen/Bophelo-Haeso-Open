@@ -62,7 +62,7 @@
         android:textSize="20sp"
         android:text="No videos found"
         android:layout_marginTop="70dp"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 
 </RelativeLayout>

@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/videosLoadingScreen">
+        android:id="@+id/imagesLoadingScreen">
 
         <LinearLayout
             android:orientation="horizontal"

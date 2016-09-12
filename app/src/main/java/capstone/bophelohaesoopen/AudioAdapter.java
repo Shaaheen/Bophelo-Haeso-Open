@@ -47,8 +47,6 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioViewHolder>
         String durationText = getFormattedDuration(duration);
         holder.duration.setText(durationText);
 
-        holder.duration.setText(""+audio.duration);
-
         if(selectedPosition == position && itemClicked)
         {
             holder.selectionOverlay.setVisibility(View.VISIBLE);

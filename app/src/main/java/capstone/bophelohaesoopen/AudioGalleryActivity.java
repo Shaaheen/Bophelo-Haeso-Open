@@ -95,6 +95,8 @@ public class AudioGalleryActivity extends AppCompatActivity
         mediaLoadService = new MediaLoadService(this);
         startService(new Intent(this, MediaLoadService.class));
 
+        audioLoadingScreen = (RelativeLayout)findViewById(R.id.audioLoadingScreen);
+
         shareMediaBar = (RelativeLayout) findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
         {
