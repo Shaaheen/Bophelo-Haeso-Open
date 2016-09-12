@@ -45,7 +45,7 @@ public class MediaShareUtils
         determinatePD.setIndeterminate(false);
         determinatePD.setProgress(0);
         determinatePD.setMax(100);
-        determinatePD.show();
+
 
         bluetoothUtils.bluetoothListener = new BluetoothListener()
         {
