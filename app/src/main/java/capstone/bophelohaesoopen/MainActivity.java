@@ -4,7 +4,9 @@ import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.HaesoAPI.Media;
+import capstone.bophelohaesoopen.HaesoAPI.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
 import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
 
@@ -34,13 +37,17 @@ public class MainActivity extends AppCompatActivity
     //region View declarations
     RelativeLayout mainMenu;
     RelativeLayout menuToggleBar;
-    RelativeLayout shareMediaBar;
+    CardView shareMediaBar;
     RecyclerView recyclerView;
     ImageView menuToggle;
     ImageView shareIcon;
     TextView shareText;
     NavigationView navigationView;
     DrawerLayout drawer;
+
+    RelativeLayout videosLoadingScreen;
+
+    MediaLoadService mediaLoadService;
 
     ProgressDialog indeterminatePD;
     ProgressDialog determinatePD;
@@ -51,10 +58,10 @@ public class MainActivity extends AppCompatActivity
 //    AppCompatButton audioGalleryButton;
 //    AppCompatButton picturesButton;
 
-    RelativeLayout recordAudioButton;
-    RelativeLayout takePictureButton;
-    RelativeLayout recordingsButton;
-    RelativeLayout picturesButton;
+    CardView recordAudioButton;
+    CardView takePictureButton;
+    CardView recordingsButton;
+    CardView picturesButton;
     // endregion
 
     //endregion
@@ -70,7 +77,10 @@ public class MainActivity extends AppCompatActivity
     boolean menuHidden = false;
     boolean firstRun = true;
     private static int MENU_ANIMATION_DURATION = 300;
+    private static int CHECK_DURATION = 1000;
     public boolean inSelectionMode = false;
+
+    public boolean videosLoaded = false;
 
     ArrayList<Video> videoList = new ArrayList<>();
 
@@ -80,14 +90,52 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        long time = System.currentTimeMillis();
+
         setContentView(R.layout.activity_main);
 
         // Initialize UI elements
         initialize();
+
+        mediaLoadService.start();
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+
+                if (mediaLoadService.videosLoaded)
+                {
+                    System.out.println("videos loaded!");
+                    videoList = mediaLoadService.getVideoList();
+                    videosLoadingScreen.setVisibility(View.INVISIBLE);
+                    videoAdapter.setVideoList(videoList);
+                    videoAdapter.notifyDataSetChanged();
+                    handler.removeCallbacks(this);
+                }
+                else
+                {
+                    handler.postDelayed(this, CHECK_DURATION);
+                }
+
+            }
+        };
+        handler.postDelayed(runnable, CHECK_DURATION);
+        long endtime = System.currentTimeMillis();
+        System.out.println("Start up time = "+((endtime - time)/1000));
+
+
     }
+
 
     private void initialize()
     {
+        mediaLoadService = new MediaLoadService(this);
+        startService(new Intent(this, MediaLoadService.class));
+
+        videosLoadingScreen = (RelativeLayout)findViewById(R.id.videosLoadingScreen);
+
         String identifierPrefix = getResources().getString(R.string.identifier_prefix);
         Media.setIdentifierPrefix(identifierPrefix);
         fileUtils = new FileUtils(this);
@@ -126,7 +174,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        shareMediaBar = (RelativeLayout) findViewById(R.id.shareMediaBar);
+        shareMediaBar = (CardView) findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -145,9 +193,12 @@ public class MainActivity extends AppCompatActivity
         gridLayoutManager = new CustomGridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        populateVideoList();
+
+//        populateVideoList();
         videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
+
+
 
         //endregion
 
@@ -158,10 +209,10 @@ public class MainActivity extends AppCompatActivity
 //        audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
 //        picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
 
-        recordAudioButton = (RelativeLayout) findViewById(R.id.recordAudioButton);
-        takePictureButton = (RelativeLayout) findViewById(R.id.takePictureButton);
-        recordingsButton = (RelativeLayout) findViewById(R.id.recordingsButton);
-        picturesButton = (RelativeLayout) findViewById(R.id.picturesButton);
+        recordAudioButton = (CardView) findViewById(R.id.recordAudioButton);
+        takePictureButton = (CardView) findViewById(R.id.takePictureButton);
+        recordingsButton = (CardView) findViewById(R.id.recordingsButton);
+        picturesButton = (CardView) findViewById(R.id.picturesButton);
 
         //endregion
 
@@ -281,7 +332,7 @@ public class MainActivity extends AppCompatActivity
     private void hideMenu()
     {
         float yPos = mainMenu.getY();
-        float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
+        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos + yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
@@ -307,7 +358,7 @@ public class MainActivity extends AppCompatActivity
     private void showMenu()
     {
         float yPos = mainMenu.getY();
-        float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
+        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos - yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
@@ -401,6 +452,27 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        videosLoaded = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        videosLoaded = false;
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        videosLoaded = false;
+        super.onResume();
     }
 
     // endregion

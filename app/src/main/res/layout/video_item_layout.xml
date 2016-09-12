@@ -8,7 +8,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="@dimen/video_item_width"
         android:layout_height="@dimen/video_item_height"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        card_view:elevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
