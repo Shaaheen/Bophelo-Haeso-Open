@@ -124,15 +124,13 @@ public class MediaShareUtils
             {
                 Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
                 //Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
-                determinatePD = new ProgressDialog(activityM);
                 String receivingDialogTitle = activityM.getResources().getString(R.string.receiving_dialog_title);
-                determinatePD.setTitle(receivingDialogTitle);
-                determinatePD.setCancelable(false);
-                determinatePD.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                determinatePD.setIndeterminate(false);
-                determinatePD.setProgress(0);
-                determinatePD.setMax(100);
-                determinatePD.show();
+                createProgressDialogue(receivingDialogTitle);
+            }
+
+            @Override
+            public void onStartSending() {
+                createProgressDialogue("Sending File...");
             }
 
             @Override
@@ -142,6 +140,7 @@ public class MediaShareUtils
                 if (progress >= 99.0)
                 {
                     sendMedia = false;
+                    determinatePD.dismiss();
                     Toast.makeText(ctx, "Received file", Toast.LENGTH_SHORT).show();
                 }
 
@@ -157,6 +156,7 @@ public class MediaShareUtils
                 if(p == 100)
                 {
                     determinatePD.dismiss();
+                    Log.v("BT","Done Sending :" + progress + "%");
                 }
                 else
                 {
@@ -166,6 +166,20 @@ public class MediaShareUtils
 
         };
 
+    }
+
+    /**
+     *
+     */
+    private void createProgressDialogue(String dialogueText){
+        determinatePD = new ProgressDialog(activityM);
+        determinatePD.setTitle(dialogueText);
+        determinatePD.setCancelable(false);
+        determinatePD.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        determinatePD.setIndeterminate(false);
+        determinatePD.setProgress(0);
+        determinatePD.setMax(100);
+        determinatePD.show();
     }
 
     /**
