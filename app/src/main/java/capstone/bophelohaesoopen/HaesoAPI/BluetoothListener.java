@@ -12,6 +12,7 @@ public interface BluetoothListener
     void onConnected();
     void onDisconnected();
     void onStartReceiving();
+    void onStartSending();
     void onReceivingProgress(double progress);
     void onSendingProgress(String progress);
 }
