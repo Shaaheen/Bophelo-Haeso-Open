@@ -35,6 +35,7 @@ public class MediaShareUtils
     public MediaShareUtils(final Context ctx, final Activity activity)
     {
         mediaToSend = null;
+        determinatePD = null;
         sendMedia = false;
         bluetoothUtils = new BluetoothUtils(ctx, activity);
         activityM = activity;
@@ -84,7 +85,6 @@ public class MediaShareUtils
                                 //Connects to selected device
                                 //simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
                                 bluetoothUtils.connectToAddress(btDevices.get(which).getAddress());
-
 
                             }
                         })
@@ -169,14 +169,16 @@ public class MediaShareUtils
     }
 
     /**
-     *
+     * Creates a new Dialog to show progress if does not exist already
      */
     private void createProgressDialogue(String dialogueText){
-        determinatePD = new ProgressDialog(activityM);
+        if (determinatePD == null){
+            determinatePD = new ProgressDialog(activityM);
+            determinatePD.setCancelable(false);
+            determinatePD.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            determinatePD.setIndeterminate(false);
+        }
         determinatePD.setTitle(dialogueText);
-        determinatePD.setCancelable(false);
-        determinatePD.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        determinatePD.setIndeterminate(false);
         determinatePD.setProgress(0);
         determinatePD.setMax(100);
         determinatePD.show();
