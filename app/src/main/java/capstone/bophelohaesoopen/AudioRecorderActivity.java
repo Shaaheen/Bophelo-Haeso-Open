@@ -44,7 +44,7 @@ public class AudioRecorderActivity extends AppCompatActivity
 
         String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
 
-        audioRecorder = new AudioRecorder(outputFile);
+        audioRecorder = new AudioRecorder();
         audioRecorder.prepareForRecording();
         try
         {

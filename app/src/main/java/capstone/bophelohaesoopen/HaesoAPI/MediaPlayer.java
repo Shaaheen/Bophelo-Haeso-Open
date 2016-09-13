@@ -42,6 +42,13 @@ public class MediaPlayer extends android.media.MediaPlayer{
         mediaPlayer.setDisplay( mediaView.getHolder() ); //Sets media onto view
         mediaPlayer.prepare();
         mediaPlayer.start();
+
+        //Log playing of video
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.MEDIA_PLAYER,"Play",mediaFile.getFileName());
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
+
     }
 
     public void stopMedia()
@@ -50,6 +57,12 @@ public class MediaPlayer extends android.media.MediaPlayer{
         mediaPlayer.reset();
         mediaPlayer.release();
         mediaPlayer = null;
+
+        //Log playing of video
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.MEDIA_PLAYER,"Stopped");
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
     }
 
     public boolean isMediaPlaying()
@@ -61,6 +74,12 @@ public class MediaPlayer extends android.media.MediaPlayer{
     {
         mediaPlayer.pause();
         currentPosition = mediaPlayer.getCurrentPosition();
+
+        //Log playing of video
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.MEDIA_PLAYER,"Paused at " + currentPosition);
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
     }
 
     public void resumeMedia() throws IOException
@@ -68,6 +87,12 @@ public class MediaPlayer extends android.media.MediaPlayer{
         mediaPlayer.start();
         // Seek to position where video was previously paused
         mediaPlayer.seekTo(currentPosition);
+
+        //Log playing of video
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.MEDIA_PLAYER,"Resumed at: " + currentPosition);
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
     }
 
 

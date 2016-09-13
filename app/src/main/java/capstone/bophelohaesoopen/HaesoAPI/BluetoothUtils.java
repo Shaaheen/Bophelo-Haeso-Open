@@ -142,6 +142,12 @@ public class BluetoothUtils {
         Log.w("Sending size", baos.size() +"" );
         Log.w("Byte size of string",sendFileSize.getBytes().length + "");
 
+        //Log to database
+        LogEntry logEntry = new LogEntry(LogEntry.LogType.BLUETOOTH,"Share Media",mediaFile.getFileName());
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
+
         //Convert to byte array to Byte object array to be able to send as param to Async task
         Byte[] byteObjects = new Byte[mediaBytes.length];
 
@@ -262,6 +268,12 @@ public class BluetoothUtils {
                             out.close();
                             Log.w( "Rec File","Done receiving file" );
                             Log.w( "File Size","File size: " + fileBytes.toByteArray().length + " Diff is: " + (fileBytes.toByteArray().length - sizeOfFileRec)  );
+
+                            //Log to database
+                            LogEntry logEntry = new LogEntry(LogEntry.LogType.BLUETOOTH,"Received Media",nameOfTransferredFile);
+                            if ( DatabaseUtils.isDatabaseSetup() ){
+                                DatabaseUtils.getInstance().addLog(logEntry);
+                            }
 
                             //Reset all variables for next file
                             fileBytes = null;
