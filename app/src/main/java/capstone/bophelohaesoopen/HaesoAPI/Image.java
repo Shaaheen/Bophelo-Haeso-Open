@@ -1,10 +1,12 @@
 package capstone.bophelohaesoopen.HaesoAPI;
 
-/**
- * Created by Shaaheen on 8/8/2016.
- */
+import android.graphics.Bitmap;
+
+
 public class Image extends Media {
     public static String mediaExtension = ".jpg";
+
+    public Bitmap thumb;
 
     public Image(String name, String filePath) {
         super(name, filePath);
