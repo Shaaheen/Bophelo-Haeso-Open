@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,7 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import capstone.bophelohaesoopen.HaesoAPI.DatabaseUtils;
+import capstone.bophelohaesoopen.HaesoAPI.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Media;
 import capstone.bophelohaesoopen.HaesoAPI.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Video;
@@ -75,6 +79,9 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Video> videoList = new ArrayList<>();
 
     MediaShareUtils mediaShareUtils;
+
+    //Logging db
+    public static DatabaseUtils databaseUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -129,6 +136,8 @@ public class MainActivity extends AppCompatActivity
 
     private void initialize()
     {
+        databaseUtils = new DatabaseUtils(this);//Start database
+
         mediaLoadService = new MediaLoadService(this);
         startService(new Intent(this, MediaLoadService.class));
 
