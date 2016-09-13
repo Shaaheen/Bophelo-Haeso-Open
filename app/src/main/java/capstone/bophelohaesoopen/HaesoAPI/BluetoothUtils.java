@@ -49,10 +49,12 @@ public class BluetoothUtils {
     private int intialOffset; //Offset to ensure file size message not in resulting file bytes
     private String nameOfTransferredFile;
     private static int NUMBER_OF_COLONS = 4;
+    private String connectedMacAddr;
 
     public BluetoothUtils( Context context, Activity activity ) {
         mSmoothBluetooth = new SmoothBluetooth(context); //Uses bluetooth library
         activityUIClass = activity; //The activity of the class stored
+        connectedMacAddr =null;
 
         if ( !mSmoothBluetooth.isBluetoothEnabled() ){
             enableBT();
@@ -89,7 +91,13 @@ public class BluetoothUtils {
     }
 
     public void connectToAddress(String macAddr){
-        simpleBluetooth.connectToBluetoothServer(macAddr);
+        if (connectedMacAddr!=null && macAddr.equals(connectedMacAddr) ){
+            bluetoothListener.onConnected();
+        }
+        else{
+            simpleBluetooth.connectToBluetoothServer(macAddr);
+            connectedMacAddr = macAddr;
+        }
     }
 
     /**
