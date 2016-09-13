@@ -255,10 +255,10 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-        Toast.makeText(this, "Opens camera to take picture.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Opens camera to take picture.", Toast.LENGTH_SHORT).show();
 
-//        Intent intent = new Intent(this, PictureActivity.class);
-//        this.startActivity(intent);
+        Intent intent = new Intent(this, CameraActivity.class);
+        this.startActivity(intent);
     }
 
     private void recordingsButtonClick()
