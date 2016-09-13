@@ -3,6 +3,9 @@ package capstone.bophelohaesoopen.HaesoAPI;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadata;
+import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -10,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.R;
@@ -29,7 +33,7 @@ public class FileUtils
      * @param extension - specifies the type of media to retrieve
      * @return An array of Media objects
      */
-    public ArrayList<? extends Media> getMediaCollectionFromStorage(String prefix,String extension)
+    public ArrayList<? extends Media> getMediaCollectionFromStorage(String prefix, String extension)
     {
         Log.v("Media","Searching for media files...");
         ArrayList<Media> mediaFiles = new ArrayList<>(); //Stores array of retrieved media
@@ -70,13 +74,29 @@ public class FileUtils
                     video.thumb = thumb;
                     mediaFiles.add(video);
                 }
+                else if(extension.equals(Image.mediaExtension))
+                {
+                    Image image = new Image(f.getName(), f.getAbsolutePath());
+
+                    int width = (int)activity.getResources().getDimension(R.dimen.image_item_width);
+                    int height = (int)activity.getResources().getDimension(R.dimen.image_item_height);
+                    Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(f.getAbsolutePath()), width, height);
+                    image.thumb = thumb;
+                    mediaFiles.add(image);
+                }
                 else
                 {
-                    mediaFiles.add( new Media(f.getName(), f.getAbsolutePath()));
+                    Audio audio = new Audio(f.getName(), f.getAbsolutePath());
+                    MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+                    metaRetriever.setDataSource(f.getAbsolutePath());
+                    String durationString = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                    long duration = Long.valueOf(durationString);
+                    audio.duration = duration;
+                    metaRetriever.release();
+                    mediaFiles.add(audio);
                 }
 
             }
         }
     }
-
 }
