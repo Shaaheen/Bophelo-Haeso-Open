@@ -26,12 +26,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import capstone.bophelohaesoopen.HaesoAPI.DatabaseUtils;
-import capstone.bophelohaesoopen.HaesoAPI.LogEntry;
-import capstone.bophelohaesoopen.HaesoAPI.Media;
-import capstone.bophelohaesoopen.HaesoAPI.MediaLoadService;
-import capstone.bophelohaesoopen.HaesoAPI.Video;
-import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
