@@ -11,9 +11,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
 
-import capstone.bophelohaesoopen.HaesoAPI.BluetoothUtils;
-import capstone.bophelohaesoopen.HaesoAPI.BluetoothListener;
-import capstone.bophelohaesoopen.HaesoAPI.Media;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.BluetoothUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.BluetoothListener;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
 /**
  * Handles connecting to BT device and sending off media files
