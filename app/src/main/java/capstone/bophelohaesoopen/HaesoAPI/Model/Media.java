@@ -1,7 +1,7 @@
 package capstone.bophelohaesoopen.HaesoAPI.Model;
 
 /**
- * Created by Shaaheen on 8/8/2016.
+ * Object representation of a media file
  */
 public class Media {
     String name;
@@ -19,6 +19,10 @@ public class Media {
         this.filePath = filePath;
     }
 
+    /**
+     * Gets name of file without prefix and extension
+     * @return - file name without prefix and extension
+     */
     public String getName() {
         int index = filePath.lastIndexOf("/");
         String filename = filePath.substring(index);

@@ -45,6 +45,7 @@ public class MediaShareUtils
             @Override
             public void onStartScan()
             {
+                //Dialog displaying scanning
                 indeterminatePD = new ProgressDialog(activityM);
                 indeterminatePD.setMessage("Scanning for devices");
                 indeterminatePD.setCancelable(false);
@@ -70,7 +71,6 @@ public class MediaShareUtils
                     return;
                 }
 
-                Toast.makeText(ctx, "Devices found", Toast.LENGTH_SHORT).show();
                 //Create pop up dialogue that displays a list of all the found devices
                 //All are clickable
                 final MaterialDialog dialog = new MaterialDialog.Builder(activityM)
@@ -97,11 +97,12 @@ public class MediaShareUtils
             public void onConnected()
             {
                 Toast.makeText(ctx, "Connected, Send : " + sendMedia, Toast.LENGTH_SHORT).show();
+                //if want to send after connection
                 if (sendMedia)
                 {
                     try
                     {
-                        Thread.sleep(700);
+                        Thread.sleep(700); //Sleeps to wait for bluetooth to set up
                     } catch (InterruptedException e)
                     {
                         e.printStackTrace();
@@ -122,7 +123,7 @@ public class MediaShareUtils
 
             public void onStartReceiving()
             {
-                Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
                 //Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
                 String receivingDialogTitle = activityM.getResources().getString(R.string.receiving_dialog_title);
                 createProgressDialogue(receivingDialogTitle);
