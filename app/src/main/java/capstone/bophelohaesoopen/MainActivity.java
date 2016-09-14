@@ -290,7 +290,6 @@ public class MainActivity extends AppCompatActivity
 
             setTitle(appName);
 
-
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");
             inSelectionMode = false;

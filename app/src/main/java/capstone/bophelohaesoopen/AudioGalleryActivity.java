@@ -2,11 +2,15 @@ package capstone.bophelohaesoopen;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,8 +50,19 @@ public class AudioGalleryActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_gallery);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        else
+        {
+            Log.i("APP", "Action bar null");
+        }
 
         initialize();
 
@@ -165,4 +180,12 @@ public class AudioGalleryActivity extends AppCompatActivity
         super.onBackPressed();
         inSelectionMode = false;
     }
+
+    @Override
+    public boolean onSupportNavigateUp()
+    {
+        finish();
+        return true;
+    }
 }
+
