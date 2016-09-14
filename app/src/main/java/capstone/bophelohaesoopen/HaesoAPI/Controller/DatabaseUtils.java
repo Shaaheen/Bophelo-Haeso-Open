@@ -2,6 +2,7 @@ package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
@@ -22,7 +24,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 public class DatabaseUtils extends SQLiteOpenHelper{
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 7;
     // Database Name
     private static final String DATABASE_NAME = "Logging_Database";
     // Logging table name
@@ -83,8 +85,22 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(CREATE_LOG_TABLE);
 
         String CREATE_COUNTER_TABLE = "CREATE TABLE " + TABLE_COUNTER
-                + "(" + KEY_LAST_SAVED_ENTRY + " INTEGER, " + KEY_NUM_OF_UNSAVED_ENTRIES + " INTEGER)";
+                + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_LAST_SAVED_ENTRY
+                + " INTEGER, " + KEY_NUM_OF_UNSAVED_ENTRIES + " INTEGER)";
         sqLiteDatabase.execSQL(CREATE_COUNTER_TABLE);
+
+        setUpCounterTable(sqLiteDatabase);
+    }
+
+    private void setUpCounterTable(SQLiteDatabase sqLiteDatabase){
+        ContentValues values = new ContentValues();
+        values.put(KEY_LAST_SAVED_ENTRY, "0");
+        values.put(KEY_NUM_OF_UNSAVED_ENTRIES, "0");
+
+        // Inserting Row
+        sqLiteDatabase.insert(TABLE_COUNTER, null, values);
+        Log.v("DB","Inserted");
+        //sqLiteDatabase.close(); // Closing database connection
     }
 
     /**
@@ -97,6 +113,10 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // Drop older table if existed
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGGING);
+
+        // Drop older table if existed
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTER);
+
         // Creating tables again
         Log.v("DB","Refreshed and updated table");
         onCreate(sqLiteDatabase);
@@ -111,6 +131,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+
         //Prepare values to be inserted in db
         ContentValues values = new ContentValues();
         values.put(KEY_TYPE, String.valueOf(logEntry.getLogEntryType()));
@@ -121,10 +142,100 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         // Inserting Row
         db.insert(TABLE_LOGGING, null, values);
         Log.v("DB","Inserted");
-        db.close(); // Closing database connection
+        //db.close(); // Closing database connection
+
+        updateCounter();
+
     }
 
-    
+    public void updateCounter(){
+        List<String> listOfCounters = getAllCounterEntries();
+
+
+
+        if ( Integer.parseInt(listOfCounters.get(2)) >= numOfEntriesBeforeSaving ){
+            List<LogEntry> logEntries = getLogsFromTill(Integer.parseInt(listOfCounters.get(1)) + "", Integer.parseInt(listOfCounters.get(2)) +"" );
+        }
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        //cv.put(KEY_ID,"1"); //These Fields should be your String values of actual column names
+        cv.put(KEY_LAST_SAVED_ENTRY, (Integer.parseInt(listOfCounters.get(1)) ) + "");
+        cv.put(KEY_NUM_OF_UNSAVED_ENTRIES,(Integer.parseInt(listOfCounters.get(2)) + 1) + "");
+
+        db.update(TABLE_COUNTER, cv, KEY_ID + "=1", null);
+
+        //db.close();
+    }
+
+    private void writeLogsToFile(){
+
+    }
+
+    public List<LogEntry> getLogsFromTill(String startId, String endId){
+        Log.v("DB","Getting all Log entries");
+        List<LogEntry> LogEntryList = new ArrayList<LogEntry>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + TABLE_LOGGING + " WHERE " + KEY_ID + " BETWEEN " + startId + " AND " + endId;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                String dateString = cursor.getString(4);
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date dateTime = null;
+                try {
+                    dateTime = dateFormat.parse(dateString);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //Create log entry from retrieved data
+                LogEntry logEntry = new LogEntry(
+                        capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry.LogType.valueOf(cursor.getString(1))
+                        , cursor.getString(2),cursor.getString(3), dateTime);
+
+                // Adding log to list
+                LogEntryList.add(logEntry);
+                Log.w("DB",logEntry.toString());
+            } while (cursor.moveToNext());
+        }
+        Log.v("DB","Retrieved all Log entries");
+        cursor.close();
+        db.close();
+        // return log list
+        return LogEntryList;
+    }
+
+    /**
+     * Gets All counter database attributes
+     */
+    public List<String> getAllCounterEntries() {
+        Log.v("DB","Getting all Counter entries");
+        List<String> listOfCounters = new LinkedList<String>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + TABLE_COUNTER;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                listOfCounters.add(cursor.getString(0));
+                listOfCounters.add(cursor.getString(1));
+                listOfCounters.add(cursor.getString(2));
+                Log.w("DB",cursor.getString(0) + " " + cursor.getString(1) +" " +  cursor.getString(2));
+            } while (cursor.moveToNext());
+        }
+        Log.v("DB","Retrieved all Log entries");
+        cursor.close();
+        db.close();
+        // return log list
+        return listOfCounters;
+    }
 
     /**
      * Gets All LogEntrys in logging database
