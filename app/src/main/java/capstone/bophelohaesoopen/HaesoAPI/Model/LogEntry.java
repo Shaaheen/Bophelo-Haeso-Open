@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Model;
 
 import java.security.Timestamp;
 import java.text.DateFormat;

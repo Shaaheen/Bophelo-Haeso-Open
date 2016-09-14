@@ -1,6 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
-
-import android.bluetooth.BluetoothAdapter;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import java.util.List;
 

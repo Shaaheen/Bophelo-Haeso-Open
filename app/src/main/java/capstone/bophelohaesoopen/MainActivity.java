@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
@@ -288,6 +286,7 @@ public class MainActivity extends AppCompatActivity
             String appName = getResources().getString(R.string.app_name);
 
             setTitle(appName);
+
 
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");

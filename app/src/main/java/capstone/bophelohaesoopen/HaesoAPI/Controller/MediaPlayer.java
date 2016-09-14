@@ -1,16 +1,11 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
-import android.content.Context;
-import android.media.PlaybackParams;
-import android.os.Environment;
-import android.text.Layout;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.VideoView;
 
 import java.io.IOException;
+
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
 /**
  * Created by Shaaheen on 8/8/2016.
@@ -35,7 +30,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
      */
     public void playMedia(Media mediaFile, SurfaceView mediaView) throws IOException
     {
-        String filePath =  mediaFile.filePath;
+        String filePath =  mediaFile.getFilePath();
         mediaPlayer = new android.media.MediaPlayer();
         mediaPlayer.setDataSource(filePath);
         mediaPlayer.setScreenOnWhilePlaying(true);

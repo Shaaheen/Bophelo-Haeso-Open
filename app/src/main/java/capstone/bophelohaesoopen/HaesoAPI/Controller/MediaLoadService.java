@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.app.Service;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.AudioGalleryActivity;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 import capstone.bophelohaesoopen.MainActivity;
 import capstone.bophelohaesoopen.PictureGalleryActivity;
 

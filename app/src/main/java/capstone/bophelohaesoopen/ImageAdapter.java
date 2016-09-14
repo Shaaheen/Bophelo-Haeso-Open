@@ -1,14 +1,13 @@
 package capstone.bophelohaesoopen;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.HaesoAPI.Image;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
 
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder>

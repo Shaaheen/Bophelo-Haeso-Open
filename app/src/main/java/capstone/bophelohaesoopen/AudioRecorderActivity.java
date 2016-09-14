@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
-import capstone.bophelohaesoopen.HaesoAPI.AudioRecorder;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.AudioRecorder;
 
 /**
  * Activity for recording audio

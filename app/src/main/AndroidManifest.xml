@@ -17,7 +17,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <service android:name=".HaesoAPI.MediaLoadService"/>
+        <service android:name=".HaesoAPI.Controller.MediaLoadService"/>
 
         <activity
             android:name=".MainActivity"

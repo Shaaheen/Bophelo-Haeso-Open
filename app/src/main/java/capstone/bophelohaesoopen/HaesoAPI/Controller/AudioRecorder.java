@@ -1,8 +1,10 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.media.MediaRecorder;
 
 import java.io.IOException;
+
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 
 /**
  * Created by Shaaheen on 8/8/2016.
