@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -19,15 +20,18 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
+import capstone.bophelohaesoopen.MainActivity;
 import capstone.bophelohaesoopen.R;
 
 public class FileUtils
 {
-
     Activity activity;
-    public FileUtils(Activity activity)
+
+    Media.MediaType mediaType;
+
+    public FileUtils(Activity activityGiven)
     {
-        this.activity = activity;
+        activity = activityGiven;
     }
 
     /**
@@ -106,5 +110,114 @@ public class FileUtils
         DateFormat dateFormat = new SimpleDateFormat("dd\\MM\\yyyy_HH:mm:ss");
         String dateTimeNow =  dateFormat.format(new Date());
         return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"Aud_Report_" +  dateTimeNow + ".3gp");
+    }
+
+    public void saveMedia(byte[] data, Media.MediaType media)
+    {
+        mediaType = media;
+        new SaveAsync().execute(toByteArray(data));
+    }
+
+    public void savePicture(byte[] bytes)
+    {
+        File pictureFile = getOutputImageFile();
+        if(pictureFile != null)
+        {
+            Log.i("APP", "Picture file not null");
+            try
+            {
+                FileOutputStream fileOutputStream = new FileOutputStream(pictureFile);
+                fileOutputStream.write(bytes);
+                Log.i("APP", "File saved");
+                fileOutputStream.close();
+            }
+            catch(FileNotFoundException e)
+            {
+                e.printStackTrace();
+                Log.i("APP", "File NOT saved");
+            }
+            catch(IOException e1)
+            {
+                e1.printStackTrace();
+                Log.i("APP", "File NOT saved");
+            }
+        }
+    }
+
+
+    /** Create a File for saving an image */
+    private File getOutputImageFile()
+    {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        File mediaStorageDirectory = new File(Environment.getExternalStorageDirectory(), MainActivity.appRootFolder);
+
+        // Create the main app storage directory if it does not exist
+        if (!mediaStorageDirectory.exists())
+        {
+            if (!mediaStorageDirectory.mkdirs())
+            {
+                return null;
+            }
+        }
+
+        // Create the image directory if it does not exist
+        File imageDirectory = new File(mediaStorageDirectory.getAbsolutePath(), MainActivity.appImageFolder);
+
+        if (!imageDirectory.exists())
+        {
+            if (!imageDirectory.mkdirs())
+            {
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        mediaFile = new File(imageDirectory.getPath() + File.separator +
+                Image.identifierPrefix + timeStamp + Image.mediaExtension);
+
+        return mediaFile;
+    }
+
+    public class SaveAsync extends AsyncTask<Byte, Integer, Long>
+    {
+
+        @Override
+        protected Long doInBackground(Byte... bytes)
+        {
+            if(mediaType == Media.MediaType.IMAGE)
+            {
+                savePicture(toPrimitiveByteArray(bytes));
+            }
+
+            return null;
+        }
+    }
+
+    public byte[] toPrimitiveByteArray(Byte[] bytes)
+    {
+        byte[] byteArray = new byte[bytes.length];
+
+        for(int i = 0; i < bytes.length; i++)
+        {
+            byteArray[i] = bytes[i];
+        }
+
+        return byteArray;
+    }
+
+    public Byte[] toByteArray(byte[] bytes)
+    {
+        Byte[] byteArray = new Byte[bytes.length];
+
+        for(int i = 0; i < bytes.length; i++)
+        {
+            byteArray[i] = bytes[i];
+        }
+
+        return byteArray;
     }
 }

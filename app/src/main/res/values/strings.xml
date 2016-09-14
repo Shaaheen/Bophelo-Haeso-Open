@@ -33,6 +33,12 @@
 
     <!--Log list Activity-->
 
+    <!--General app configuration-->
+    <string name="root_folder">@string/app_name</string>
+    <string name="images_folder">Images</string>
+    <string name="videos_folder">Videos</string>
+    <string name="recordings_folder">Recordings</string>
+
 
     <string-array name="string_array_example">
         <item>15</item>

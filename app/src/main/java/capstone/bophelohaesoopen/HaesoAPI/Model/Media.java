@@ -9,6 +9,8 @@ public class Media {
     public static String identifierPrefix = "";
     public static String mediaExtension = "";
 
+    public enum MediaType{IMAGE, VIDEO, AUDIO}
+
     /**
      * Represents a media object
      * @param name Name of media (No extension or prefix here)

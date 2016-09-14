@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity
     CardView picturesButton;
     // endregion
 
+    public static String appRootFolder;
+    public static String appImageFolder;
+    public static String appRecordingsFolder;
+    public static String appVideosFolder;
+
     //endregion
 
     //region Other class declarations
@@ -207,6 +212,12 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(videoAdapter);
 
 
+        //region
+        appRootFolder = getResources().getString(R.string.root_folder);
+        appImageFolder = getResources().getString(R.string.images_folder);
+        appRecordingsFolder = getResources().getString(R.string.recordings_folder);
+        appVideosFolder = getResources().getString(R.string.videos_folder);
+        //endregion
 
         //endregion
 
