@@ -25,7 +25,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     private static final int DATABASE_VERSION = 3;
     // Database Name
     private static final String DATABASE_NAME = "Logging_Database";
-    // Contacts table name
+    // Logging table name
     private static final String TABLE_LOGGING = "Logs";
     // LogEntrys Table Columns names
     private static final String KEY_ID = "Id";
@@ -33,6 +33,16 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     private static final String KEY_ACTION = "Log_Action";
     private static final String KEY_FILENAME = "File_name";
     private static final String KEY_DATETIME = "Date";
+
+    //Counter table
+    private static final String TABLE_COUNTER = "Counter";
+    //Columns
+    private static final String KEY_LAST_SAVED_ENTRY = "Last_Saved_Entry_Id";
+    private static final String KEY_NUM_OF_UNSAVED_ENTRIES = "Num_Of_Unsaved_Entries";
+
+    public static int numOfEntriesBeforeSaving = 10;
+
+
     //private static final String KEY_SH_ADDR = “LogEntry_address”;
 
     //For backend access to logg on setup db
@@ -67,10 +77,14 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CREATE_LOG_TABLE = "CREATE TABLE " + TABLE_LOGGING + "("
-        + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TYPE + " TEXT," +
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TYPE + " TEXT," +
                 KEY_ACTION + " TEXT," + KEY_FILENAME + " TEXT," + KEY_DATETIME + " DATETIME" + ")";
         Log.v("DB","Created table");
         sqLiteDatabase.execSQL(CREATE_LOG_TABLE);
+
+        String CREATE_COUNTER_TABLE = "CREATE TABLE " + TABLE_COUNTER
+                + "(" + KEY_LAST_SAVED_ENTRY + " INTEGER, " + KEY_NUM_OF_UNSAVED_ENTRIES + " INTEGER)";
+        sqLiteDatabase.execSQL(CREATE_COUNTER_TABLE);
     }
 
     /**
@@ -109,6 +123,8 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         Log.v("DB","Inserted");
         db.close(); // Closing database connection
     }
+
+    
 
     /**
      * Gets All LogEntrys in logging database
