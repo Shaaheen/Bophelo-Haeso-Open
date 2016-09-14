@@ -10,8 +10,8 @@ import android.view.View;
 
 import java.io.IOException;
 
-import capstone.bophelohaesoopen.HaesoAPI.MediaPlayer;
-import capstone.bophelohaesoopen.HaesoAPI.Video;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaPlayer;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
  * Activity for video playback - allows, play, pause, resume functionality
