@@ -26,12 +26,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import capstone.bophelohaesoopen.HaesoAPI.DatabaseUtils;
-import capstone.bophelohaesoopen.HaesoAPI.LogEntry;
-import capstone.bophelohaesoopen.HaesoAPI.Media;
-import capstone.bophelohaesoopen.HaesoAPI.MediaLoadService;
-import capstone.bophelohaesoopen.HaesoAPI.Video;
-import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -289,7 +288,6 @@ public class MainActivity extends AppCompatActivity
             String appName = getResources().getString(R.string.app_name);
 
             setTitle(appName);
-
 
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");

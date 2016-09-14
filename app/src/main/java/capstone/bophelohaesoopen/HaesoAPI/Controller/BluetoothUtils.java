@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
 
@@ -51,6 +53,11 @@ public class BluetoothUtils {
     private static int NUMBER_OF_COLONS = 4;
     private String connectedMacAddr;
 
+    /**
+     * Bluetooth Utility to handle sending and receiving via bluetooth
+     * @param context
+     * @param activity
+     */
     public BluetoothUtils( Context context, Activity activity ) {
         mSmoothBluetooth = new SmoothBluetooth(context); //Uses bluetooth library
         activityUIClass = activity; //The activity of the class stored
@@ -65,6 +72,9 @@ public class BluetoothUtils {
 
     }
 
+    /**
+     * Initialises all BT variables
+     */
     private void setupBTUtilities() {
         mSmoothBluetooth.setListener(mListener);  //for bluetooth events
 
@@ -90,6 +100,10 @@ public class BluetoothUtils {
         activityUIClass.startActivityForResult(enableBluetooth, ENABLE_BT_REQUEST);
     }
 
+    /**
+     * Connects to device with given mac address via Bluetooth
+     * @param macAddr - string of a desired device's mac address
+     */
     public void connectToAddress(String macAddr){
         if (connectedMacAddr!=null && macAddr.equals(connectedMacAddr) ){
             bluetoothListener.onConnected();
@@ -105,6 +119,12 @@ public class BluetoothUtils {
      */
     public void startScanning(){
         mSmoothBluetooth.doDiscovery();
+
+        //Log to database
+        LogEntry logEntry = new LogEntry(LogEntry.LogType.BLUETOOTH,"Start Sharing",null);
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
     }
 
 
@@ -114,15 +134,16 @@ public class BluetoothUtils {
      * @param mediaFile - Media object of file want to send
      */
     public void sendMediaFile(Media mediaFile){
-        //verifyStoragePermissions(activityUIClass);
-        bluetoothListener.onStartSending();
+        bluetoothListener.onStartSending(); //launch event saying sending has started
+
         File file = new File(mediaFile.getFilePath());
-        System.out.println(file.getName());
+        Log.w("BT",mediaFile.getFileName());
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream(); //To accumulate file bytes
         FileInputStream fis = null;
         byte[] mediaBytes = new byte[0]; //Initialise bytes for media file
         try {
-            //Gets bytes from file - 1024 bytes at a time
+            //Gets bytes from media file - 1024 bytes at a time
             fis = new FileInputStream(file);
             byte[] buf = new byte[1024];
             int n;
@@ -198,44 +219,49 @@ public class BluetoothUtils {
     };
 
     private SimpleBluetoothListener simpleBluetoothListener = new SimpleBluetoothListener() {
+
         /**
          * Gets data that has been transferred to Device
          * DATA ONLY COMES IN BYTE ARRAYS OF SIZE 1024 (byte[1024])
          * Hence byte arrays are accumalated up until file size and then exported into file
-         * @param bytes
-         * @param data
+         * @param bytes - bytes of received data
+         * @param data - String data received
          */
         @Override
         public void onBluetoothDataReceived(byte[] bytes, String data) {
             super.onBluetoothDataReceived(bytes, data);
-            //Log.w("SIMPLEBT", "Data received");
-            //Log.w("Byte array length ",bytes.length+"");
             if (data != null){
 
+                //if the data received is for progress monitoring i.e Sending progres
                 if (data.contains("_Progress_;")){
                     String[] splitte = data.split(";");
-                    String progress = splitte[1]; //Gets progress number
-                    progress = Integer.valueOf(progress).toString();
-                    //progress.replaceFirst("^0+(?!$)", ""); //Removes leading zeros
-                    bluetoothListener.onSendingProgress(progress);
+                    String progress = splitte[1]; //Gets progress number -percentage
+                    progress = Integer.valueOf(progress).toString(); //Removes leading zeros
+                    bluetoothListener.onSendingProgress(progress); //Report new Sending progress
                 }
                 else{
                     //Initial message received indicates the file size so we know
                     // when to stop reading in bytes that are being received
                     if (data.contains("file_size:")){
-                        bluetoothListener.onStartReceiving(); //launch event
+                        bluetoothListener.onStartReceiving(); //launch event - Receving started
                         receivingProgress = 0.0;
+
                         fileBytes = new ByteArrayOutputStream();
+
                         //Separates details from found information
                         String[] splitFileInfo = data.split(":");
                         sizeOfFileRec = Integer.parseInt( splitFileInfo[1] );
                         nameOfTransferredFile = splitFileInfo[3];
+
                         Log.w("Size of File",sizeOfFileRec + "");
+
                         //Set offset to know what bytes to skip
                         intialOffset = (splitFileInfo[0] + splitFileInfo[1] + splitFileInfo[2] + splitFileInfo[3]).getBytes().length + NUMBER_OF_COLONS;
-                        Log.w( "Byte size ", intialOffset + "" );
 
+                        Log.w( "Byte size ", intialOffset + "" );
                         currSizeOfRecFile = 0; //New file receiving
+
+
                     }
 
                     FileOutputStream out = null;
@@ -266,6 +292,7 @@ public class BluetoothUtils {
                             out =  new FileOutputStream( Environment.getExternalStorageDirectory() + "/" + nameOfTransferredFile );
                             out.write( fileBytes.toByteArray() );
                             out.close();
+
                             Log.w( "Rec File","Done receiving file" );
                             Log.w( "File Size","File size: " + fileBytes.toByteArray().length + " Diff is: " + (fileBytes.toByteArray().length - sizeOfFileRec)  );
 

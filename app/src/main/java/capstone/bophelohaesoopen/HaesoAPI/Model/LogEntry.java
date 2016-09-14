@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Model;
 
 import java.security.Timestamp;
 import java.text.DateFormat;
@@ -7,17 +7,24 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by Shaaheen on 9/10/2016.
+ * Object representation of a log entry in the logging database
  */
 public class LogEntry {
 
+    //Types of logs available - for organising data
     public static enum LogType {MEDIA_PLAYER, RECORDING, BLUETOOTH, PAGE_VISITS}
 
+    //Attributes of a log entry in db
     private LogType logEntryType;
     private String loggedAction;
     private Date timestamp;
     private String fileName;
 
+    /**
+     * Log object for logging database
+     * @param logType - specified type of the log data
+     * @param action - action that is to be logged
+     */
     public LogEntry(LogType logType, String action) {
         this.logEntryType = logType;
         this.loggedAction = action;
@@ -25,6 +32,12 @@ public class LogEntry {
         this.timestamp = new Date();
     }
 
+    /**
+     * Log object for logging database
+     * @param logEntryType - specified type of the log data
+     * @param loggedAction - action that is to be logged
+     * @param fileName - Action associated with specified file
+     */
     public LogEntry(LogType logEntryType, String loggedAction, String fileName) {
         this.logEntryType = logEntryType;
         this.loggedAction = loggedAction;
@@ -32,16 +45,24 @@ public class LogEntry {
         this.timestamp = new Date();
     }
 
-    public String getFileName() {
-        return fileName;
-    }
-
+    /**
+     * Log object for logging database
+     * @param logType - specified type of the log data
+     * @param action - action that is to be logged
+     * @param fileName - Action associated with specified file
+     * @param date - date of logged action
+     */
     public LogEntry(LogType logType, String action,String fileName, Date date) {
         this.logEntryType = logType;
         this.loggedAction = action;
         this.fileName = fileName;
         this.timestamp = date;
     }
+
+    public String getFileName() {
+        return fileName;
+    }
+
 
     public String getDateTimeString(){
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

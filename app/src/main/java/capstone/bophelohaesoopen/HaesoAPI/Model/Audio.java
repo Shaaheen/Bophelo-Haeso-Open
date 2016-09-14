@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Model;
 
 /**
  * Created by Shaaheen on 8/8/2016.

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.HaesoAPI.Audio;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 
 public class AudioAdapter extends RecyclerView.Adapter<AudioViewHolder>
 {
