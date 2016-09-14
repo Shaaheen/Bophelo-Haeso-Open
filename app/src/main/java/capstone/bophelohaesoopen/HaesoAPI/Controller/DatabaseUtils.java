@@ -17,7 +17,7 @@ import java.util.List;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 
 /**
- * Created by Shaaheen on 8/8/2016.
+ * Utility used to interact with the logging database
  */
 public class DatabaseUtils extends SQLiteOpenHelper{
 
@@ -38,6 +38,10 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     //For backend access to logg on setup db
     private static DatabaseUtils database = null;
 
+    /**
+     * Starts/Connects to database in given context
+     * @param context - activity db will be setup at
+     */
     public DatabaseUtils(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         Log.v("DB","Setting up DB");
@@ -48,10 +52,18 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         return database;
     }
 
+    /**
+     * Checks if database instance exist in app
+     * @return bool
+     */
     protected static boolean isDatabaseSetup(){
         return (database!=null);
     }
 
+    /**
+     * Creates table if not already exists
+     * @param sqLiteDatabase
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CREATE_LOG_TABLE = "CREATE TABLE " + TABLE_LOGGING + "("
@@ -61,6 +73,12 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(CREATE_LOG_TABLE);
     }
 
+    /**
+     *  Updates table if version number is incremented
+     * @param sqLiteDatabase
+     * @param i
+     * @param i1
+     */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // Drop older table if existed
@@ -76,12 +94,16 @@ public class DatabaseUtils extends SQLiteOpenHelper{
      */
     public void addLog(LogEntry logEntry) {
         Log.v("DB","Adding entry to DB: " + logEntry);
+
         SQLiteDatabase db = this.getWritableDatabase();
+
+        //Prepare values to be inserted in db
         ContentValues values = new ContentValues();
         values.put(KEY_TYPE, String.valueOf(logEntry.getLogEntryType()));
         values.put(KEY_ACTION, logEntry.getLoggedAction());
         values.put(KEY_FILENAME, logEntry.getFileName());
         values.put(KEY_DATETIME, logEntry.getDateTimeString());
+
         // Inserting Row
         db.insert(TABLE_LOGGING, null, values);
         Log.v("DB","Inserted");
@@ -110,10 +132,12 @@ public class DatabaseUtils extends SQLiteOpenHelper{
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                System.out.println(dateTime);
+                Log.w("DB",dateString);
+                //Create log entry from retrieved data
                 LogEntry LogEntry = new LogEntry(
                         capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry.LogType.valueOf(cursor.getString(1))
                         , cursor.getString(2),cursor.getString(3), dateTime);
+
                 // Adding log to list
                 LogEntryList.add(LogEntry);
             } while (cursor.moveToNext());
@@ -121,7 +145,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         Log.v("DB","Retrieved all Log entries");
         cursor.close();
         db.close();
-        // return contact list
+        // return log list
         return LogEntryList;
     }
 
@@ -134,15 +158,13 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     public List<LogEntry> getLogEntriesForType(LogEntry.LogType logType) {
         Log.v("DB","Getting log entries for type : "+ logType.name());
         List<LogEntry> LogEntryList = new ArrayList<LogEntry>();
-        String nam = logType.name();
-        // Select All Query
         SQLiteDatabase db = this.getWritableDatabase();
 
+        //Queries for only data of a specified type to be retreived
         Cursor cursor = db.query(TABLE_LOGGING, new String[]{KEY_ID,
                         KEY_TYPE, KEY_ACTION,KEY_DATETIME}, KEY_TYPE + "=?",
                 new String[]{logType.name()}, null, null, null, null);
 
-        //Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {

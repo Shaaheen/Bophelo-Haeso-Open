@@ -49,15 +49,18 @@ public class MediaPlayer extends android.media.MediaPlayer{
     public void stopMedia()
     {
         mediaPlayer.stop();
+
+        //Log playing of video
+        if ( DatabaseUtils.isDatabaseSetup() ){
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.MEDIA_PLAYER,"Stopped at " + mediaPlayer.getCurrentPosition());
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
+
         mediaPlayer.reset();
         mediaPlayer.release();
         mediaPlayer = null;
 
-        //Log playing of video
-        if ( DatabaseUtils.isDatabaseSetup() ){
-            LogEntry logEntry = new LogEntry(LogEntry.LogType.MEDIA_PLAYER,"Stopped");
-            DatabaseUtils.getInstance().addLog(logEntry);
-        }
+
     }
 
     public boolean isMediaPlaying()
