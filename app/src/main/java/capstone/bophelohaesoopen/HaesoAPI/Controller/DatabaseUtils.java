@@ -1,10 +1,9 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -14,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 
 /**
  * Created by Shaaheen on 8/8/2016.
@@ -111,7 +112,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
                 }
                 System.out.println(dateTime);
                 LogEntry LogEntry = new LogEntry(
-                        capstone.bophelohaesoopen.HaesoAPI.LogEntry.LogType.valueOf(cursor.getString(1))
+                        capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry.LogType.valueOf(cursor.getString(1))
                         , cursor.getString(2),cursor.getString(3), dateTime);
                 // Adding log to list
                 LogEntryList.add(LogEntry);
@@ -156,7 +157,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
                 System.out.println(dateTime);
 
                 LogEntry LogEntry = new LogEntry(
-                        capstone.bophelohaesoopen.HaesoAPI.LogEntry.LogType.valueOf(cursor.getString(1))
+                        capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry.LogType.valueOf(cursor.getString(1))
                         , cursor.getString(2) , cursor.getString(3) , dateTime);
                 // Adding log to list
                 LogEntryList.add(LogEntry);

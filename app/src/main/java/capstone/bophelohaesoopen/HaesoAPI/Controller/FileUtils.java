@@ -1,24 +1,24 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaMetadata;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
+import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 import capstone.bophelohaesoopen.R;
 
 public class FileUtils

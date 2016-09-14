@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
 

@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Model;
 
 import android.graphics.Bitmap;
 

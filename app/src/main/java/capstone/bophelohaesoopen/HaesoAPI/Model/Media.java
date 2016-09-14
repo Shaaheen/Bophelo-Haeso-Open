@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI;
+package capstone.bophelohaesoopen.HaesoAPI.Model;
 
 /**
  * Created by Shaaheen on 8/8/2016.
@@ -22,7 +22,7 @@ public class Media {
     public String getName() {
         int index = filePath.lastIndexOf("/");
         String filename = filePath.substring(index);
-        if(identifierPrefix != "")
+        if(!identifierPrefix.equals(""))
         {
             if(filename.contains(identifierPrefix))
             {

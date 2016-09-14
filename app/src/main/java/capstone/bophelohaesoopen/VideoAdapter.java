@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.HaesoAPI.Video;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
  * Data adapter for MainActivity RecyclerView (list of videos)
