@@ -102,8 +102,10 @@ public class CameraActivity extends AppCompatActivity
             camera.stopPreview();
             camera.startPreview();
             Log.i("APP", "Picture callback called");
-            fileUtils.saveMedia(bytes, Media.MediaType.IMAGE);
-//            new SaveAsync().execute(toByteArray(bytes));
+
+            // An image file name will be created automatically
+            fileUtils.saveMedia(bytes, Media.MediaType.IMAGE, "");
+
         }
     };
 
