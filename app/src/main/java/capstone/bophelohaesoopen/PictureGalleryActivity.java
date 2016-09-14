@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.HaesoAPI.Image;
-import capstone.bophelohaesoopen.HaesoAPI.MediaLoadService;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 
 /**
  * Activity where pictures taken are listed / shown
