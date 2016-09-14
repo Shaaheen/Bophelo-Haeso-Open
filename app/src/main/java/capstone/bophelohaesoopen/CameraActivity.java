@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
 
 public class CameraActivity extends AppCompatActivity
 {
