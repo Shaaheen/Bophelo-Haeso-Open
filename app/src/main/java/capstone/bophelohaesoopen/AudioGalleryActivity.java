@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.HaesoAPI.Audio;
-import capstone.bophelohaesoopen.HaesoAPI.MediaLoadService;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 
 /**
  * Activity where recorded audio files are listed / shown
