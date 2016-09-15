@@ -40,6 +40,8 @@ public class FileUtils
         activity = activityGiven;
     }
 
+    public FileUtils() {}
+
     /**
      * Scans device file directory for media files and creates an array of Media objects from the videos found
      * @param prefix - prefix to specify files that are retrieved
@@ -115,7 +117,7 @@ public class FileUtils
     public static String getAudioRecordingFileName(){
         DateFormat dateFormat = new SimpleDateFormat("dd\\MM\\yyyy_HH:mm:ss");
         String dateTimeNow =  dateFormat.format(new Date());
-        return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"report_" + dateTimeNow + ".3gp");
+        return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"Report_" + dateTimeNow + ".3gp");
     }
 
     public void saveMedia(byte[] data, Media.MediaType media, String outFileName)

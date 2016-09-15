@@ -265,58 +265,55 @@ public class BluetoothUtils {
                     }
 
                     FileOutputStream out = null;
-                    try {
 
-                        //Writes bytes just received into accumalating array of bytes
-                        //Will accumulate all bytes received and export all bytes into one file
-                        fileBytes.write( bytes , intialOffset, bytes.length - intialOffset);
-                        currSizeOfRecFile += bytes.length ;
-                        currSizeOfRecFile -= intialOffset;
-                        intialOffset = 0;
+                    //Writes bytes just received into accumalating array of bytes
+                    //Will accumulate all bytes received and export all bytes into one file
+                    fileBytes.write( bytes , intialOffset, bytes.length - intialOffset);
+                    currSizeOfRecFile += bytes.length ;
+                    currSizeOfRecFile -= intialOffset;
+                    intialOffset = 0;
 
-                        //To track progress,
-                        // Checks received file size so far against expected file size
-                        double currProg = ( (currSizeOfRecFile+0.0) /(sizeOfFileRec+0.0) );
-                        currProg = currProg *100;
-                        //Launch event if another 1% has been received
-                        if (currProg - receivingProgress >= 1.0 || currProg == 100.0){
-                            Log.w("BT","Progress found and sending: " + currProg);
-                            receivingProgress = currProg;
-                            bluetoothListener.onReceivingProgress(receivingProgress);
-                            sendProgressToOtherDevice((int) receivingProgress); //Notify other device
-                        }
-
-
-                        //Stop taking in bytes and export file
-                        if ( currSizeOfRecFile >= sizeOfFileRec ){
-                            out =  new FileOutputStream( Environment.getExternalStorageDirectory() + "/" + nameOfTransferredFile );
-                            out.write( fileBytes.toByteArray() );
-                            out.close();
-
-                            // Suggestion for using fileUtils to save the file:
-                            // fileUtils.saveMedia(fileBytes.toByteArray(), Media.MediaType.VIDEO, nameOfTransferredFile);
-
-
-                            Log.w( "Rec File","Done receiving file" );
-                            Log.w( "File Size","File size: " + fileBytes.toByteArray().length + " Diff is: " + (fileBytes.toByteArray().length - sizeOfFileRec)  );
-
-                            //Log to database
-                            LogEntry logEntry = new LogEntry(LogEntry.LogType.BLUETOOTH,"Received Media",nameOfTransferredFile);
-                            if ( DatabaseUtils.isDatabaseSetup() ){
-                                DatabaseUtils.getInstance().addLog(logEntry);
-                            }
-
-                            //Reset all variables for next file
-                            fileBytes = null;
-                            sizeOfFileRec = 0;
-                            currSizeOfRecFile = 0;
-                            intialOffset = 0;
-                            nameOfTransferredFile = "Media";
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    //To track progress,
+                    // Checks received file size so far against expected file size
+                    double currProg = ( (currSizeOfRecFile+0.0) /(sizeOfFileRec+0.0) );
+                    currProg = currProg *100;
+                    //Launch event if another 1% has been received
+                    if (currProg - receivingProgress >= 1.0 || currProg == 100.0){
+                        Log.w("BT","Progress found and sending: " + currProg);
+                        receivingProgress = currProg;
+                        bluetoothListener.onReceivingProgress(receivingProgress);
+                        sendProgressToOtherDevice((int) receivingProgress); //Notify other device
                     }
+
+
+                    //Stop taking in bytes and export file
+                    if ( currSizeOfRecFile >= sizeOfFileRec ){
+//                            out =  new FileOutputStream( Environment.getExternalStorageDirectory() + "/" + nameOfTransferredFile );
+//                            out.write( fileBytes.toByteArray() );
+//                            out.close();
+
+                        // Suggestion for using fileUtils to save the file:
+                        FileUtils fileUtils = new FileUtils();
+                        fileUtils.saveMedia(fileBytes.toByteArray(), Media.MediaType.VIDEO, nameOfTransferredFile);
+
+
+                        Log.w( "Rec File","Done receiving file" );
+                        Log.w( "File Size","File size: " + fileBytes.toByteArray().length + " Diff is: " + (fileBytes.toByteArray().length - sizeOfFileRec)  );
+
+                        //Log to database
+                        LogEntry logEntry = new LogEntry(LogEntry.LogType.BLUETOOTH,"Received Media",nameOfTransferredFile);
+                        if ( DatabaseUtils.isDatabaseSetup() ){
+                            DatabaseUtils.getInstance().addLog(logEntry);
+                        }
+
+                        //Reset all variables for next file
+                        fileBytes = null;
+                        sizeOfFileRec = 0;
+                        currSizeOfRecFile = 0;
+                        intialOffset = 0;
+                        nameOfTransferredFile = "Media";
+                    }
+
                 }
             }
             else{
