@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.provider.MediaStore;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,7 +28,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 public class DatabaseUtils extends SQLiteOpenHelper{
 
     // Database Version
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
     // Database Name
     private static final String DATABASE_NAME = "Logging_Database";
     // Logging table name
@@ -92,6 +96,10 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         setUpCounterTable(sqLiteDatabase);
     }
 
+    /**
+     * Initialises counter table
+     * @param sqLiteDatabase
+     */
     private void setUpCounterTable(SQLiteDatabase sqLiteDatabase){
         ContentValues values = new ContentValues();
         values.put(KEY_LAST_SAVED_ENTRY, "0");
@@ -148,21 +156,45 @@ public class DatabaseUtils extends SQLiteOpenHelper{
 
     }
 
+    /**
+     * Updates the counter table by incrementing counter for new entry
+     * Will update log file after specified amount new entries
+     */
     public void updateCounter(){
+        //Gets current counter details
         List<String> listOfCounters = getAllCounterEntries();
+        String lastSaved = listOfCounters.get(1);
+        String unsavedEntr = listOfCounters.get(2);
 
-
-
-        if ( Integer.parseInt(listOfCounters.get(2)) >= numOfEntriesBeforeSaving ){
-            List<LogEntry> logEntries = getLogsFromTill(Integer.parseInt(listOfCounters.get(1)) + "", Integer.parseInt(listOfCounters.get(2)) +"" );
+        //Checks if too many unsaved entries, then saves unsaved entries to file
+        if ( Integer.parseInt(unsavedEntr) >= numOfEntriesBeforeSaving ){
+            List<LogEntry> logEntries = getLogsFromTill( (Integer.parseInt(lastSaved)+1) + ""
+                    , (Integer.parseInt(lastSaved) + Integer.parseInt(unsavedEntr)) +"" );
+//            try {
+//                File f = new File("pathToYourFile");
+//                if(!f.exists() && !f.isDirectory())
+//                {
+//                    f.createNewFile()
+//                }
+//                for (LogEntry entry:logEntries){
+//                    fileOutputStream.write(entry.csvFormat());
+//                }
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+            //Reset values
+            lastSaved = (Integer.parseInt(lastSaved) + Integer.parseInt(unsavedEntr)) +"";
+            unsavedEntr = "0";
         }
 
+        //Update DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         //cv.put(KEY_ID,"1"); //These Fields should be your String values of actual column names
-        cv.put(KEY_LAST_SAVED_ENTRY, (Integer.parseInt(listOfCounters.get(1)) ) + "");
-        cv.put(KEY_NUM_OF_UNSAVED_ENTRIES,(Integer.parseInt(listOfCounters.get(2)) + 1) + "");
+        cv.put(KEY_LAST_SAVED_ENTRY, (Integer.parseInt(lastSaved) ) + "");
+        cv.put(KEY_NUM_OF_UNSAVED_ENTRIES,(Integer.parseInt(unsavedEntr) + 1) + "");
 
         db.update(TABLE_COUNTER, cv, KEY_ID + "=1", null);
 
@@ -173,6 +205,12 @@ public class DatabaseUtils extends SQLiteOpenHelper{
 
     }
 
+    /**
+     * Gets Log Entries between specified ids
+     * @param startId - from id
+     * @param endId - to id
+     * @return - List of log entries from start id to end id
+     */
     public List<LogEntry> getLogsFromTill(String startId, String endId){
         Log.v("DB","Getting all Log entries");
         List<LogEntry> LogEntryList = new ArrayList<LogEntry>();
