@@ -519,7 +519,7 @@ public class MainActivity extends AppCompatActivity
 
         // Using a TreeMap to obtain the map objects sorted according to their values
         TreeMap<String, Integer> playFrequencies = new TreeMap<>();
-        
+
         // TreeMap<String, Integer> playFrequencies = LogEntry.getMostPlayedVideos() // or something like this
 
         int count = 0;
