@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,13 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;

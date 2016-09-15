@@ -9,7 +9,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 
