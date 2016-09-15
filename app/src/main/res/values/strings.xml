@@ -17,6 +17,7 @@
     <string name="title_activity_camera">Camera</string>
 
     <!--Video Player Activity-->
+    <string name="title_activity_video_player">Video Player</string>
 
     <!--Audio Player Activity-->
 

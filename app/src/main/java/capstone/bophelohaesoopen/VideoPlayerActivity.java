@@ -2,11 +2,15 @@ package capstone.bophelohaesoopen;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import java.io.IOException;
 
@@ -37,11 +41,29 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     boolean playing = true;
     boolean paused = false;
 
+    int screenWidth;
+    int screenHeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        screenWidth = getWindowManager().getDefaultDisplay().getWidth();
+        screenHeight = getWindowManager().getDefaultDisplay().getHeight();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+
+
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        else
+        {
+            Log.i("APP", "Action bar null");
+        }
 
         initializeViews();
 
@@ -84,12 +106,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         });
     }
 
-    private void playVideo()
+    private void playVideo(int width, int height)
     {
         playing = true;
         try
         {
-            mediaPlayer.playMedia( video , videoView ); //Plays video on given view
+            mediaPlayer.playMedia(video, videoView, width, height); //Plays video on given view
         }
         catch (IOException e)
         {
@@ -106,7 +128,39 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     public void surfaceCreated(SurfaceHolder holder)
     {
-        playVideo();
+
+        mediaPlayer.setOnPreparedListener(new android.media.MediaPlayer.OnPreparedListener()
+        {
+            @Override
+            public void onPrepared(android.media.MediaPlayer mediaPlayer)
+            {
+                // so it fits on the screen
+                int videoWidth = mediaPlayer.getVideoWidth();
+                int videoHeight = mediaPlayer.getVideoHeight();
+                Log.i("BHO", "Video height = "+videoHeight);
+                Log.i("BHO", "Video width = "+videoWidth);
+
+                float videoProportion = (float) videoWidth / (float) videoHeight;
+
+                float screenProportion = (float) screenWidth / (float) screenHeight;
+                android.view.ViewGroup.LayoutParams lp = videoView.getLayoutParams();
+
+                if (videoProportion > screenProportion)
+                {
+                    lp.width = screenWidth;
+                    lp.height = (int) ((float) screenWidth / videoProportion);
+                }
+                else
+                {
+                    lp.width = (int) (videoProportion * (float) screenHeight);
+                    lp.height = screenHeight;
+                }
+                videoView.setLayoutParams(lp);
+
+            }
+        });
+//
+        playVideo(screenHeight, screenWidth);
     }
 
     @Override
@@ -153,7 +207,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         }
         else if(!paused && !playing)
         {
-            playVideo();
+            playVideo(screenWidth, screenHeight);
             playPauseButton.setImageResource(R.drawable.pause);
         }
 
@@ -185,5 +239,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     {
         mediaPlayer.stopMedia();
         playing = false;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp()
+    {
+        onBackPressed();
+        return true;
     }
 }

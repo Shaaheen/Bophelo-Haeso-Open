@@ -33,7 +33,8 @@
             android:name=".AudioGalleryActivity"
             android:label="@string/title_activity_audio_gallery">
         </activity>
-        <activity android:name=".VideoPlayerActivity">
+        <activity android:name=".VideoPlayerActivity"
+                  android:label="@string/title_activity_video_player">
         </activity>
         <activity android:name=".AudioPlayerActivity">
         </activity>
