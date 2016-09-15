@@ -48,7 +48,7 @@ public class Media {
     }
 
     public String getFileName(){
-        return (identifierPrefix + name + mediaExtension);
+        return ( name );
     }
 
     public void setName(String name) {

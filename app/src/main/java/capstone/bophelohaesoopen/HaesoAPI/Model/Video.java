@@ -17,7 +17,7 @@ public class Video extends Media {
     }
 
     public String getFileName(){
-        return (identifierPrefix + name + mediaExtension);
+        return (name );
     }
 
 

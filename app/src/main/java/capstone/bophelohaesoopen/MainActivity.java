@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity
         // Initialize UI elements
         initialize();
 
+
         mediaLoadService.start();
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable()
@@ -490,7 +491,7 @@ public class MainActivity extends AppCompatActivity
     // endregion
 
     /**
-     * Populates video list with the list of videos from storage (Currently only prototype functionality)
+     * Populates video list with the list of videos from storage
      */
     private void populateVideoList()
     {
@@ -516,7 +517,7 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Video> ordered = new ArrayList<>();
 
         // Using a TreeMap to obtain the map objects sorted according to their values
-        TreeMap<String, Integer> playFrequencies = new TreeMap<>();
+        TreeMap<String, Integer> playFrequencies = databaseUtils.getMostPlayedVideos();
 
         // TreeMap<String, Integer> playFrequencies = LogEntry.getMostPlayedVideos() // or something like this
 

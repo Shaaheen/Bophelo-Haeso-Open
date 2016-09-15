@@ -9,6 +9,6 @@ public class Audio extends Media {
     }
 
     public String getFileName(){
-        return (identifierPrefix + name + mediaExtension);
+        return ( name );
     }
 }
