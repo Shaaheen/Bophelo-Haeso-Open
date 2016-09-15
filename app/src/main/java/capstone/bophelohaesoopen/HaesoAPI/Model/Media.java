@@ -9,6 +9,8 @@ public class Media {
     public static String identifierPrefix = "";
     public static String mediaExtension = "";
 
+    public enum MediaType{IMAGE, VIDEO, AUDIO}
+
     /**
      * Represents a media object
      * @param name Name of media (No extension or prefix here)
@@ -35,7 +37,8 @@ public class Media {
             }
         }
 
-        int extensionLength = mediaExtension.length();
+        // Length of media extension strings i.e. .3gp / .jpg / .mp4
+        int extensionLength = 4;
         filename = filename.substring(0,(filename.length() - extensionLength));
         return filename;
     }

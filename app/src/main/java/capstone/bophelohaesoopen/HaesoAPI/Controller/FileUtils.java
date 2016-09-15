@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -19,15 +20,19 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
+import capstone.bophelohaesoopen.MainActivity;
 import capstone.bophelohaesoopen.R;
 
 public class FileUtils
 {
-
     Activity activity;
-    public FileUtils(Activity activity)
+
+    Media.MediaType mediaType;
+    String outputFileName;
+
+    public FileUtils(Activity activityGiven)
     {
-        this.activity = activity;
+        activity = activityGiven;
     }
 
     /**
@@ -105,6 +110,152 @@ public class FileUtils
     public static String getAudioRecordingFileName(){
         DateFormat dateFormat = new SimpleDateFormat("dd\\MM\\yyyy_HH:mm:ss");
         String dateTimeNow =  dateFormat.format(new Date());
-        return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"Aud_Report_" +  dateTimeNow + ".3gp");
+        return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"report_" + dateTimeNow + ".3gp");
+    }
+
+    public void saveMedia(byte[] data, Media.MediaType media, String outFileName)
+    {
+        mediaType = media;
+        outputFileName = outFileName;
+        new SaveAsync().execute(toByteArray(data));
+    }
+
+    public void writeOut(byte[] bytes)
+    {
+        File outputFile = null;
+        if(mediaType == Media.MediaType.IMAGE)
+        {
+            Log.i("BHO", "Image file to be saved");
+            outputFile = getOutputImageFile();
+        }
+        else if(mediaType == Media.MediaType.VIDEO)
+        {
+            Log.i("BHO", "Video file to be saved");
+            outputFile = getOutputVideoFile();
+        }
+        if(outputFile != null)
+        {
+            Log.i("BHO", "File not null");
+            try
+            {
+                FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+                fileOutputStream.write(bytes);
+                Log.i("BHO", "File saved");
+                fileOutputStream.close();
+            }
+            catch(FileNotFoundException e)
+            {
+                e.printStackTrace();
+                Log.i("BHO", "File NOT saved");
+            }
+            catch(IOException e1)
+            {
+                e1.printStackTrace();
+                Log.i("BHO", "File NOT saved");
+            }
+        }
+
+    }
+
+
+    /** Create a file for saving an image */
+    private File getOutputImageFile()
+    {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        File mediaStorageDirectory = new File(Environment.getExternalStorageDirectory(), MainActivity.appRootFolder);
+
+        // Create the main app storage directory if it does not exist
+        if (!mediaStorageDirectory.exists())
+        {
+            if (!mediaStorageDirectory.mkdirs())
+            {
+                return null;
+            }
+        }
+
+        // Create the image directory if it does not exist
+        File imageDirectory = new File(mediaStorageDirectory.getAbsolutePath(), MainActivity.appImageFolder);
+
+        if (!imageDirectory.exists())
+        {
+            if (!imageDirectory.mkdirs())
+            {
+                return null;
+            }
+        }
+
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        File mediaFile = new File(imageDirectory.getPath() + File.separator + Image.identifierPrefix + timeStamp + Image.mediaExtension);
+
+        return mediaFile;
+    }
+
+    /** Create a file for saving a video */
+    private File getOutputVideoFile()
+    {
+        File mediaStorageDirectory = new File(Environment.getExternalStorageDirectory(), MainActivity.appRootFolder);
+
+        // Create the main app storage directory if it does not exist
+        if (!mediaStorageDirectory.exists())
+        {
+            if (!mediaStorageDirectory.mkdirs())
+            {
+                return null;
+            }
+        }
+
+        // Create the video directory if it does not exist
+        File videoDirectory = new File(mediaStorageDirectory.getAbsolutePath(), MainActivity.appVideosFolder);
+
+        if (!videoDirectory.exists())
+        {
+            if (!videoDirectory.mkdirs())
+            {
+                return null;
+            }
+        }
+
+        File videoFile = new File(videoDirectory.getPath() + File.separator + outputFileName);
+
+        return videoFile;
+    }
+
+    public class SaveAsync extends AsyncTask<Byte, Integer, Long>
+    {
+
+        @Override
+        protected Long doInBackground(Byte... bytes)
+        {
+            writeOut(toPrimitiveByteArray(bytes));
+            return null;
+        }
+    }
+
+    public byte[] toPrimitiveByteArray(Byte[] bytes)
+    {
+        byte[] byteArray = new byte[bytes.length];
+
+        for(int i = 0; i < bytes.length; i++)
+        {
+            byteArray[i] = bytes[i];
+        }
+
+        return byteArray;
+    }
+
+    public Byte[] toByteArray(byte[] bytes)
+    {
+        Byte[] byteArray = new Byte[bytes.length];
+
+        for(int i = 0; i < bytes.length; i++)
+        {
+            byteArray[i] = bytes[i];
+        }
+
+        return byteArray;
     }
 }

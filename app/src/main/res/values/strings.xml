@@ -26,12 +26,22 @@
     <!--Audio Gallery Activity-->
     <string name="title_activity_audio_gallery">Audio files</string>
 
-    <!--Audio recorder activity-->
+    <!--Audio Recorder activity-->
     <string name="recording_indicator">Recording indicator</string>
     <string name="thumbnail">Thumbnail</string>
-    <string name="title_activity_audio_recording">Recording . .</string>
+    <string name="recording_duration_limit_minutes">1</string>
+    <string name="title_activity_audio_recording">Audio Recorder</string>
+    <string name="recording_duration_limit_message">The recording will now be saved.</string>
+    <string name="recording_duration_limit_title">Recording limit reached</string>
+    <string name="recording_duration_limit_positive_action">OK</string>
 
     <!--Log list Activity-->
+
+    <!--General app configuration-->
+    <string name="root_folder">@string/app_name</string>
+    <string name="images_folder">Images</string>
+    <string name="videos_folder">Videos</string>
+    <string name="recordings_folder">Recordings</string>
 
 
     <string-array name="string_array_example">

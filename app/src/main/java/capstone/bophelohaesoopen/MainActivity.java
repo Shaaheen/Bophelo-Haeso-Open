@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,9 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
@@ -56,6 +58,11 @@ public class MainActivity extends AppCompatActivity
     CardView recordingsButton;
     CardView picturesButton;
     // endregion
+
+    public static String appRootFolder;
+    public static String appImageFolder;
+    public static String appRecordingsFolder;
+    public static String appVideosFolder;
 
     //endregion
 
@@ -207,6 +214,12 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(videoAdapter);
 
 
+        //region
+        appRootFolder = getResources().getString(R.string.root_folder);
+        appImageFolder = getResources().getString(R.string.images_folder);
+        appRecordingsFolder = getResources().getString(R.string.recordings_folder);
+        appVideosFolder = getResources().getString(R.string.videos_folder);
+        //endregion
 
         //endregion
 
@@ -496,5 +509,60 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getName());
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
         this.startActivity(intent);
+    }
+
+    private ArrayList<Video> getOrderedVideos(ArrayList<Video> unordered)
+    {
+        ArrayList<Video> ordered = new ArrayList<>();
+
+        // Using a TreeMap to obtain the map objects sorted according to their values
+        TreeMap<String, Integer> playFrequencies = new TreeMap<>();
+
+        // TreeMap<String, Integer> playFrequencies = LogEntry.getMostPlayedVideos() // or something like this
+
+        int count = 0;
+
+        for(String name : playFrequencies.keySet())
+        {
+            // Only add the 4 most watched videos first as the rest will be ordered differently
+            if(count < 4)
+            {
+                for(Video video : unordered)
+                {
+                    if(name.equals(video.getFileName()))
+                    {
+                        ordered.add(video);
+                        unordered.remove(video);
+                    }
+                }
+            }
+            else
+            {
+                break;
+            }
+            count++;
+        }
+
+        TreeSet<String> alphabeticallyOrdered = new TreeSet<>();
+        for(Video video : unordered)
+        {
+            alphabeticallyOrdered.add(video.getFileName());
+        }
+
+        Iterator iterator = alphabeticallyOrdered.iterator();
+        while(iterator.hasNext())
+        {
+            String current = (String)iterator.next();
+            for(Video video : unordered)
+            {
+                if(current.equals(video.getFileName()))
+                {
+                    ordered.add(video);
+                }
+            }
+
+        }
+
+        return ordered;
     }
 }

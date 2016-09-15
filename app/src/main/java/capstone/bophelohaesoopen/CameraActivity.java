@@ -6,17 +6,12 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.hardware.Camera;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -30,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
 public class CameraActivity extends AppCompatActivity
 {
@@ -37,6 +34,8 @@ public class CameraActivity extends AppCompatActivity
     private Camera camera;
     private CameraView cameraView;
     FloatingActionButton capture;
+
+    FileUtils fileUtils;
 
     RelativeLayout captureScreen;
 
@@ -57,6 +56,8 @@ public class CameraActivity extends AppCompatActivity
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        fileUtils = new FileUtils(this);
 
         initialize();
     }
@@ -101,18 +102,17 @@ public class CameraActivity extends AppCompatActivity
             camera.stopPreview();
             camera.startPreview();
             Log.i("APP", "Picture callback called");
-            new SaveAsync().execute(toByteArray(bytes));
+
+            // An image file name will be created automatically
+            fileUtils.saveMedia(bytes, Media.MediaType.IMAGE, "");
+
         }
     };
 
     public void savePicture(byte[] bytes)
     {
         File pictureFile = getOutputMediaFile();
-        if(pictureFile == null)
-        {
-            Toast.makeText(getApplicationContext(), "Image capture failed", Toast.LENGTH_LONG).show();
-        }
-        else
+        if(pictureFile != null)
         {
             Log.i("APP", "Picture file not null");
             try
@@ -150,7 +150,7 @@ public class CameraActivity extends AppCompatActivity
         return c;
     }
 
-    /** Create a File for saving an image or video */
+    /** Create a File for saving an image */
     private File getOutputMediaFile()
     {
         // To be safe, you should check that the SDCard is mounted
@@ -252,12 +252,12 @@ public class CameraActivity extends AppCompatActivity
         @Override
         protected Long doInBackground(Byte... bytes)
         {
-            savePicture(toPrimitive(bytes));
+            savePicture(toPrimitiveByteArray(bytes));
             return null;
         }
     }
 
-    public byte[] toPrimitive(Byte[] bytes)
+    public byte[] toPrimitiveByteArray(Byte[] bytes)
     {
         byte[] primArray = new byte[bytes.length];
 

@@ -1,14 +1,18 @@
 package capstone.bophelohaesoopen;
 
-import android.os.Environment;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.app.AlertDialog;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -28,6 +32,8 @@ public class AudioRecorderActivity extends AppCompatActivity
     Handler handler;
     Runnable runnable;
 
+    AlertDialog.Builder alert;
+
     AudioRecorder audioRecorder;
 
     boolean indicatorVisible = true;
@@ -38,13 +44,30 @@ public class AudioRecorderActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        // Get action bar if not present
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_recorder);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         initializeViews();
 
-        String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+        alert = new AlertDialog.Builder(this);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        else
+        {
+            Log.i("APP", "Action bar null");
+        }
 
         audioRecorder = new AudioRecorder();
+        String durationLimit = getResources().getString(R.string.recording_duration_limit_minutes);
+        audioRecorder.setRecordingDurationLimit(Integer.parseInt(durationLimit));
         audioRecorder.prepareForRecording();
         try
         {
@@ -84,7 +107,6 @@ public class AudioRecorderActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
-        showToast();
 
         // Close the activity
         finish();
@@ -120,7 +142,41 @@ public class AudioRecorderActivity extends AppCompatActivity
                 }
                 if (!recordingStopped)
                 {
-                    handler.postDelayed(this, ANIM_DURATION);
+                    if(!audioRecorder.maxDurationReached)
+                    {
+                        handler.postDelayed(this, ANIM_DURATION);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            audioRecorder.stopRecording();
+
+                            recordingStopped = true;
+
+                            String recordingLimitMessage = getResources().getString(R.string.recording_duration_limit_message);
+                            String recordingLimitTitle = getResources().getString(R.string.recording_duration_limit_title);
+                            String okText = getResources().getString(R.string.recording_duration_limit_positive_action);
+                            alert.setTitle(recordingLimitTitle);
+                            alert.setMessage(recordingLimitMessage);
+                            alert.setPositiveButton(okText, new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i)
+                                {
+                                    dialogInterface.dismiss();
+                                    finish();
+                                }
+                            });
+                            alert.show();
+                        }
+                        catch (IllegalStateException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
+
                 }
 
             }
@@ -134,8 +190,6 @@ public class AudioRecorderActivity extends AppCompatActivity
         super.onBackPressed();
         audioRecorder.stopRecording();
         recordingStopped = true;
-        showToast();
-
 
         // Close the activity
         finish();
@@ -175,10 +229,13 @@ public class AudioRecorderActivity extends AppCompatActivity
         timeView.setText(timeText);
     }
 
-    private void showToast()
+    @Override
+    public boolean onSupportNavigateUp()
     {
-        handler.removeCallbacks(runnable);
-        Toast toast = Toast.makeText(this, "Recording saved as \"recording.3gp\"", Toast.LENGTH_SHORT);
-        toast.show();
+        super.onBackPressed();
+        audioRecorder.stopRecording();
+        recordingStopped = true;
+        finish();
+        return true;
     }
 }

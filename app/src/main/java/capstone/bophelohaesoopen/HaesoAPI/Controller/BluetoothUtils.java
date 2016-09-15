@@ -293,6 +293,10 @@ public class BluetoothUtils {
                             out.write( fileBytes.toByteArray() );
                             out.close();
 
+                            // Suggestion for using fileUtils to save the file:
+                            // fileUtils.saveMedia(fileBytes.toByteArray(), Media.MediaType.VIDEO, nameOfTransferredFile);
+
+
                             Log.w( "Rec File","Done receiving file" );
                             Log.w( "File Size","File size: " + fileBytes.toByteArray().length + " Diff is: " + (fileBytes.toByteArray().length - sizeOfFileRec)  );
 
