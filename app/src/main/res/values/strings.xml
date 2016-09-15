@@ -29,7 +29,7 @@
     <!--Audio recorder activity-->
     <string name="recording_indicator">Recording indicator</string>
     <string name="thumbnail">Thumbnail</string>
-    <string name="title_activity_audio_recording">Recording . .</string>
+    <string name="title_activity_audio_recording">Audio Recorder</string>
 
     <!--Log list Activity-->
 
