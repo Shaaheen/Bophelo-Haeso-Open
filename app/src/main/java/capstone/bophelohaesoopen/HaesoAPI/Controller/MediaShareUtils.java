@@ -155,7 +155,7 @@ public class MediaShareUtils
                 Log.v("BT","Sending " + progress + "%");
 
                 int p = Integer.valueOf(progress);
-                if(p == 100)
+                if(p >= 99)
                 {
                     determinatePD.dismiss();
                     Log.v("BT","Done Sending :" + progress + "%");
