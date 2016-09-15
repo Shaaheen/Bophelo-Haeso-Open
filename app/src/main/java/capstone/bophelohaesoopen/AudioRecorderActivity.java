@@ -1,11 +1,15 @@
 package capstone.bophelohaesoopen;
 
-import android.os.Environment;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.app.AlertDialog;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +32,8 @@ public class AudioRecorderActivity extends AppCompatActivity
     Handler handler;
     Runnable runnable;
 
+    AlertDialog.Builder alert;
+
     AudioRecorder audioRecorder;
 
     boolean indicatorVisible = true;
@@ -38,13 +44,26 @@ public class AudioRecorderActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_recorder);
         initializeViews();
 
-        String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+        alert = new AlertDialog.Builder(this);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        else
+        {
+            Log.i("APP", "Action bar null");
+        }
 
         audioRecorder = new AudioRecorder();
+        String durationLimit = getResources().getString(R.string.recording_duration_limit_minutes);
+        audioRecorder.setRecordingDurationLimit(Integer.parseInt(durationLimit));
         audioRecorder.prepareForRecording();
         try
         {
@@ -120,7 +139,40 @@ public class AudioRecorderActivity extends AppCompatActivity
                 }
                 if (!recordingStopped)
                 {
-                    handler.postDelayed(this, ANIM_DURATION);
+                    if(!audioRecorder.maxDurationReached)
+                    {
+                        handler.postDelayed(this, ANIM_DURATION);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            audioRecorder.stopRecording();
+
+                            recordingStopped = true;
+
+                            String recordingLimitMessage = getResources().getString(R.string.recording_duration_limit_message);
+                            String recordingLimitTitle = getResources().getString(R.string.recording_duration_limit_title);
+                            alert.setTitle(recordingLimitTitle);
+                            alert.setMessage(recordingLimitMessage);
+                            alert.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i)
+                                {
+                                    dialogInterface.dismiss();
+                                    finish();
+                                }
+                            });
+                            alert.show();
+                        }
+                        catch (IllegalStateException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
+
                 }
 
             }
@@ -180,5 +232,15 @@ public class AudioRecorderActivity extends AppCompatActivity
         handler.removeCallbacks(runnable);
         Toast toast = Toast.makeText(this, "Recording saved as \"recording.3gp\"", Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp()
+    {
+        super.onBackPressed();
+        audioRecorder.stopRecording();
+        recordingStopped = true;
+        finish();
+        return true;
     }
 }

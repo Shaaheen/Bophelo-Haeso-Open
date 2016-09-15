@@ -12,7 +12,7 @@
     <dimen name="image_item_width">100dp</dimen>
     <dimen name="image_item_height">100dp</dimen>
     <dimen name="video_text_size">12sp</dimen>
-    <dimen name="circle_radius">50dp</dimen>
+    <dimen name="circle_radius">60dp</dimen>
     <dimen name="main_menu_top_margin">220dp</dimen>
     <dimen name="button_column_width">160dp</dimen>
     <dimen name="menu_button_width">125dp</dimen>

@@ -110,7 +110,7 @@ public class FileUtils
     public static String getAudioRecordingFileName(){
         DateFormat dateFormat = new SimpleDateFormat("dd\\MM\\yyyy_HH:mm:ss");
         String dateTimeNow =  dateFormat.format(new Date());
-        return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"Aud_Report_" +  dateTimeNow + ".3gp");
+        return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"report_" + dateTimeNow + ".3gp");
     }
 
     public void saveMedia(byte[] data, Media.MediaType media, String outFileName)

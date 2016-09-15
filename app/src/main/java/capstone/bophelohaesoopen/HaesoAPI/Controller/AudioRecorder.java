@@ -17,6 +17,8 @@ public class AudioRecorder {
     //MediaRecorder myAudioRecorder = new MediaRecorder();
     private String outputFile;
     MediaRecorder myAudioRecorder;
+    public static int MAX_DURATION;
+    public boolean maxDurationReached = false;
 
     public AudioRecorder(){
         myAudioRecorder = new MediaRecorder();
@@ -30,8 +32,19 @@ public class AudioRecorder {
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-
+        myAudioRecorder.setMaxDuration(MAX_DURATION);
         myAudioRecorder.setOutputFile(outputFile);
+        myAudioRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener()
+        {
+            @Override
+            public void onInfo(MediaRecorder mediaRecorder, int i, int i1)
+            {
+                if(i == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED)
+                {
+                    maxDurationReached = true;
+                }
+            }
+        });
 
     }
 
@@ -64,5 +77,11 @@ public class AudioRecorder {
 
         myAudioRecorder.release();
         myAudioRecorder = null;
+    }
+
+    public void setRecordingDurationLimit(int minutes)
+    {
+        // Minutes converted to milliseconds
+        MAX_DURATION = minutes * 60 * 1000;
     }
 }
