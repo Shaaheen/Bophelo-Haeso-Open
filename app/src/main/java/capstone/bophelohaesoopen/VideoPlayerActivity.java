@@ -128,38 +128,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     public void surfaceCreated(SurfaceHolder holder)
     {
-
-        mediaPlayer.setOnPreparedListener(new android.media.MediaPlayer.OnPreparedListener()
-        {
-            @Override
-            public void onPrepared(android.media.MediaPlayer mediaPlayer)
-            {
-                // so it fits on the screen
-                int videoWidth = mediaPlayer.getVideoWidth();
-                int videoHeight = mediaPlayer.getVideoHeight();
-                Log.i("BHO", "Video height = "+videoHeight);
-                Log.i("BHO", "Video width = "+videoWidth);
-
-                float videoProportion = (float) videoWidth / (float) videoHeight;
-
-                float screenProportion = (float) screenWidth / (float) screenHeight;
-                android.view.ViewGroup.LayoutParams lp = videoView.getLayoutParams();
-
-                if (videoProportion > screenProportion)
-                {
-                    lp.width = screenWidth;
-                    lp.height = (int) ((float) screenWidth / videoProportion);
-                }
-                else
-                {
-                    lp.width = (int) (videoProportion * (float) screenHeight);
-                    lp.height = screenHeight;
-                }
-                videoView.setLayoutParams(lp);
-
-            }
-        });
-//
         playVideo(screenHeight, screenWidth);
     }
 
