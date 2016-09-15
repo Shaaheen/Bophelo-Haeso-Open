@@ -1,6 +1,7 @@
 package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -10,8 +11,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Surface;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -48,6 +51,9 @@ public class CameraActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         String title = getResources().getString(R.string.title_activity_camera);
         setTitle(title);
 
@@ -83,8 +89,11 @@ public class CameraActivity extends AppCompatActivity
     {
         camera = getCameraInstance();
         cameraView = new CameraView(this, camera);
+
         FrameLayout preview = (FrameLayout)findViewById(R.id.camera_preview);
         preview.addView(cameraView);
+
+        setCameraDisplayOrientation(this,0 ,camera);
     }
 
     private void captureClick()
@@ -109,32 +118,6 @@ public class CameraActivity extends AppCompatActivity
         }
     };
 
-    public void savePicture(byte[] bytes)
-    {
-        File pictureFile = getOutputMediaFile();
-        if(pictureFile != null)
-        {
-            Log.i("APP", "Picture file not null");
-            try
-            {
-                FileOutputStream fileOutputStream = new FileOutputStream(pictureFile);
-                fileOutputStream.write(bytes);
-                Log.i("APP", "File saved");
-                fileOutputStream.close();
-            }
-            catch(FileNotFoundException e)
-            {
-                e.printStackTrace();
-                Log.i("APP", "File NOT saved");
-            }
-            catch(IOException e1)
-            {
-                e1.printStackTrace();
-                Log.i("APP", "File NOT saved");
-            }
-        }
-    }
-
     public static Camera getCameraInstance()
     {
         Camera c = null;
@@ -148,33 +131,6 @@ public class CameraActivity extends AppCompatActivity
         }
 
         return c;
-    }
-
-    /** Create a File for saving an image */
-    private File getOutputMediaFile()
-    {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "Bophelo Haeso");
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
-
-        // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-//                Log.d("MyCameraApp", "failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
-
-        return mediaFile;
     }
 
     private void animateCaptureScreen()
@@ -220,6 +176,15 @@ public class CameraActivity extends AppCompatActivity
 
     //region Activity overrides
 
+
+    @Override
+    public void onBackPressed()
+    {
+        camera.release();
+        finish();
+        super.onBackPressed();
+    }
+
     @Override
     protected void onDestroy()
     {
@@ -242,44 +207,41 @@ public class CameraActivity extends AppCompatActivity
     public boolean onSupportNavigateUp()
     {
         finish();
+        camera.release();
         return true;
     }
     //endregion
 
-    public class SaveAsync extends AsyncTask<Byte, Integer, Long>
-    {
+    public static void setCameraDisplayOrientation(Activity activity,
+                                                   int cameraId, android.hardware.Camera camera) {
 
-        @Override
-        protected Long doInBackground(Byte... bytes)
-        {
-            savePicture(toPrimitiveByteArray(bytes));
-            return null;
-        }
-    }
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
 
-    public byte[] toPrimitiveByteArray(Byte[] bytes)
-    {
-        byte[] primArray = new byte[bytes.length];
+        android.hardware.Camera.getCameraInfo(cameraId, info);
 
-        for(int i = 0; i < bytes.length; i++)
-        {
-            primArray[i] = bytes[i];
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
         }
 
-        return primArray;
-    }
-
-    public Byte[] toByteArray(byte[] bytes)
-    {
-        Byte[] array = new Byte[bytes.length];
-
-        for(int i = 0; i < bytes.length; i++)
-        {
-            array[i] = bytes[i];
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
         }
-
-        return array;
+        camera.setDisplayOrientation(result);
     }
+
+
+
 
 
 }
