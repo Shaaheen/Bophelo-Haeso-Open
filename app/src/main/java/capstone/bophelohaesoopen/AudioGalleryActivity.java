@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +28,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 
 public class AudioGalleryActivity extends AppCompatActivity
 {
-    RelativeLayout shareMediaBar;
+    CardView shareMediaBar;
     RecyclerView recyclerView;
     AudioAdapter audioAdapter;
 
@@ -112,7 +113,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
         audioLoadingScreen = (RelativeLayout)findViewById(R.id.audioLoadingScreen);
 
-        shareMediaBar = (RelativeLayout) findViewById(R.id.shareMediaBar);
+        shareMediaBar = (CardView) findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
         {
             @Override
