@@ -232,7 +232,7 @@ public class BluetoothUtils {
             super.onBluetoothDataReceived(bytes, data);
             if (data != null){
 
-                //if the data received is for progress monitoring i.e Sending progres
+                //if the data received is for progress monitoring i.e Sending progress
                 if (data.contains("_Progress_;")){
                     String[] splitte = data.split(";");
                     String progress = splitte[1]; //Gets progress number -percentage

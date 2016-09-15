@@ -170,19 +170,9 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         if ( Integer.parseInt(unsavedEntr) >= numOfEntriesBeforeSaving ){
             List<LogEntry> logEntries = getLogsFromTill( (Integer.parseInt(lastSaved)+1) + ""
                     , (Integer.parseInt(lastSaved) + Integer.parseInt(unsavedEntr)) +"" );
-//            try {
-//                File f = new File("pathToYourFile");
-//                if(!f.exists() && !f.isDirectory())
-//                {
-//                    f.createNewFile()
-//                }
-//                for (LogEntry entry:logEntries){
-//                    fileOutputStream.write(entry.csvFormat());
-//                }
-//
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
+
+            FileUtils.writeToLogFile(logEntries); //Update log file
+
             //Reset values
             lastSaved = (Integer.parseInt(lastSaved) + Integer.parseInt(unsavedEntr)) +"";
             unsavedEntr = "0";

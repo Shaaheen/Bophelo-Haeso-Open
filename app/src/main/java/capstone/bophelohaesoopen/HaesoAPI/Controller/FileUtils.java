@@ -8,6 +8,7 @@ import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.*;
@@ -15,9 +16,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 import capstone.bophelohaesoopen.MainActivity;
@@ -29,6 +32,8 @@ public class FileUtils
 
     Media.MediaType mediaType;
     String outputFileName;
+
+    public static String LOG_FILE_NAME = "UserLog.csv";
 
     public FileUtils(Activity activityGiven)
     {
@@ -57,7 +62,7 @@ public class FileUtils
     }
 
     /**
-     * Checks all files and subdir in a given directory for mp4 files with specified prefix
+     * Checks all files and subdir in a given directory for specfic extension files with specified prefix
      * @param directory list of files/subdir
      * @param prefix specifies specific files
      * @param extension specifies type of media files to retrieve
@@ -157,34 +162,16 @@ public class FileUtils
 
     }
 
-
     /** Create a file for saving an image */
     private File getOutputImageFile()
     {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDirectory = new File(Environment.getExternalStorageDirectory(), MainActivity.appRootFolder);
-
-        // Create the main app storage directory if it does not exist
-        if (!mediaStorageDirectory.exists())
-        {
-            if (!mediaStorageDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
+        File mediaStorageDirectory = getAppDirectory(
+                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+        if (mediaStorageDirectory == null) return null;
 
         // Create the image directory if it does not exist
-        File imageDirectory = new File(mediaStorageDirectory.getAbsolutePath(), MainActivity.appImageFolder);
-
-        if (!imageDirectory.exists())
-        {
-            if (!imageDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
+        File imageDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appImageFolder);
+        if (imageDirectory == null) return null;
 
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -197,7 +184,43 @@ public class FileUtils
     /** Create a file for saving a video */
     private File getOutputVideoFile()
     {
-        File mediaStorageDirectory = new File(Environment.getExternalStorageDirectory(), MainActivity.appRootFolder);
+        File mediaStorageDirectory = getAppDirectory(
+                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+        if (mediaStorageDirectory == null) return null;
+
+        File videoDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appVideosFolder);
+        if (videoDirectory == null) return null;
+
+        File videoFile = new File(videoDirectory.getPath() + File.separator + outputFileName);
+
+        return videoFile;
+    }
+
+    public static void writeToLogFile(List<LogEntry> logEntriesToWrite){
+        File mediaStorageDirectory = getAppDirectory(
+                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+        if (mediaStorageDirectory == null) return ;
+
+        File logFile = new File(mediaStorageDirectory.getPath() + File.separator + LOG_FILE_NAME);
+        try {
+            FileWriter fileWriter = new FileWriter(logFile,true);
+            for (LogEntry logEntry : logEntriesToWrite){
+                fileWriter.write( logEntry.csvFormat()  + "\r\n");
+            }
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.w("File","Wrote to Log file");
+    }
+
+    @Nullable
+    private static File getAppDirectory(String basePath, String directoryName) {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        File mediaStorageDirectory = new File(basePath, directoryName);
 
         // Create the main app storage directory if it does not exist
         if (!mediaStorageDirectory.exists())
@@ -207,22 +230,9 @@ public class FileUtils
                 return null;
             }
         }
-
-        // Create the video directory if it does not exist
-        File videoDirectory = new File(mediaStorageDirectory.getAbsolutePath(), MainActivity.appVideosFolder);
-
-        if (!videoDirectory.exists())
-        {
-            if (!videoDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
-
-        File videoFile = new File(videoDirectory.getPath() + File.separator + outputFileName);
-
-        return videoFile;
+        return mediaStorageDirectory;
     }
+
 
     public class SaveAsync extends AsyncTask<Byte, Integer, Long>
     {
