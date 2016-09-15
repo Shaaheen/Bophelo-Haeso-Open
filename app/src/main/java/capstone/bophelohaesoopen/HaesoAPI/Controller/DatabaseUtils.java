@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeMap;
 
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 
@@ -191,8 +192,30 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         //db.close();
     }
 
-    private void writeLogsToFile(){
+    public TreeMap<String,Integer> getMostPlayedVideos(){
+        Log.v("DB","Getting most watched videos");
+        String videoQuery = "SELECT count(" + KEY_FILENAME + ")," +  KEY_FILENAME + "\n" +
+                "FROM " + TABLE_LOGGING + "\n" +
+                "GROUP BY " + KEY_FILENAME + " ORDER BY count(" + KEY_FILENAME + ") DESC";
+        TreeMap<String,Integer> videosWithFrequencies = new TreeMap<>();
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(videoQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                if (cursor.getString(1) != null ){
+                    videosWithFrequencies.put( cursor.getString(1) , Integer.parseInt(cursor.getString(0)) );
+                    Log.v("DB",cursor.getString(0) + " " + cursor.getString(1));
+                }
+            } while (cursor.moveToNext());
+        }
+        Log.v("DB","Retrieved all Most played videos");
+        cursor.close();
+        db.close();
+
+        return videosWithFrequencies;
     }
 
     /**
