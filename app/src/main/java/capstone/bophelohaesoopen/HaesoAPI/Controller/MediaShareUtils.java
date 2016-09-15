@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen;
+package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -14,6 +14,7 @@ import java.util.List;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.BluetoothUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.BluetoothListener;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
+import capstone.bophelohaesoopen.R;
 
 /**
  * Handles connecting to BT device and sending off media files
@@ -154,7 +155,7 @@ public class MediaShareUtils
                 Log.v("BT","Sending " + progress + "%");
 
                 int p = Integer.valueOf(progress);
-                if(p == 100)
+                if(p >= 99)
                 {
                     determinatePD.dismiss();
                     Log.v("BT","Done Sending :" + progress + "%");

@@ -86,4 +86,8 @@ public class LogEntry {
                 ", fileName='" + fileName + '\'' +
                 '}';
     }
+
+    public String csvFormat(){
+        return logEntryType.name() + "," + loggedAction + "," + timestamp + "," + fileName;
+    }
 }

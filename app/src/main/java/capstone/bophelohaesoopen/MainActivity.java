@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -26,16 +23,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener
+        implements NavigationView.OnNavigationItemSelectedListener
 {
     //region View declarations
     RelativeLayout mainMenu;
@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity
     public static String appRecordingsFolder;
     public static String appVideosFolder;
 
-
-    float absY;
     //endregion
 
     //region Other class declarations
@@ -101,6 +99,7 @@ public class MainActivity extends AppCompatActivity
 
         // Initialize UI elements
         initialize();
+
 
         mediaLoadService.start();
         final Handler handler = new Handler();
@@ -141,11 +140,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     private void initialize()
     {
         databaseUtils = new DatabaseUtils(this);//Start database
-
-
 
         mediaLoadService = new MediaLoadService(this);
         startService(new Intent(this, MediaLoadService.class));
@@ -182,7 +180,6 @@ public class MainActivity extends AppCompatActivity
                 menuToggleClick();
             }
         });
-        menuToggleBar.setOnTouchListener(this);
         menuToggle = (ImageView) findViewById(R.id.menuToggle);
         menuToggle.setOnClickListener(new View.OnClickListener()
         {
@@ -192,8 +189,6 @@ public class MainActivity extends AppCompatActivity
                 menuToggleClick();
             }
         });
-
-        absY = mainMenu.getY();
 
         shareMediaBar = (CardView) findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
@@ -321,7 +316,7 @@ public class MainActivity extends AppCompatActivity
             setTitle("Select video");
             if (!menuHidden)
             {
-                hideMenu(absY);
+                hideMenu();
             }
             shareIcon.setImageResource(R.drawable.cancel);
             shareText.setText("Cancel");
@@ -339,22 +334,19 @@ public class MainActivity extends AppCompatActivity
     {
         if (!menuHidden)
         {
-            hideMenu(absY);
+            hideMenu();
         } else
         {
-            showMenu(absY + mainMenu.getHeight()-menuToggleBar.getHeight());
+            showMenu();
         }
     }
 
     // endregion
 
-    private void hideMenu(float yPos)
+    private void hideMenu()
     {
-//        float yPos = mainMenu.getY();
-//        float yDelta = (mainMenu.getHeight() - menuToggle.getHeight()) - Math.abs(absY - yPos);
-
-        float yDelta =  Math.abs(absY - yPos)- 0;
-
+        float yPos = mainMenu.getY();
+        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos + yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
@@ -377,11 +369,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void showMenu(float yPos)
+    private void showMenu()
     {
-//        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
-//        float yDelta = Math.abs(yPos - absY);
-        float yDelta = Math.abs(absY - yPos);
+        float yPos = mainMenu.getY();
+        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
 
         ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos - yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
@@ -415,8 +406,15 @@ public class MainActivity extends AppCompatActivity
         recyclerView.smoothScrollToPosition(0);
 
         menuToggle.setImageResource(R.drawable.arrow_down);
+
     }
 
+    public void shareVideo(int position)
+    {
+        videoToSend = videoList.get(position);
+
+        mediaShareUtils.sendMedia(videoToSend);
+    }
 
     // region Activity overrides
 
@@ -492,6 +490,13 @@ public class MainActivity extends AppCompatActivity
 
     // endregion
 
+    /**
+     * Populates video list with the list of videos from storage
+     */
+    private void populateVideoList()
+    {
+        videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("chw_", Video.mediaExtension);
+    }
 
     /**
      * Starts the VideoPlayerActivity with the video at the position (in the video list) given
@@ -507,63 +512,58 @@ public class MainActivity extends AppCompatActivity
         this.startActivity(intent);
     }
 
-
-    public void shareVideo(int position)
+    private ArrayList<Video> getOrderedVideos(ArrayList<Video> unordered)
     {
-        videoToSend = videoList.get(position);
+        ArrayList<Video> ordered = new ArrayList<>();
 
-        mediaShareUtils.sendMedia(videoToSend);
-    }
+        // Using a TreeMap to obtain the map objects sorted according to their values
+        TreeMap<String, Integer> playFrequencies = databaseUtils.getMostPlayedVideos();
 
-    float cx;
-    float cy;
-    float dx;
-    float dy;
-    float lastX;
-    float lastY;
-    float downy;
-    float viewy;
+        // TreeMap<String, Integer> playFrequencies = LogEntry.getMostPlayedVideos() // or something like this
 
-    @Override
-    public boolean onTouch(View view, MotionEvent event)
-    {
-        final float x = event.getRawX();
-        final float y = event.getRawY();
-        int parentHeight = ((ViewGroup)mainMenu.getParent()).getHeight();
+        int count = 0;
 
-        switch(event.getAction())
+        for(String name : playFrequencies.keySet())
         {
-            case MotionEvent.ACTION_DOWN:
-//                dx = view.getX() - event.getRawX();
-//                dy = view.getY() - event.getRawY();
-
-                downy = event.getRawY();
-                viewy = mainMenu.getY();
-                lastY = event.getRawY();
+            // Only add the 4 most watched videos first as the rest will be ordered differently
+            if(count < 4)
+            {
+                for(Video video : unordered)
+                {
+                    if(name.equals(video.getFileName()))
+                    {
+                        ordered.add(video);
+                        unordered.remove(video);
+                    }
+                }
+            }
+            else
+            {
                 break;
-            case MotionEvent.ACTION_MOVE:
-                cy = event.getRawY();
-                dy = downy - cy;
-                lastY = cy;
-
-                float delta = viewy - dy;
-                if(delta < parentHeight - view.getHeight() && delta > parentHeight - mainMenu.getHeight())
-                {
-                    mainMenu.setY(delta);
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                if(mainMenu.getY() > parentHeight - mainMenu.getHeight()/2)
-                {
-                    hideMenu(event.getRawY());
-                }
-                else
-                {
-                    showMenu(event.getRawY());
-                }
-            default:
-                return false;
+            }
+            count++;
         }
-        return true;
+
+        TreeSet<String> alphabeticallyOrdered = new TreeSet<>();
+        for(Video video : unordered)
+        {
+            alphabeticallyOrdered.add(video.getFileName());
+        }
+
+        Iterator iterator = alphabeticallyOrdered.iterator();
+        while(iterator.hasNext())
+        {
+            String current = (String)iterator.next();
+            for(Video video : unordered)
+            {
+                if(current.equals(video.getFileName()))
+                {
+                    ordered.add(video);
+                }
+            }
+
+        }
+
+        return ordered;
     }
 }

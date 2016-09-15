@@ -9,7 +9,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="circle_radius">40dp</dimen>
     <dimen name="audio_item_height">90dp</dimen>
-    <dimen name="video_item_width">70dp</dimen>
+    <dimen name="video_item_width">110dp</dimen>
     <dimen name="video_item_height">90dp</dimen>
     <dimen name="image_item_width">100dp</dimen>
     <dimen name="image_item_height">100dp</dimen>
@@ -25,4 +25,5 @@
     <dimen name="video_player_button_dimen">50dp</dimen>
     <dimen name="share_button_margin">35dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
+    <dimen name="button_container_bottom_padding">10dp</dimen>
 </resources>

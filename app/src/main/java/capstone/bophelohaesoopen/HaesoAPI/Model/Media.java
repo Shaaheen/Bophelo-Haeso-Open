@@ -37,7 +37,8 @@ public class Media {
             }
         }
 
-        int extensionLength = mediaExtension.length();
+        // Length of media extension strings i.e. .3gp / .jpg / .mp4
+        int extensionLength = 4;
         filename = filename.substring(0,(filename.length() - extensionLength));
         return filename;
     }
@@ -47,7 +48,7 @@ public class Media {
     }
 
     public String getFileName(){
-        return (identifierPrefix + name + mediaExtension);
+        return ( name );
     }
 
     public void setName(String name) {

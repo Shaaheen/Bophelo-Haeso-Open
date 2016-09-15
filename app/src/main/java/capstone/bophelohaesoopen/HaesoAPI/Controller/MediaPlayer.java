@@ -15,6 +15,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
     String nameOfApp;
     android.media.MediaPlayer mediaPlayer;
 
+//    SurfaceView surfaceView;
     // Stores play position of video when it is paused
     int currentPosition = 0;
 
@@ -28,12 +29,39 @@ public class MediaPlayer extends android.media.MediaPlayer{
      * @param mediaView - The view that the media will show on
      * @throws IOException
      */
-    public void playMedia(Media mediaFile, SurfaceView mediaView) throws IOException
+    public void playMedia(Media mediaFile, SurfaceView mediaView, final int screenWidth, final int screenHeight) throws IOException
     {
+        final SurfaceView mView = mediaView;
         String filePath =  mediaFile.getFilePath();
         mediaPlayer = new android.media.MediaPlayer();
         mediaPlayer.setDataSource(filePath);
         mediaPlayer.setScreenOnWhilePlaying(true);
+        mediaPlayer.setOnPreparedListener(new android.media.MediaPlayer.OnPreparedListener()
+        {
+            @Override
+            public void onPrepared(android.media.MediaPlayer mediaPlayer)
+            {
+                // Get video height and width
+                int videoWidth = mediaPlayer.getVideoWidth();
+                int videoHeight = mediaPlayer.getVideoHeight();
+                float videoProportion = (float) videoWidth / (float) videoHeight;
+
+                float screenProportion = (float) screenWidth / (float) screenHeight;
+                android.view.ViewGroup.LayoutParams lp = mView.getLayoutParams();
+
+                if (videoProportion > screenProportion)
+                {
+                    lp.width = screenWidth;
+                    lp.height = (int) ((float) screenWidth / videoProportion);
+                } else
+                {
+                    lp.width = (int) (videoProportion * (float) screenHeight);
+                    lp.height = screenHeight;
+                }
+                mView.setLayoutParams(lp);
+
+            }
+        });
         mediaPlayer.setDisplay( mediaView.getHolder() ); //Sets media onto view
         mediaPlayer.prepare();
         mediaPlayer.start();

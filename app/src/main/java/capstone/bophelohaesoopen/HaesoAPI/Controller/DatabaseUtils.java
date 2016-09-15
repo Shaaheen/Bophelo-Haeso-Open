@@ -2,17 +2,24 @@ package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.provider.MediaStore;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeMap;
 
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 
@@ -22,10 +29,10 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 public class DatabaseUtils extends SQLiteOpenHelper{
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 8;
     // Database Name
     private static final String DATABASE_NAME = "Logging_Database";
-    // Contacts table name
+    // Logging table name
     private static final String TABLE_LOGGING = "Logs";
     // LogEntrys Table Columns names
     private static final String KEY_ID = "Id";
@@ -33,6 +40,16 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     private static final String KEY_ACTION = "Log_Action";
     private static final String KEY_FILENAME = "File_name";
     private static final String KEY_DATETIME = "Date";
+
+    //Counter table
+    private static final String TABLE_COUNTER = "Counter";
+    //Columns
+    private static final String KEY_LAST_SAVED_ENTRY = "Last_Saved_Entry_Id";
+    private static final String KEY_NUM_OF_UNSAVED_ENTRIES = "Num_Of_Unsaved_Entries";
+
+    public static int numOfEntriesBeforeSaving = 10;
+
+
     //private static final String KEY_SH_ADDR = “LogEntry_address”;
 
     //For backend access to logg on setup db
@@ -67,10 +84,32 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CREATE_LOG_TABLE = "CREATE TABLE " + TABLE_LOGGING + "("
-        + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TYPE + " TEXT," +
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TYPE + " TEXT," +
                 KEY_ACTION + " TEXT," + KEY_FILENAME + " TEXT," + KEY_DATETIME + " DATETIME" + ")";
         Log.v("DB","Created table");
         sqLiteDatabase.execSQL(CREATE_LOG_TABLE);
+
+        String CREATE_COUNTER_TABLE = "CREATE TABLE " + TABLE_COUNTER
+                + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_LAST_SAVED_ENTRY
+                + " INTEGER, " + KEY_NUM_OF_UNSAVED_ENTRIES + " INTEGER)";
+        sqLiteDatabase.execSQL(CREATE_COUNTER_TABLE);
+
+        setUpCounterTable(sqLiteDatabase);
+    }
+
+    /**
+     * Initialises counter table
+     * @param sqLiteDatabase
+     */
+    private void setUpCounterTable(SQLiteDatabase sqLiteDatabase){
+        ContentValues values = new ContentValues();
+        values.put(KEY_LAST_SAVED_ENTRY, "0");
+        values.put(KEY_NUM_OF_UNSAVED_ENTRIES, "0");
+
+        // Inserting Row
+        sqLiteDatabase.insert(TABLE_COUNTER, null, values);
+        Log.v("DB","Inserted");
+        //sqLiteDatabase.close(); // Closing database connection
     }
 
     /**
@@ -83,6 +122,10 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // Drop older table if existed
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGGING);
+
+        // Drop older table if existed
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTER);
+
         // Creating tables again
         Log.v("DB","Refreshed and updated table");
         onCreate(sqLiteDatabase);
@@ -97,6 +140,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+
         //Prepare values to be inserted in db
         ContentValues values = new ContentValues();
         values.put(KEY_TYPE, String.valueOf(logEntry.getLogEntryType()));
@@ -107,7 +151,141 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         // Inserting Row
         db.insert(TABLE_LOGGING, null, values);
         Log.v("DB","Inserted");
-        db.close(); // Closing database connection
+        //db.close(); // Closing database connection
+
+        updateCounter();
+
+    }
+
+    /**
+     * Updates the counter table by incrementing counter for new entry
+     * Will update log file after specified amount new entries
+     */
+    public void updateCounter(){
+        //Gets current counter details
+        List<String> listOfCounters = getAllCounterEntries();
+        String lastSaved = listOfCounters.get(1);
+        String unsavedEntr = listOfCounters.get(2);
+
+        //Checks if too many unsaved entries, then saves unsaved entries to file
+        if ( Integer.parseInt(unsavedEntr) >= numOfEntriesBeforeSaving ){
+            List<LogEntry> logEntries = getLogsFromTill( (Integer.parseInt(lastSaved)+1) + ""
+                    , (Integer.parseInt(lastSaved) + Integer.parseInt(unsavedEntr)) +"" );
+
+            FileUtils.writeToLogFile(logEntries); //Update log file
+
+            //Reset values
+            lastSaved = (Integer.parseInt(lastSaved) + Integer.parseInt(unsavedEntr)) +"";
+            unsavedEntr = "0";
+        }
+
+        //Update DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        //cv.put(KEY_ID,"1"); //These Fields should be your String values of actual column names
+        cv.put(KEY_LAST_SAVED_ENTRY, (Integer.parseInt(lastSaved) ) + "");
+        cv.put(KEY_NUM_OF_UNSAVED_ENTRIES,(Integer.parseInt(unsavedEntr) + 1) + "");
+
+        db.update(TABLE_COUNTER, cv, KEY_ID + "=1", null);
+
+        //db.close();
+    }
+
+    public TreeMap<String,Integer> getMostPlayedVideos(){
+        Log.v("DB","Getting most watched videos");
+        String videoQuery = "SELECT count(" + KEY_FILENAME + ")," +  KEY_FILENAME + "\n" +
+                "FROM " + TABLE_LOGGING + "\n" +
+                "GROUP BY " + KEY_FILENAME + " ORDER BY count(" + KEY_FILENAME + ") DESC";
+        TreeMap<String,Integer> videosWithFrequencies = new TreeMap<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(videoQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                if (cursor.getString(1) != null ){
+                    videosWithFrequencies.put( cursor.getString(1) , Integer.parseInt(cursor.getString(0)) );
+                    Log.v("DB",cursor.getString(0) + " " + cursor.getString(1));
+                }
+            } while (cursor.moveToNext());
+        }
+        Log.v("DB","Retrieved all Most played videos");
+        cursor.close();
+        db.close();
+
+        return videosWithFrequencies;
+    }
+
+    /**
+     * Gets Log Entries between specified ids
+     * @param startId - from id
+     * @param endId - to id
+     * @return - List of log entries from start id to end id
+     */
+    public List<LogEntry> getLogsFromTill(String startId, String endId){
+        Log.v("DB","Getting all Log entries");
+        List<LogEntry> LogEntryList = new ArrayList<LogEntry>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + TABLE_LOGGING + " WHERE " + KEY_ID + " BETWEEN " + startId + " AND " + endId;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                String dateString = cursor.getString(4);
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date dateTime = null;
+                try {
+                    dateTime = dateFormat.parse(dateString);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //Create log entry from retrieved data
+                LogEntry logEntry = new LogEntry(
+                        capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry.LogType.valueOf(cursor.getString(1))
+                        , cursor.getString(2),cursor.getString(3), dateTime);
+
+                // Adding log to list
+                LogEntryList.add(logEntry);
+                Log.w("DB",logEntry.toString());
+            } while (cursor.moveToNext());
+        }
+        Log.v("DB","Retrieved all Log entries");
+        cursor.close();
+        db.close();
+        // return log list
+        return LogEntryList;
+    }
+
+    /**
+     * Gets All counter database attributes
+     */
+    public List<String> getAllCounterEntries() {
+        Log.v("DB","Getting all Counter entries");
+        List<String> listOfCounters = new LinkedList<String>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM " + TABLE_COUNTER;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                listOfCounters.add(cursor.getString(0));
+                listOfCounters.add(cursor.getString(1));
+                listOfCounters.add(cursor.getString(2));
+                Log.w("DB",cursor.getString(0) + " " + cursor.getString(1) +" " +  cursor.getString(2));
+            } while (cursor.moveToNext());
+        }
+        Log.v("DB","Retrieved all Log entries");
+        cursor.close();
+        db.close();
+        // return log list
+        return listOfCounters;
     }
 
     /**

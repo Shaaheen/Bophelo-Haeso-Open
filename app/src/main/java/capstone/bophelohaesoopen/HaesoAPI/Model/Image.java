@@ -2,7 +2,6 @@ package capstone.bophelohaesoopen.HaesoAPI.Model;
 
 import android.graphics.Bitmap;
 
-
 public class Image extends Media {
     public static String mediaExtension = ".jpg";
 
@@ -13,6 +12,6 @@ public class Image extends Media {
     }
 
     public String getFileName(){
-        return (identifierPrefix + name + mediaExtension);
+        return (name );
     }
 }
