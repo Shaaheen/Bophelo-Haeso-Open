@@ -101,8 +101,6 @@ public class AudioGalleryActivity extends AppCompatActivity
             }
         };
         handler.postDelayed(runnable, CHECK_DURATION);
-
-
     }
 
     private void initialize()
