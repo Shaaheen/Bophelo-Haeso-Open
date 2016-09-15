@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -44,9 +44,13 @@ public class AudioRecorderActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        // Get action bar if not present
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_recorder);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         initializeViews();
 
         alert = new AlertDialog.Builder(this);
@@ -103,7 +107,6 @@ public class AudioRecorderActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
-        showToast();
 
         // Close the activity
         finish();
@@ -153,9 +156,10 @@ public class AudioRecorderActivity extends AppCompatActivity
 
                             String recordingLimitMessage = getResources().getString(R.string.recording_duration_limit_message);
                             String recordingLimitTitle = getResources().getString(R.string.recording_duration_limit_title);
+                            String okText = getResources().getString(R.string.recording_duration_limit_positive_action);
                             alert.setTitle(recordingLimitTitle);
                             alert.setMessage(recordingLimitMessage);
-                            alert.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                            alert.setPositiveButton(okText, new DialogInterface.OnClickListener()
                             {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i)
@@ -186,8 +190,6 @@ public class AudioRecorderActivity extends AppCompatActivity
         super.onBackPressed();
         audioRecorder.stopRecording();
         recordingStopped = true;
-        showToast();
-
 
         // Close the activity
         finish();
@@ -225,13 +227,6 @@ public class AudioRecorderActivity extends AppCompatActivity
 
         String timeText = minuteText+":"+secondsText;
         timeView.setText(timeText);
-    }
-
-    private void showToast()
-    {
-        handler.removeCallbacks(runnable);
-        Toast toast = Toast.makeText(this, "Recording saved as \"recording.3gp\"", Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     @Override

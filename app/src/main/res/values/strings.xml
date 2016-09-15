@@ -31,8 +31,9 @@
     <string name="thumbnail">Thumbnail</string>
     <string name="recording_duration_limit_minutes">1</string>
     <string name="title_activity_audio_recording">Audio Recorder</string>
-    <string name="recording_duration_limit_message">The recording will now be saved</string>
+    <string name="recording_duration_limit_message">The recording will now be saved.</string>
     <string name="recording_duration_limit_title">Recording limit reached</string>
+    <string name="recording_duration_limit_positive_action">OK</string>
 
     <!--Log list Activity-->
 
