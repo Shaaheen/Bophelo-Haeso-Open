@@ -27,8 +27,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
 public class CameraActivity extends AppCompatActivity
@@ -70,6 +72,13 @@ public class CameraActivity extends AppCompatActivity
 
     private void initialize()
     {
+        DatabaseUtils databaseUtils = new DatabaseUtils(this); // Connect to database
+        LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Camera", null);
+        if(DatabaseUtils.isDatabaseSetup())
+        {
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
+
         capture = (FloatingActionButton)findViewById(R.id.capture);
         capture.setOnClickListener(new View.OnClickListener()
         {

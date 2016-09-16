@@ -65,7 +65,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
         database = this;
     }
 
-    protected static DatabaseUtils getInstance(){
+    public static DatabaseUtils getInstance(){
         return database;
     }
 
@@ -73,7 +73,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
      * Checks if database instance exist in app
      * @return bool
      */
-    protected static boolean isDatabaseSetup(){
+    public static boolean isDatabaseSetup(){
         return (database!=null);
     }
 

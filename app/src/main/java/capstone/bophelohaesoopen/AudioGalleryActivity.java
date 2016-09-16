@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 
 /**
  * Activity where recorded audio files are listed / shown
@@ -105,6 +107,13 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     private void initialize()
     {
+        DatabaseUtils databaseUtils = new DatabaseUtils(this); // Connect to database
+        LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Recordings Gallery ", null);
+        if(DatabaseUtils.isDatabaseSetup())
+        {
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
+
         mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
         mediaLoadService = new MediaLoadService(this);
         startService(new Intent(this, MediaLoadService.class));

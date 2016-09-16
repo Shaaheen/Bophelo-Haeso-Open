@@ -29,6 +29,7 @@ import java.util.TreeSet;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
@@ -143,7 +144,12 @@ public class MainActivity extends AppCompatActivity
 
     private void initialize()
     {
-        databaseUtils = new DatabaseUtils(this);//Start database
+        databaseUtils = new DatabaseUtils(this); // Connect to database
+        LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Main Screen", null);
+        if(DatabaseUtils.isDatabaseSetup())
+        {
+            DatabaseUtils.getInstance().addLog(logEntry);
+        }
 
         mediaLoadService = new MediaLoadService(this);
         startService(new Intent(this, MediaLoadService.class));
