@@ -4,7 +4,6 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,23 +15,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.DecelerateInterpolator;
+import android.support.v7.widget.AppCompatButton;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
-import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
-import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
-import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
-import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
-import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
-import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
+import capstone.bophelohaesoopen.HaesoAPI.Video;
+import capstone.bophelohaesoopen.HaesoAPI.FileUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -40,7 +33,7 @@ public class MainActivity extends AppCompatActivity
     //region View declarations
     RelativeLayout mainMenu;
     RelativeLayout menuToggleBar;
-    CardView shareMediaBar;
+    RelativeLayout shareMediaBar;
     RecyclerView recyclerView;
     ImageView menuToggle;
     ImageView shareIcon;
@@ -48,21 +41,12 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     DrawerLayout drawer;
 
-    TextView noMediaText;
-    RelativeLayout videosLoadingScreen;
-
-    MediaLoadService mediaLoadService;
-
-    CardView recordAudioButton;
-    CardView takePictureButton;
-    CardView recordingsButton;
-    CardView picturesButton;
+    // region Button declarations
+    AppCompatButton recordAudioButton;
+    AppCompatButton takePictureButton;
+    AppCompatButton audioGalleryButton;
+    AppCompatButton picturesButton;
     // endregion
-
-    public static String appRootFolder;
-    public static String appImageFolder;
-    public static String appRecordingsFolder;
-    public static String appVideosFolder;
 
     //endregion
 
@@ -70,91 +54,29 @@ public class MainActivity extends AppCompatActivity
     VideoAdapter videoAdapter;
     FileUtils fileUtils;
     CustomGridLayoutManager gridLayoutManager;
-    Video videoToSend;
     //endregion
 
     // region Primitives declarations
     boolean menuHidden = false;
-    boolean firstRun = true;
     private static int MENU_ANIMATION_DURATION = 300;
-    private static int CHECK_DURATION = 1000;
     public boolean inSelectionMode = false;
 
-    public boolean videosLoaded = false;
-
     ArrayList<Video> videoList = new ArrayList<>();
-
-    MediaShareUtils mediaShareUtils;
-
-    //Logging db
-    public static DatabaseUtils databaseUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        long time = System.currentTimeMillis();
-
         setContentView(R.layout.activity_main);
 
         // Initialize UI elements
         initialize();
 
-
-        mediaLoadService.start();
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-
-                if (mediaLoadService.mediaLoaded)
-                {
-//                    System.out.println("videos loaded!");
-                    videoList = mediaLoadService.getVideoList();
-                    videosLoadingScreen.setVisibility(View.INVISIBLE);
-                    if(!videoList.isEmpty())
-                    {
-                        videoAdapter.setVideos(videoList);
-                        videoAdapter.notifyDataSetChanged();
-                    }
-                    else
-                    {
-                        noMediaText.setVisibility(View.VISIBLE);
-                    }
-
-                    handler.removeCallbacks(this);
-                }
-                else
-                {
-                    handler.postDelayed(this, CHECK_DURATION);
-                }
-
-            }
-        };
-        handler.postDelayed(runnable, CHECK_DURATION);
-        long endtime = System.currentTimeMillis();
-        System.out.println("Start up time = "+((endtime - time)/1000));
-
-
     }
-
 
     private void initialize()
     {
-        databaseUtils = new DatabaseUtils(this);//Start database
-
-        mediaLoadService = new MediaLoadService(this);
-        startService(new Intent(this, MediaLoadService.class));
-
-        videosLoadingScreen = (RelativeLayout)findViewById(R.id.videosLoadingScreen);
-
-        String identifierPrefix = getResources().getString(R.string.identifier_prefix);
-        Media.setIdentifierPrefix(identifierPrefix);
-        fileUtils = new FileUtils(this);
-
-        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
+        fileUtils = new FileUtils();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -165,13 +87,11 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        noMediaText = (TextView)findViewById(R.id.noMediaText);
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mainMenu = (RelativeLayout) findViewById(R.id.mainMenu);
-        menuToggleBar = (RelativeLayout) findViewById(R.id.menuToggleBar);
+        mainMenu = (RelativeLayout)findViewById(R.id.mainMenu);
+        menuToggleBar = (RelativeLayout)findViewById(R.id.menuToggleBar);
         menuToggleBar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -180,7 +100,7 @@ public class MainActivity extends AppCompatActivity
                 menuToggleClick();
             }
         });
-        menuToggle = (ImageView) findViewById(R.id.menuToggle);
+        menuToggle = (ImageView)findViewById(R.id.menuToggle);
         menuToggle.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -190,7 +110,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        shareMediaBar = (CardView) findViewById(R.id.shareMediaBar);
+        shareMediaBar = (RelativeLayout)findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -199,37 +119,28 @@ public class MainActivity extends AppCompatActivity
                 shareMediaButtonClick();
             }
         });
-        shareIcon = (ImageView) findViewById(R.id.shareIcon);
-        shareText = (TextView) findViewById(R.id.shareText);
+        shareIcon = (ImageView)findViewById(R.id.shareIcon);
+        shareText = (TextView)findViewById(R.id.shareText);
 
         //region RecyclerView initialization
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         gridLayoutManager = new CustomGridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-
-//        populateVideoList();
+        //populateVideoList();
         videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
-
-
-        //region
-        appRootFolder = getResources().getString(R.string.root_folder);
-        appImageFolder = getResources().getString(R.string.images_folder);
-        appRecordingsFolder = getResources().getString(R.string.recordings_folder);
-        appVideosFolder = getResources().getString(R.string.videos_folder);
-        //endregion
 
         //endregion
 
         //region Buttons initializations
 
-        recordAudioButton = (CardView) findViewById(R.id.recordAudioButton);
-        takePictureButton = (CardView) findViewById(R.id.takePictureButton);
-        recordingsButton = (CardView) findViewById(R.id.recordingsButton);
-        picturesButton = (CardView) findViewById(R.id.picturesButton);
+        recordAudioButton = (AppCompatButton) findViewById(R.id.recordAudioButton);
+        takePictureButton = (AppCompatButton) findViewById(R.id.takePictureButton);
+        audioGalleryButton = (AppCompatButton) findViewById(R.id.audioGalleryButton);
+        picturesButton = (AppCompatButton) findViewById(R.id.picturesButton);
 
         //endregion
 
@@ -252,12 +163,12 @@ public class MainActivity extends AppCompatActivity
                 takePictureButtonClick();
             }
         });
-        recordingsButton.setOnClickListener(new View.OnClickListener()
+        audioGalleryButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                recordingsButtonClick();
+                audioGalleryButtonClick();
             }
         });
 
@@ -277,44 +188,42 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-//        Toast.makeText(this, "Opens camera to take picture.", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(this, CameraActivity.class);
-        this.startActivity(intent);
+        Toast.makeText(this,"Opens camera activity for user to take a picture.", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(this, PictureActivity.class);
+//        this.startActivity(intent);
     }
 
-    private void recordingsButtonClick()
+    private void audioGalleryButtonClick()
     {
-        Intent intent = new Intent(this, AudioGalleryActivity.class);
-        this.startActivity(intent);
+        Toast.makeText(this,"Opens list / gallery of recorded audio files.", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(this, AudioGalleryActivity.class);
+//        this.startActivity(intent);
     }
 
     private void pictureGalleryButtonClick()
     {
-        Intent intent = new Intent(this, PictureGalleryActivity.class);
-        this.startActivity(intent);
+        Toast.makeText(this,"Opens gallery of pictures taken.", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(this, PictureGalleryActivity.class);
+//        this.startActivity(intent);
     }
 
     private void shareMediaButtonClick()
     {
-        if (inSelectionMode)
+//        Intent intent = new Intent(this, MediaShareActivity.class);
+//        this.startActivity(intent);
+        if(inSelectionMode)
         {
-            String appName = getResources().getString(R.string.app_name);
-
-            setTitle(appName);
-
+            if(menuHidden)
+            {
+                showMenu();
+            }
             shareIcon.setImageResource(R.drawable.share);
             shareText.setText("Share");
             inSelectionMode = false;
-
-            // Hide video item tick overlay
-            videoAdapter.setItemClicked(false);
-            videoAdapter.notifyDataSetChanged();
         }
         else
         {
-            setTitle("Select video");
-            if (!menuHidden)
+            if(!menuHidden)
             {
                 hideMenu();
             }
@@ -332,10 +241,11 @@ public class MainActivity extends AppCompatActivity
 
     private void menuToggleClick()
     {
-        if (!menuHidden)
+        if(!menuHidden)
         {
             hideMenu();
-        } else
+        }
+        else
         {
             showMenu();
         }
@@ -346,17 +256,17 @@ public class MainActivity extends AppCompatActivity
     private void hideMenu()
     {
         float yPos = mainMenu.getY();
-        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
+        float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
 
-        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos + yDelta);
+        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos+yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
-        anim.setInterpolator(new DecelerateInterpolator());
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator)
             {
-                mainMenu.setY((Float) valueAnimator.getAnimatedValue());
+                mainMenu.setY((Float)valueAnimator.getAnimatedValue());
             }
         });
         anim.start();
@@ -372,17 +282,17 @@ public class MainActivity extends AppCompatActivity
     private void showMenu()
     {
         float yPos = mainMenu.getY();
-        float yDelta = mainMenu.getHeight() - menuToggle.getHeight();
+        float yDelta = mainMenu.getHeight() - (menuToggle.getHeight() + shareMediaBar.getHeight());
 
-        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos - yDelta);
+        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos-yDelta);
         anim.setDuration(MENU_ANIMATION_DURATION);
-        anim.setInterpolator(new DecelerateInterpolator());
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator)
             {
-                mainMenu.setY((Float) valueAnimator.getAnimatedValue());
+                mainMenu.setY((Float)valueAnimator.getAnimatedValue());
             }
         });
         anim.start();
@@ -411,9 +321,8 @@ public class MainActivity extends AppCompatActivity
 
     public void shareVideo(int position)
     {
-        videoToSend = videoList.get(position);
-
-        mediaShareUtils.sendMedia(videoToSend);
+        Video video = videoList.get(position);
+        // TODO: Send video
     }
 
     // region Activity overrides
@@ -457,7 +366,7 @@ public class MainActivity extends AppCompatActivity
     {
         // Handle navigation view item clicks
         int id = item.getItemId();
-        if (id == R.id.nav_view_logs)
+        if(id == R.id.nav_view_logs)
         {
             Toast.makeText(this, "Opens activity to show list of logs", Toast.LENGTH_SHORT).show();
         }
@@ -467,40 +376,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    protected void onDestroy()
-    {
-        videosLoaded = false;
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onRestart()
-    {
-        videosLoaded = false;
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume()
-    {
-        videosLoaded = false;
-        super.onResume();
-    }
-
     // endregion
 
     /**
-     * Populates video list with the list of videos from storage
+     * Populates video list with the list of videos from storage (Currently only prototype functionality)
      */
-    private void populateVideoList()
-    {
-        videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("chw_", Video.mediaExtension);
-    }
+    //private void populateVideoList()
+//    {
+//        videoList = fileUtils.getVideoCollectionFromStorage();
+//    }
 
     /**
      * Starts the VideoPlayerActivity with the video at the position (in the video list) given
-     *
      * @param position a position in the video list
      */
     public void playVideo(int position)
@@ -512,58 +399,7 @@ public class MainActivity extends AppCompatActivity
         this.startActivity(intent);
     }
 
-    private ArrayList<Video> getOrderedVideos(ArrayList<Video> unordered)
-    {
-        ArrayList<Video> ordered = new ArrayList<>();
 
-        // Using a TreeMap to obtain the map objects sorted according to their values
-        TreeMap<String, Integer> playFrequencies = databaseUtils.getMostPlayedVideos();
 
-        // TreeMap<String, Integer> playFrequencies = LogEntry.getMostPlayedVideos() // or something like this
 
-        int count = 0;
-
-        for(String name : playFrequencies.keySet())
-        {
-            // Only add the 4 most watched videos first as the rest will be ordered differently
-            if(count < 4)
-            {
-                for(Video video : unordered)
-                {
-                    if(name.equals(video.getFileName()))
-                    {
-                        ordered.add(video);
-                        unordered.remove(video);
-                    }
-                }
-            }
-            else
-            {
-                break;
-            }
-            count++;
-        }
-
-        TreeSet<String> alphabeticallyOrdered = new TreeSet<>();
-        for(Video video : unordered)
-        {
-            alphabeticallyOrdered.add(video.getFileName());
-        }
-
-        Iterator iterator = alphabeticallyOrdered.iterator();
-        while(iterator.hasNext())
-        {
-            String current = (String)iterator.next();
-            for(Video video : unordered)
-            {
-                if(current.equals(video.getFileName()))
-                {
-                    ordered.add(video);
-                }
-            }
-
-        }
-
-        return ordered;
-    }
 }
