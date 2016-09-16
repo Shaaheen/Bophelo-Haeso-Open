@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
@@ -321,13 +322,16 @@ public class BluetoothUtils {
 //                            out.write( fileBytes.toByteArray() );
 //                            out.close();
 
-                        // Suggestion for using fileUtils to save the file:
+                        // Use fileUtils to save the file in correct app folder
                         FileUtils fileUtils = new FileUtils();
                         if (nameOfTransferredFile.contains(Video.mediaExtension)){
                             fileUtils.saveMedia(fileBytes.toByteArray(), Media.MediaType.VIDEO, nameOfTransferredFile);
                         }
                         else if (nameOfTransferredFile.contains(Audio.mediaExtension)){
                             fileUtils.saveMedia(fileBytes.toByteArray(), Media.MediaType.AUDIO, nameOfTransferredFile);
+                        }
+                        else if (nameOfTransferredFile.contains(Image.mediaExtension)){
+                            fileUtils.saveMedia(fileBytes.toByteArray(), Media.MediaType.IMAGE, nameOfTransferredFile);
                         }
 
 
