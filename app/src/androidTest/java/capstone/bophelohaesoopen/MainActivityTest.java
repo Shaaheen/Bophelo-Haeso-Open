@@ -40,7 +40,7 @@ public class MainActivityTest {
     public void testButtons() {
         recordAudio = (Button) mActivity.findViewById(R.id.recordAudioButton);
         capturePicture = (Button) mActivity.findViewById(R.id.takePictureButton);
-        viewAudio = (Button) mActivity.findViewById(R.id.audioGalleryButton);
+        viewAudio = (Button) mActivity.findViewById(R.id.recordingsButton);
         viewPicture = (Button) mActivity.findViewById(R.id.picturesButton);
 
         assertNotNull(recordAudio);
