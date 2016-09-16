@@ -1,9 +1,12 @@
 package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
+import android.media.AudioManager;
+import android.util.Log;
 import android.view.SurfaceView;
 
 import java.io.IOException;
 
+import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
@@ -31,7 +34,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
      * @param mediaView - The view that the media will show on
      * @throws IOException
      */
-    public void playMedia(Media mediaFile, SurfaceView mediaView, final int screenWidth, final int screenHeight) throws IOException
+    public void playVideo(Media mediaFile, SurfaceView mediaView, final int screenWidth, final int screenHeight) throws IOException
     {
         final SurfaceView mView = mediaView;
         String filePath =  mediaFile.getFilePath();
@@ -76,6 +79,26 @@ public class MediaPlayer extends android.media.MediaPlayer{
             DatabaseUtils.getInstance().addLog(logEntry);
         }
 
+    }
+
+    public void playAudio(Audio audioFile) throws IOException
+    {
+        String filePath =  audioFile.getFilePath();
+        mediaPlayer = new android.media.MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setDataSource(filePath);
+        mediaPlayer.setScreenOnWhilePlaying(true);
+        mediaPlayer.prepare();
+        mediaPlayer.setOnPreparedListener(new OnPreparedListener()
+        {
+            @Override
+            public void onPrepared(android.media.MediaPlayer player)
+            {
+                Log.i("BHO", "Media player prepared!");
+                mediaPlayer.start();
+                prepared = true;
+            }
+        });
     }
 
     public void stopMedia()

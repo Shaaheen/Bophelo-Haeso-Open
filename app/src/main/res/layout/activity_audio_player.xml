@@ -4,10 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="capstone.bophelohaesoopen.AudioPlayerActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:background="#80000000"
+        android:id="@+id/videoControls"
+        >
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar"
+            android:layout_above="@+id/playPauseButton"
+            android:padding="10dp"
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="@dimen/video_player_button_dimen"
+            android:layout_height="@dimen/video_player_button_dimen"
+            android:id="@+id/stopButton"
+            app:elevation="0dp"
+            android:src="@drawable/stop"
+            app:backgroundTint="#868787"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="50dp"
+            android:layout_toRightOf="@+id/playPauseButton"/>
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="@dimen/video_player_button_dimen"
+            android:layout_height="@dimen/video_player_button_dimen"
+            android:id="@+id/playPauseButton"
+            app:elevation="0dp"
+            android:src="@drawable/pause"
+            app:backgroundTint="#868787"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/videoControls">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageView6"
+            android:layout_centerInParent="true"
+            android:src="@drawable/recordings"/>
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
@@ -158,7 +157,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
         videoControls = (RelativeLayout)findViewById(R.id.videoControls);
         seekBar = (SeekBar)findViewById(R.id.seekBar);
-//        seekBar.setMax(100);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
@@ -167,9 +165,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
                 if(fromUser)
                 {
                     seekBarUpdateHandler.removeCallbacks(updateSeekbar);
-//                    int videoDuration = mediaPlayer.getVideoDuration();
-//                    float percentage = progress/100f;
-//                    int newPosition = (int)(percentage * videoDuration);
                     mediaPlayer.seekToPosition(progress);
                     seekBarUpdateHandler.postDelayed(updateSeekbar, 0);
                 }
@@ -214,7 +209,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         paused = false;
         try
         {
-            mediaPlayer.playMedia(video, videoView, width, height); //Plays video on given view
+            mediaPlayer.playVideo(video, videoView, width, height); //Plays video on given view
         }
         catch (IOException e)
         {
@@ -355,6 +350,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     {
         seekBarUpdateHandler.removeCallbacks(updateSeekbar);
         mediaPlayer.stopMedia();
+        mediaPlayer.release();
         playing = false;
     }
 

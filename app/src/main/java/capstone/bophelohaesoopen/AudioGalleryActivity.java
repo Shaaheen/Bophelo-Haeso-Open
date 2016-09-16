@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
  * Activity where recorded audio files are listed / shown
@@ -165,7 +166,11 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     public void playAudio(int position)
     {
-        Toast.makeText(this, "Plays audio", Toast.LENGTH_SHORT).show();
+        Audio audio = audioList.get(position);
+        Intent intent = new Intent(this, AudioPlayerActivity.class);
+        intent.putExtra(AudioPlayerActivity.AUDIO_NAME, audio.getName());
+        intent.putExtra(AudioPlayerActivity.AUDIO_FILE_PATH, audio.getFilePath());
+        this.startActivity(intent);
     }
 
     public void shareAudio(int position)
