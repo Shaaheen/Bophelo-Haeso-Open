@@ -199,6 +199,8 @@ public class FileUtils
     }
 
     public static void writeToLogFile(List<LogEntry> logEntriesToWrite){
+        Log.v("DB",Environment.getExternalStorageDirectory().getAbsolutePath());
+        Log.v("DB",MainActivity.appRootFolder);
         File mediaStorageDirectory = getAppDirectory(
                 Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
         if (mediaStorageDirectory == null) return ;
