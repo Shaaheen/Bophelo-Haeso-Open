@@ -18,9 +18,11 @@ public class MediaPlayer extends android.media.MediaPlayer{
 //    SurfaceView surfaceView;
     // Stores play position of video when it is paused
     int currentPosition = 0;
+    public boolean prepared = false;
 
     public MediaPlayer(String nameOfApp) {
         this.nameOfApp = nameOfApp;
+        prepared = false;
     }
 
     /**
@@ -41,6 +43,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
             @Override
             public void onPrepared(android.media.MediaPlayer mediaPlayer)
             {
+
                 // Get video height and width
                 int videoWidth = mediaPlayer.getVideoWidth();
                 int videoHeight = mediaPlayer.getVideoHeight();
@@ -65,6 +68,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
         mediaPlayer.setDisplay( mediaView.getHolder() ); //Sets media onto view
         mediaPlayer.prepare();
         mediaPlayer.start();
+        prepared = true;
 
         //Log playing of video
         if ( DatabaseUtils.isDatabaseSetup() ){
@@ -98,8 +102,9 @@ public class MediaPlayer extends android.media.MediaPlayer{
 
     public void pauseMedia() throws IllegalStateException
     {
-        mediaPlayer.pause();
         currentPosition = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
+
 
         //Log playing of video
         if ( DatabaseUtils.isDatabaseSetup() ){
@@ -121,6 +126,25 @@ public class MediaPlayer extends android.media.MediaPlayer{
         }
     }
 
+    public void seekToPosition(int position)
+    {
+        mediaPlayer.seekTo(position);
+    }
+
+    public int getVideoDuration()
+    {
+        return mediaPlayer.getDuration();
+    }
+
+    public int getCurrentPlayPosition()
+    {
+        return mediaPlayer.getCurrentPosition();
+    }
+
+    public boolean isPrepared()
+    {
+        return prepared;
+    }
 
 
 }
