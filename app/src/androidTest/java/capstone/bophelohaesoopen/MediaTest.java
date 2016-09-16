@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import capstone.bophelohaesoopen.HaesoAPI.AudioRecorder;
-import capstone.bophelohaesoopen.HaesoAPI.Media;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;

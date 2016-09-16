@@ -28,7 +28,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
-import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
     ArrayList<Video> videoList = new ArrayList<>();
 
-    MediaShareUtils mediaShareUtils;
+    MediaShareUserInterface mediaShareUserInterface;
 
     //Logging db
     public static DatabaseUtils databaseUtils;
@@ -144,7 +143,15 @@ public class MainActivity extends AppCompatActivity
 
     private void initialize()
     {
+        //region
+        appRootFolder = getResources().getString(R.string.root_folder);
+        appImageFolder = getResources().getString(R.string.images_folder);
+        appRecordingsFolder = getResources().getString(R.string.recordings_folder);
+        appVideosFolder = getResources().getString(R.string.videos_folder);
+        //endregion
+
         databaseUtils = new DatabaseUtils(this); // Connect to database
+
         LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Main Screen", null);
         if(DatabaseUtils.isDatabaseSetup())
         {
@@ -160,7 +167,7 @@ public class MainActivity extends AppCompatActivity
         Media.setIdentifierPrefix(identifierPrefix);
         fileUtils = new FileUtils(this);
 
-        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
+        mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -221,12 +228,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(videoAdapter);
 
 
-        //region
-        appRootFolder = getResources().getString(R.string.root_folder);
-        appImageFolder = getResources().getString(R.string.images_folder);
-        appRecordingsFolder = getResources().getString(R.string.recordings_folder);
-        appVideosFolder = getResources().getString(R.string.videos_folder);
-        //endregion
+
 
         //endregion
 
@@ -419,7 +421,7 @@ public class MainActivity extends AppCompatActivity
     {
         videoToSend = videoList.get(position);
 
-        mediaShareUtils.sendMedia(videoToSend);
+        mediaShareUserInterface.sendMedia(videoToSend);
     }
 
     // region Activity overrides

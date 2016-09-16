@@ -19,7 +19,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
-import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
@@ -38,7 +37,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     ArrayList<Audio> audioList = new ArrayList<>();
 
-    MediaShareUtils mediaShareUtils;
+    MediaShareUserInterface mediaShareUserInterface;
 
     MediaLoadService mediaLoadService;
 
@@ -107,14 +106,14 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     private void initialize()
     {
-        DatabaseUtils databaseUtils = new DatabaseUtils(this); // Connect to database
-        LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Recordings Gallery ", null);
+
+        LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Recordings Gallery", null);
         if(DatabaseUtils.isDatabaseSetup())
         {
             DatabaseUtils.getInstance().addLog(logEntry);
         }
 
-        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
+        mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
         mediaLoadService = new MediaLoadService(this);
         startService(new Intent(this, MediaLoadService.class));
 
@@ -179,7 +178,8 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     public void shareAudio(int position)
     {
-        Toast.makeText(this, "Shares audio file", Toast.LENGTH_SHORT).show();
+        mediaShareUserInterface.sendMedia(audioList.get(position));
+        //Toast.makeText(this, "Shares audio file", Toast.LENGTH_SHORT).show();
     }
 
     @Override

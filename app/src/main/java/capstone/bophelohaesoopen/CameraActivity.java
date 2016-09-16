@@ -72,7 +72,7 @@ public class CameraActivity extends AppCompatActivity
 
     private void initialize()
     {
-        DatabaseUtils databaseUtils = new DatabaseUtils(this); // Connect to database
+        
         LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Camera", null);
         if(DatabaseUtils.isDatabaseSetup())
         {
