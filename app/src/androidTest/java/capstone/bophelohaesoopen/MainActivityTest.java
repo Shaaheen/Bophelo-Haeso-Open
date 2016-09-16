@@ -3,7 +3,9 @@ package capstone.bophelohaesoopen;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.CardView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 /**
@@ -24,6 +27,7 @@ import static junit.framework.Assert.assertNotNull;
 public class MainActivityTest {
 
     Button recordAudio, viewAudio, capturePicture, viewPicture;
+    CardView shareMediaBar;
     private MainActivity mActivity;
 
     @Rule
@@ -48,6 +52,35 @@ public class MainActivityTest {
         assertNotNull(viewAudio);
         assertNotNull(viewPicture);
     }
+
+    // Test the presence of the share media bar.
+    public void testShareMediaBarPresence() {
+        //Get the shareMediaBar on the current activity.
+        shareMediaBar = (CardView) mActivity.findViewById(R.id.shareMediaBar);
+        assertNotNull(shareMediaBar);
+    }
+
+    // Tests the change text on the shareMediaBar when it is clicked.
+    public void testShareMediaBarTextChange() {
+        TextView shareText = (TextView) mActivity.findViewById(R.id.shareText);
+
+        //First check the shareText on the bar before it is clicked.
+        assertEquals("Share", shareText,toString());
+
+        //perform button click.
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // click recordings button and open audioGalleryActivity.
+                shareMediaBar.performClick();
+            }
+        });
+
+        //The text should change from "Share" to "Cancel" after the bar is clicked.
+        assertEquals("Cancel", shareText,toString());
+    }
+
+
 
     @After
     public void tearDown() throws Exception {
