@@ -35,7 +35,7 @@ public class AudioGalleryActivityTest {
     }
 
     @Test
-    public void clickRecordingButton_startsAudioGlaleryActivity(){
+    public void clickRecordingButton_startsAudioGalleryActivity(){
         // register next activity that need to be monitored.
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(AudioGalleryActivity.class.getName(), null, false);
 
