@@ -59,7 +59,7 @@ public class MediaTest {
     //Confirm the media name and the output filePath.
     @Test
     public void confirmMediaDetails() {
-        assertEquals(media.getName(), name);
+        assertEquals(media.getName(), "workout");
         assertEquals(media.getFilePath(), outputFile);
     }
 

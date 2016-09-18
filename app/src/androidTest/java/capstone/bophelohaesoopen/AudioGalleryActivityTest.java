@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.CardView;
 import android.widget.Button;
 
 import org.junit.After;
@@ -22,7 +23,7 @@ import static junit.framework.Assert.assertNotNull;
 
 @RunWith(AndroidJUnit4.class)
 public class AudioGalleryActivityTest {
-    Button recordingsButton;
+    CardView recordingsButton;
     Activity mActivity, audioGalleryActivity;
 
     @Rule
@@ -31,7 +32,7 @@ public class AudioGalleryActivityTest {
     @Before
     public void setUp() throws Exception {
         mActivity = mActivityRule.getActivity();
-        recordingsButton = (Button) mActivity.findViewById(R.id.recordingsButton);
+        recordingsButton = (CardView) mActivity.findViewById(R.id.recordingsButton);
     }
 
     @Test

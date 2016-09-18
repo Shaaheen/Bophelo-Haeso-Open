@@ -26,7 +26,7 @@ import static junit.framework.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    Button recordAudio, viewAudio, capturePicture, viewPicture;
+    CardView recordAudio, viewAudio, capturePicture, viewPicture;
     CardView shareMediaBar;
     private MainActivity mActivity;
 
@@ -42,10 +42,10 @@ public class MainActivityTest {
     //Check that all the UI buttons are present.
     @Test
     public void testButtons() {
-        recordAudio = (Button) mActivity.findViewById(R.id.recordAudioButton);
-        capturePicture = (Button) mActivity.findViewById(R.id.takePictureButton);
-        viewAudio = (Button) mActivity.findViewById(R.id.recordingsButton);
-        viewPicture = (Button) mActivity.findViewById(R.id.picturesButton);
+        recordAudio = (CardView) mActivity.findViewById(R.id.recordAudioButton);
+        capturePicture = (CardView) mActivity.findViewById(R.id.takePictureButton);
+        viewAudio = (CardView) mActivity.findViewById(R.id.recordingsButton);
+        viewPicture = (CardView) mActivity.findViewById(R.id.picturesButton);
 
         assertNotNull(recordAudio);
         assertNotNull(capturePicture);
@@ -65,7 +65,7 @@ public class MainActivityTest {
         TextView shareText = (TextView) mActivity.findViewById(R.id.shareText);
 
         //First check the shareText on the bar before it is clicked.
-        assertEquals("Share", shareText,toString());
+        assertEquals("Share", shareText.toString());
 
         //perform button click.
         mActivity.runOnUiThread(new Runnable() {
@@ -77,7 +77,7 @@ public class MainActivityTest {
         });
 
         //The text should change from "Share" to "Cancel" after the bar is clicked.
-        assertEquals("Cancel", shareText,toString());
+        assertEquals("Cancel", shareText.toString());
     }
 
 

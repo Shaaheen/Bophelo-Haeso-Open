@@ -3,6 +3,7 @@ package capstone.bophelohaesoopen;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.support.test.rule.ActivityTestRule;
+import android.support.v7.widget.CardView;
 import android.widget.Button;
 
 import org.junit.After;
@@ -18,7 +19,7 @@ import static junit.framework.Assert.assertNotNull;
  * This class will test the start of the PictureGalleryActivity by the MainActivity using pictures button.
  */
 public class PictureGalleryActivityTest {
-    Button picturesButton;
+    CardView picturesButton;
     Activity mActivity, pictureGalleryActivity;
 
     @Rule
@@ -27,7 +28,7 @@ public class PictureGalleryActivityTest {
     @Before
     public void setUp() throws Exception {
         mActivity = mActivityRule.getActivity();
-        picturesButton = (Button) mActivity.findViewById(R.id.picturesButton);
+        picturesButton = (CardView) mActivity.findViewById(R.id.picturesButton);
     }
 
     @Test
