@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
+//import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
@@ -37,7 +37,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     ArrayList<Audio> audioList = new ArrayList<>();
 
-    MediaShareUtils mediaShareUtils;
+//    MediaShareUtils mediaShareUtils;
 
     MediaLoadService mediaLoadService;
 
@@ -106,7 +106,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     private void initialize()
     {
-        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
+//        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
         mediaLoadService = new MediaLoadService(this);
         startService(new Intent(this, MediaLoadService.class));
 

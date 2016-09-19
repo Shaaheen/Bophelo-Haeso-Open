@@ -115,9 +115,27 @@ public class FileUtils
         }
     }
     public static String getAudioRecordingFileName(){
-        DateFormat dateFormat = new SimpleDateFormat("dd\\MM\\yyyy_HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss");
         String dateTimeNow =  dateFormat.format(new Date());
-        return (Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Media.identifierPrefix +"Report_" + dateTimeNow + ".3gp");
+        System.out.println("BHO : DATE TIME NOW = "+dateTimeNow);
+        File mediaStorageDirectory = getAppDirectory(
+                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+        if(!mediaStorageDirectory.exists())
+        {
+            if(!mediaStorageDirectory.mkdirs())
+            {
+
+            }
+        }
+        File audioDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appRecordingsFolder);
+        if(!audioDirectory.exists())
+        {
+            if(!audioDirectory.mkdirs())
+            {
+
+            }
+        }
+        return (audioDirectory.getAbsolutePath() + "/" + Media.identifierPrefix +"Report_" + dateTimeNow + ".3gp");
     }
 
     public void saveMedia(byte[] data, Media.MediaType media, String outFileName)
@@ -140,10 +158,9 @@ public class FileUtils
             Log.i("BHO", "Video file to be saved");
             outputFile = getOutputVideoFile();
         }
-        else if (mediaType == Media.MediaType.AUDIO){
-            Log.i("BHO", "Audio file to be saved");
-            outputFile = getOutputAudioFile();
-        }
+
+        // Audio files are created and written out automatically by the Android MediaRecorder class
+
         if(outputFile != null)
         {
             Log.i("BHO", "File not null");
@@ -169,31 +186,29 @@ public class FileUtils
     }
 
     /** Create a file for saving an image */
-    private File getOutputAudioFile()
-    {
-        File mediaStorageDirectory = getAppDirectory(
-                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
-        if (mediaStorageDirectory == null) return null;
-
-        // Create the image directory if it does not exist
-        File audioDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appRecordingsFolder);
-        if (audioDirectory == null) return null;
-
-        File mediaFile = new File(audioDirectory.getPath() + File.separator + outputFileName);
-
-        return mediaFile;
-    }
-
-    /** Create a file for saving an image */
     private File getOutputImageFile()
     {
         File mediaStorageDirectory = getAppDirectory(
                 Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
-        if (mediaStorageDirectory == null) return null;
+        if(!mediaStorageDirectory.exists())
+        {
+            if(!mediaStorageDirectory.mkdirs())
+            {
+
+            }
+        }
+//        if (mediaStorageDirectory == null) return null;
 
         // Create the image directory if it does not exist
         File imageDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appImageFolder);
-        if (imageDirectory == null) return null;
+        if(!imageDirectory.exists())
+        {
+            if(!imageDirectory.mkdirs())
+            {
+                return null;
+            }
+        }
+//        if (imageDirectory == null) return null;
 
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -208,10 +223,24 @@ public class FileUtils
     {
         File mediaStorageDirectory = getAppDirectory(
                 Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
-        if (mediaStorageDirectory == null) return null;
+        if(!mediaStorageDirectory.exists())
+        {
+            if(!mediaStorageDirectory.mkdirs())
+            {
+
+            }
+        }
+//        if (mediaStorageDirectory == null) return null;
 
         File videoDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appVideosFolder);
-        if (videoDirectory == null) return null;
+        if(!videoDirectory.exists())
+        {
+            if(!videoDirectory.mkdirs())
+            {
+                return null;
+            }
+        }
+//        if (videoDirectory == null) return null;
 
         File videoFile = new File(videoDirectory.getPath() + File.separator + outputFileName);
 

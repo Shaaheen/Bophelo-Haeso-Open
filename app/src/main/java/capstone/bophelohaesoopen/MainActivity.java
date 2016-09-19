@@ -227,9 +227,6 @@ public class MainActivity extends AppCompatActivity
         videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
 
-
-
-
         //endregion
 
         //region Buttons initializations
@@ -343,7 +340,8 @@ public class MainActivity extends AppCompatActivity
         if (!menuHidden)
         {
             hideMenu();
-        } else
+        }
+        else
         {
             showMenu();
         }
@@ -414,7 +412,6 @@ public class MainActivity extends AppCompatActivity
         recyclerView.smoothScrollToPosition(0);
 
         menuToggle.setImageResource(R.drawable.arrow_down);
-
     }
 
     public void shareVideo(int position)

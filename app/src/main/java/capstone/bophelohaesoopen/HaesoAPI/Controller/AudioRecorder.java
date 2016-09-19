@@ -1,6 +1,7 @@
 package capstone.bophelohaesoopen.HaesoAPI.Controller;
 
 import android.media.MediaRecorder;
+import android.os.Environment;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class AudioRecorder {
 
     public AudioRecorder(){
         myAudioRecorder = new MediaRecorder();
-        this.outputFile = FileUtils.getAudioRecordingFileName();
+        outputFile = FileUtils.getAudioRecordingFileName();
     }
 
     /**
@@ -33,6 +34,7 @@ public class AudioRecorder {
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         myAudioRecorder.setMaxDuration(MAX_DURATION);
+//        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/chw_recording.3gp";
         myAudioRecorder.setOutputFile(outputFile);
         myAudioRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener()
         {
@@ -45,6 +47,13 @@ public class AudioRecorder {
                 }
             }
         });
+        try
+        {
+            myAudioRecorder.prepare();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
@@ -53,7 +62,7 @@ public class AudioRecorder {
      * @throws IOException
      */
     public void startRecording() throws IOException {
-        myAudioRecorder.prepare();
+
         myAudioRecorder.start();
 
         //Log playing of video
@@ -64,19 +73,20 @@ public class AudioRecorder {
     }
 
     /**
-     * Stop recording and release the audionRecorder instance.
+     * Stop recording and release the audio Recorder instance.
      */
     public void stopRecording() {
         myAudioRecorder.stop();
+        myAudioRecorder.release();
+        myAudioRecorder = null;
 
-        //Log playing of video
+        //Log playing of audio
         if ( DatabaseUtils.isDatabaseSetup() ){
             LogEntry logEntry = new LogEntry(LogEntry.LogType.RECORDING,"Stopped recording");
             DatabaseUtils.getInstance().addLog(logEntry);
         }
 
-        myAudioRecorder.release();
-        myAudioRecorder = null;
+
     }
 
     public void setRecordingDurationLimit(int minutes)
