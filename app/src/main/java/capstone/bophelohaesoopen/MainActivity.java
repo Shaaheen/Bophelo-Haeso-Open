@@ -4,9 +4,12 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,7 +39,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener
 {
     //region View declarations
     RelativeLayout mainMenu;
@@ -81,6 +85,10 @@ public class MainActivity extends AppCompatActivity
     public boolean inSelectionMode = false;
 
     public boolean videosLoaded = false;
+
+    float topY;
+    float bottomY;
+    float midY;
 
     ArrayList<Video> videoList = new ArrayList<>();
 
@@ -136,8 +144,6 @@ public class MainActivity extends AppCompatActivity
         handler.postDelayed(runnable, CHECK_DURATION);
         long endtime = System.currentTimeMillis();
         System.out.println("Start up time = "+((endtime - time)/1000));
-
-
     }
 
 
@@ -184,6 +190,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         mainMenu = (RelativeLayout) findViewById(R.id.mainMenu);
+
         menuToggleBar = (RelativeLayout) findViewById(R.id.menuToggleBar);
         menuToggleBar.setOnClickListener(new View.OnClickListener()
         {
@@ -202,6 +209,10 @@ public class MainActivity extends AppCompatActivity
                 menuToggleClick();
             }
         });
+        menuToggleBar.setOnTouchListener(this);
+
+        Log.i("BHO", "HEight = "+mainMenu.getHeight());
+
 
         shareMediaBar = (CardView) findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
@@ -226,9 +237,6 @@ public class MainActivity extends AppCompatActivity
 //        populateVideoList();
         videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
-
-
-
 
         //endregion
 
@@ -417,6 +425,68 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    void hideMenu(float yPos)
+    {
+        float yDelta = Math.abs(bottomY - yPos);
+
+        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos + yDelta);
+        anim.setDuration(MENU_ANIMATION_DURATION);
+        anim.setInterpolator(new DecelerateInterpolator());
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+        {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator)
+            {
+                mainMenu.setY((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        anim.start();
+
+        menuHidden = true;
+
+        // Enable scrolling on the video list since the list is in full view
+        gridLayoutManager.setScrollEnabled(true);
+        menuToggle.setImageResource(R.drawable.arrow_up);
+    }
+
+    void showMenu(float yPos)
+    {
+        float yDelta = yPos - topY;
+
+        ValueAnimator anim = ValueAnimator.ofFloat(yPos, yPos - yDelta);
+        anim.setDuration(MENU_ANIMATION_DURATION);
+        anim.setInterpolator(new DecelerateInterpolator());
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+        {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator)
+            {
+                mainMenu.setY((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        anim.start();
+
+        menuHidden = false;
+
+        // Delay to allow the video list to scroll to the top before scrolling is disabled
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                // Disable scrolling so that the 4 videos at the top stay in view
+                gridLayoutManager.setScrollEnabled(false);
+            }
+        }, 200);
+
+
+        // Scroll video list to the top in case it was scrolled down, in order to show the 4 videos at the top
+        recyclerView.smoothScrollToPosition(0);
+
+        menuToggle.setImageResource(R.drawable.arrow_down);
+    }
+
     public void shareVideo(int position)
     {
         videoToSend = videoList.get(position);
@@ -573,5 +643,62 @@ public class MainActivity extends AppCompatActivity
         }
 
         return ordered;
+    }
+
+    float viewY = 0;
+    float y = 0;
+    float dy;
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent)
+    {
+        topY = getWindowManager().getDefaultDisplay().getHeight() - (mainMenu.getHeight());
+        bottomY = topY + mainMenu.getHeight() - menuToggleBar.getHeight();
+        midY = topY + ((float)mainMenu.getHeight()/2f);
+        switch(motionEvent.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+//                Log.i("BHO", "ACTION_DOWN");
+
+//                Log.i("BHO", "Viewy = "+viewY);
+                viewY = mainMenu.getY();
+                y = motionEvent.getRawY();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+//                viewY = getWindowManager().getDefaultDisplay().getHeight() - (mainMenu.getHeight()/2);
+//                Log.i("BHO", "Viewy = "+viewY);
+//                Log.i("BHO", "ACTION_MOVE");
+
+                float cy = motionEvent.getRawY();
+                dy = cy - y;
+                mainMenu.setY(viewY + dy);
+                if(mainMenu.getY() == topY)
+                {
+                    Log.i("BHO", "REACHED TOP ");
+                }
+                else if(mainMenu.getY() == midY)
+                {
+                    Log.i("BHO", "REACHED MID");
+                }
+                else if(mainMenu.getY() == bottomY)
+                {
+                    Log.i("BHO", "REACHED BOTTOM");
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if(mainMenu.getY() < midY)
+                {
+                    hideMenu(mainMenu.getY());
+                }
+                else
+                {
+                    showMenu(mainMenu.getY());
+                }
+                break;
+
+        }
+        return false;
     }
 }
