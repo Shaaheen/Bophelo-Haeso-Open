@@ -1,4 +1,4 @@
-package capstone.bophelohaesoopen.HaesoAPI.Controller;
+package capstone.bophelohaesoopen;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -19,7 +19,7 @@ import capstone.bophelohaesoopen.R;
 /**
  * Handles connecting to BT device and sending off media files
  */
-public class MediaShareUtils
+public class MediaShareUserInterface
 {
     public BluetoothUtils bluetoothUtils;
 
@@ -33,7 +33,7 @@ public class MediaShareUtils
     private MaterialDialog scanningDialog;
     private Activity activityM;
 
-    public MediaShareUtils(final Context ctx, final Activity activity)
+    public MediaShareUserInterface(final Context ctx, final Activity activity)
     {
         mediaToSend = null;
         determinatePD = null;
@@ -208,4 +208,10 @@ public class MediaShareUtils
         scanForDevices();
     }
 
+    public void end(){
+        mediaToSend = null;
+        determinatePD = null;
+        sendMedia = false;
+        bluetoothUtils.end();
+    }
 }

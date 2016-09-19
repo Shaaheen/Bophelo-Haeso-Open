@@ -140,6 +140,10 @@ public class FileUtils
             Log.i("BHO", "Video file to be saved");
             outputFile = getOutputVideoFile();
         }
+        else if (mediaType == Media.MediaType.AUDIO){
+            Log.i("BHO", "Audio file to be saved");
+            outputFile = getOutputAudioFile();
+        }
         if(outputFile != null)
         {
             Log.i("BHO", "File not null");
@@ -162,6 +166,22 @@ public class FileUtils
             }
         }
 
+    }
+
+    /** Create a file for saving an image */
+    private File getOutputAudioFile()
+    {
+        File mediaStorageDirectory = getAppDirectory(
+                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+        if (mediaStorageDirectory == null) return null;
+
+        // Create the image directory if it does not exist
+        File audioDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appRecordingsFolder);
+        if (audioDirectory == null) return null;
+
+        File mediaFile = new File(audioDirectory.getPath() + File.separator + outputFileName);
+
+        return mediaFile;
     }
 
     /** Create a file for saving an image */
@@ -199,6 +219,8 @@ public class FileUtils
     }
 
     public static void writeToLogFile(List<LogEntry> logEntriesToWrite){
+        Log.v("DB",Environment.getExternalStorageDirectory().getAbsolutePath());
+        Log.v("DB",MainActivity.appRootFolder);
         File mediaStorageDirectory = getAppDirectory(
                 Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
         if (mediaStorageDirectory == null) return ;
