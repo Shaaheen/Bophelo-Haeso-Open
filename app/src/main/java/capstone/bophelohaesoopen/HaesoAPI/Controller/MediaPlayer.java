@@ -10,7 +10,6 @@ import java.io.IOException;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
-import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
  * Created by Shaaheen on 8/8/2016.
@@ -36,7 +35,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
      * @param mediaView - The view that the media will show on
      * @throws IOException
      */
-    public void playVideo(Video mediaFile, SurfaceView mediaView, final int screenWidth, final int screenHeight) throws IOException
+    public void playVideo(Media mediaFile, SurfaceView mediaView, final int screenWidth, final int screenHeight) throws IOException
     {
         final SurfaceView mView = mediaView;
         String filePath =  mediaFile.getFilePath();
@@ -80,6 +79,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
 
         //Log playing of video
         if ( DatabaseUtils.isDatabaseSetup() ){
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.MEDIA_PLAYER,"Play",mediaFile.getFileName());
             DatabaseUtils.getInstance().addLog(logEntry);
         }
 
@@ -103,12 +103,6 @@ public class MediaPlayer extends android.media.MediaPlayer{
                 prepared = true;
             }
         });
-
-        //Log playing of video
-        if ( DatabaseUtils.isDatabaseSetup() ){
-            LogEntry logEntry = new LogEntry(LogEntry.LogType.MEDIA_PLAYER,"Play Audio",audioFile.getFileName());
-            DatabaseUtils.getInstance().addLog(logEntry);
-        }
     }
 
     public void stopMedia()

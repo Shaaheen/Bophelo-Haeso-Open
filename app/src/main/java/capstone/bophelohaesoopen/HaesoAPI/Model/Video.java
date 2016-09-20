@@ -11,12 +11,6 @@ public class Video extends Media {
         super(name, filePath);
     }
 
-    /**
-     * Instance of Video object
-     * @param name - name of file
-     * @param filePath - path to file
-     * @param thumbnailPath - path to thumbnail image
-     */
     public Video(String name, String filePath, String thumbnailPath) {
         super(name, filePath);
         this.thumbnailPath = thumbnailPath;
@@ -24,10 +18,6 @@ public class Video extends Media {
 
     public String getFileName(){
         return (name );
-    }
-
-    public String getFilePathName(){
-        return (identifierPrefix + name + mediaExtension);
     }
 
 

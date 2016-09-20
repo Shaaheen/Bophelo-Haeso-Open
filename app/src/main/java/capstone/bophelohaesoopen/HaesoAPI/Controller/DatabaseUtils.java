@@ -29,7 +29,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 public class DatabaseUtils extends SQLiteOpenHelper{
 
     // Database Version
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 8;
     // Database Name
     private static final String DATABASE_NAME = "Logging_Database";
     // Logging table name
@@ -195,7 +195,7 @@ public class DatabaseUtils extends SQLiteOpenHelper{
     public TreeMap<String,Integer> getMostPlayedVideos(){
         Log.v("DB","Getting most watched videos");
         String videoQuery = "SELECT count(" + KEY_FILENAME + ")," +  KEY_FILENAME + "\n" +
-                "FROM " + TABLE_LOGGING + " WHERE " + KEY_ACTION + "=" + "'Play Video' " +
+                "FROM " + TABLE_LOGGING + "\n" +
                 "GROUP BY " + KEY_FILENAME + " ORDER BY count(" + KEY_FILENAME + ") DESC";
         TreeMap<String,Integer> videosWithFrequencies = new TreeMap<>();
 
