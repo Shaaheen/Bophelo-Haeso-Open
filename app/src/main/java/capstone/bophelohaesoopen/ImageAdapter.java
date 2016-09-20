@@ -16,10 +16,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder>
     PictureGalleryActivity galleryActivity;
     RecyclerView recView;
 
-    int selectedPosition = 0;
-
-    boolean itemClicked = false;
-
     public ImageAdapter(PictureGalleryActivity activity, RecyclerView recyclerView, ArrayList<Image> images)
     {
         imageList = images;
@@ -45,32 +41,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder>
 
         holder.thumbnail.setImageBitmap(image.thumb);
 
-        if(selectedPosition == position && itemClicked)
-        {
-            holder.selectionOverlay.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            holder.selectionOverlay.setVisibility(View.INVISIBLE);
-        }
-
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                setItemClicked(true);
-                if(galleryActivity.inSelectionMode)
-                {
-                    notifyItemChanged(selectedPosition);
-                    selectedPosition = position;
-                    notifyItemChanged(selectedPosition);
-                    galleryActivity.shareImage(position);
-                }
-                else
-                {
-                    galleryActivity.displayImage(position);
-                }
+                galleryActivity.displayImage(position);
 
             }
         });
@@ -80,11 +56,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder>
     public int getItemCount()
     {
         return imageList.size();
-    }
-
-    public void setItemClicked(boolean clicked)
-    {
-        itemClicked = clicked;
     }
 
     public void setImages(ArrayList<Image> images)

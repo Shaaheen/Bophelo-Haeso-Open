@@ -61,10 +61,6 @@ public class AudioPlayerActivity extends AppCompatActivity
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        else
-        {
-            Log.i("APP", "Action bar null");
-        }
 
         // Gets name and path of video from previous activity
         Intent intent = getIntent();

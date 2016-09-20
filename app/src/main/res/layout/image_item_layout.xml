@@ -24,21 +24,6 @@
                 android:contentDescription="@string/thumbnail"
                 android:visibility="visible"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#838181"
-                android:id="@+id/selectionOverlay"
-                android:visibility="invisible"
-                android:alpha="1">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/check"
-                    android:padding="10dp"/>
-            </RelativeLayout>
-
         </RelativeLayout>
 
 

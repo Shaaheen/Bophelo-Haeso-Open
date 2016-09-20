@@ -11,13 +11,10 @@ import android.widget.RelativeLayout;
 public class ImageViewHolder extends RecyclerView.ViewHolder
 {
     public ImageView thumbnail;
-    public RelativeLayout selectionOverlay;
-
 
     public ImageViewHolder(View itemView)
     {
         super(itemView);
         thumbnail = (ImageView)itemView.findViewById(R.id.thumbnail);
-        selectionOverlay = (RelativeLayout)itemView.findViewById(R.id.selectionOverlay);
     }
 }

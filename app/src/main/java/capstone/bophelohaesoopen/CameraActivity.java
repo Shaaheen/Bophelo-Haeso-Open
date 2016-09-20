@@ -2,6 +2,9 @@ package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -21,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -122,7 +126,7 @@ public class CameraActivity extends AppCompatActivity
             Log.i("APP", "Picture callback called");
 
             // An image file name will be created automatically
-            fileUtils.saveMedia(bytes, Media.MediaType.IMAGE, "");
+            fileUtils.saveImage(bytes);
 
         }
     };

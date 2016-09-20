@@ -3,6 +3,7 @@ package capstone.bophelohaesoopen.HaesoAPI.Controller;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
@@ -145,6 +146,69 @@ public class FileUtils
         new SaveAsync().execute(toByteArray(data));
     }
 
+    public void saveImage(byte[] bytes)
+    {
+        File tempOutputFile = getOutputImageFile();
+
+        try
+        {
+            // Write image out to file temporarily
+            FileOutputStream fileOutputStream = new FileOutputStream(tempOutputFile);
+            fileOutputStream.write(bytes);
+            Log.i("BHO", "File saved");
+            fileOutputStream.close();
+        }
+        catch(FileNotFoundException e)
+        {
+            e.printStackTrace();
+            Log.i("BHO", "File NOT saved");
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            Log.i("BHO", "File NOT saved");
+        }
+        try
+        {
+            // Read in saved image file into Bitmap object for manipulation
+            FileInputStream fis = new FileInputStream(tempOutputFile);
+            Bitmap image = BitmapFactory.decodeStream(fis);
+
+            // Delete original temporary file
+            tempOutputFile.delete();
+
+            // Calculate sizes to scale the image down to
+            int newWidth = image.getWidth()/3;
+            int newHeight = image.getHeight()/3;
+
+            // Create scaled down image from the original image
+            Bitmap scaledDownImage = Bitmap.createScaledBitmap(image, newWidth, newHeight, false);
+
+            // Matrix object to be used to rotate the image since by default, the image was captured with a -90 degree rotation
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            Bitmap finalImage = Bitmap.createBitmap(scaledDownImage, 0, 0, scaledDownImage.getWidth(), scaledDownImage.getHeight(), matrix, false);
+
+            // Get new output file instance
+            File newOutputFile = getOutputImageFile();
+
+            // Save scaled, rotated image
+            FileOutputStream fos = new FileOutputStream(newOutputFile);
+            finalImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void writeOut(byte[] bytes)
     {
         File outputFile = null;
@@ -186,7 +250,7 @@ public class FileUtils
     }
 
     /** Create a file for saving an image */
-    private File getOutputImageFile()
+    public File getOutputImageFile()
     {
         File mediaStorageDirectory = getAppDirectory(
                 Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);

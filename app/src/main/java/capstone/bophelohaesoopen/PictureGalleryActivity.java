@@ -29,12 +29,8 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 
 public class PictureGalleryActivity extends AppCompatActivity
 {
-    CardView shareMediaBar;
     RecyclerView recyclerView;
     ImageAdapter imageAdapter;
-
-    ImageView shareIcon;
-    TextView shareText;
 
     RelativeLayout imagesLoadingScreen;
 
@@ -46,7 +42,6 @@ public class PictureGalleryActivity extends AppCompatActivity
 
     TextView noMediaText;
 
-    boolean inSelectionMode = false;
     private static int CHECK_DURATION = 1000;
 
     @Override
@@ -60,10 +55,6 @@ public class PictureGalleryActivity extends AppCompatActivity
         if(actionBar != null)
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        else
-        {
-            Log.i("APP", "Action bar null");
         }
 
         initialize();
@@ -119,18 +110,6 @@ public class PictureGalleryActivity extends AppCompatActivity
 
         imagesLoadingScreen = (RelativeLayout)findViewById(R.id.imagesLoadingScreen);
 
-        shareMediaBar = (CardView) findViewById(R.id.shareMediaBar);
-        shareMediaBar.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                shareMediaButtonClick();
-            }
-        });
-        shareIcon = (ImageView) findViewById(R.id.shareIcon);
-        shareText = (TextView) findViewById(R.id.shareText);
-
         noMediaText = (TextView)findViewById(R.id.noMediaText);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -143,54 +122,24 @@ public class PictureGalleryActivity extends AppCompatActivity
         recyclerView.setAdapter(imageAdapter);
     }
 
-    private void shareMediaButtonClick()
-    {
-//        Toast.makeText(this, "Sends a selected picture", Toast.LENGTH_SHORT).show();
-        if (inSelectionMode)
-        {
-            String appName = getResources().getString(R.string.app_name);
-
-            setTitle(appName);
-
-            shareIcon.setImageResource(R.drawable.share);
-            shareText.setText("Share");
-            inSelectionMode = false;
-
-            // Hide video item tick overlay
-            imageAdapter.setItemClicked(false);
-            imageAdapter.notifyDataSetChanged();
-        }
-        else
-        {
-            setTitle("Select picture");
-            shareIcon.setImageResource(R.drawable.cancel);
-            shareText.setText("Cancel");
-            inSelectionMode = true;
-        }
-    }
-
-    public void shareImage(int position)
-    {
-        mediaShareUserInterface.sendMedia(imageList.get(position));
-        //Toast.makeText(this, "Shares picture", Toast.LENGTH_SHORT).show();
-    }
-
     public void displayImage(int position)
     {
-        Toast.makeText(this, "Shows picture", Toast.LENGTH_SHORT).show();
+        Image image = imageList.get(position);
+        Intent intent = new Intent(this, PictureActivity.class);
+        intent.putExtra(PictureActivity.IMAGE_NAME, image.getFilePath());
+        this.startActivity(intent);
     }
 
     @Override
     public void onBackPressed()
     {
         super.onBackPressed();
-        inSelectionMode = false;
     }
 
     @Override
     public boolean onSupportNavigateUp()
     {
-        finish();
+        onBackPressed();
         return true;
     }
 }

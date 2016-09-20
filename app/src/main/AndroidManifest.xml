@@ -57,7 +57,8 @@
             android:name=".AudioRecorderActivity"
             android:label="@string/title_activity_audio_recording">
         </activity>
-        <activity android:name=".PictureActivity">
+        <activity android:name=".PictureActivity"
+                  android:label="@string/title_activity_picture">
         </activity>
         <activity android:name=".CameraActivity">
         </activity>
