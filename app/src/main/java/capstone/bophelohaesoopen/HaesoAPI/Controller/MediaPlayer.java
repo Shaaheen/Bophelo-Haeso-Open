@@ -3,6 +3,7 @@ package capstone.bophelohaesoopen.HaesoAPI.Controller;
 import android.media.AudioManager;
 import android.util.Log;
 import android.view.SurfaceView;
+import android.view.ViewGroup;
 
 import java.io.IOException;
 
@@ -53,16 +54,19 @@ public class MediaPlayer extends android.media.MediaPlayer{
                 float videoProportion = (float) videoWidth / (float) videoHeight;
 
                 float screenProportion = (float) screenWidth / (float) screenHeight;
-                android.view.ViewGroup.LayoutParams lp = mView.getLayoutParams();
+                ViewGroup.LayoutParams lp = mView.getLayoutParams();
 
                 if (videoProportion > screenProportion)
                 {
                     lp.width = screenWidth;
                     lp.height = (int) ((float) screenWidth / videoProportion);
-                } else
+                }
+                else
                 {
-                    lp.width = (int) (videoProportion * (float) screenHeight);
+                    lp.width = (int) (videoProportion * screenHeight);
+//                    lp.width = (int)((float)screenHeight / screenProportion);
                     lp.height = screenHeight;
+
                 }
                 mView.setLayoutParams(lp);
 

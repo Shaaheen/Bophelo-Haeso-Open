@@ -25,34 +25,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/seekBar"
-            android:layout_above="@+id/playPauseButton"
             android:padding="10dp"
             />
 
-        <android.support.design.widget.FloatingActionButton
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="@dimen/video_player_button_dimen"
-            android:layout_height="@dimen/video_player_button_dimen"
-            android:id="@+id/stopButton"
-            app:elevation="0dp"
-            android:src="@drawable/stop"
-            app:backgroundTint="#868787"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="50dp"
-            android:layout_toRightOf="@+id/playPauseButton"/>
+            android:layout_centerHorizontal="true">
 
-        <android.support.design.widget.FloatingActionButton
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="@dimen/video_player_button_dimen"
-            android:layout_height="@dimen/video_player_button_dimen"
-            android:id="@+id/playPauseButton"
-            app:elevation="0dp"
-            android:src="@drawable/pause"
-            app:backgroundTint="#868787"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"/>
+            <android.support.design.widget.FloatingActionButton
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="@dimen/video_player_button_dimen"
+                android:layout_height="@dimen/video_player_button_dimen"
+                android:id="@+id/playPauseButton"
+                app:elevation="0dp"
+                android:src="@drawable/pause"
+                app:backgroundTint="#868787"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="20dp"/>
+
+            <android.support.design.widget.FloatingActionButton
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="@dimen/video_player_button_dimen"
+                android:layout_height="@dimen/video_player_button_dimen"
+                android:id="@+id/stopButton"
+                app:elevation="0dp"
+                android:src="@drawable/stop"
+                app:backgroundTint="#868787"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/playPauseButton"
+                android:layout_marginLeft="20dp"/>
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

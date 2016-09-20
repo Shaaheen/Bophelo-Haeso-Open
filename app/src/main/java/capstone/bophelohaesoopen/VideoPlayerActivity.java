@@ -2,6 +2,7 @@ package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -68,11 +69,11 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     protected void onCreate(Bundle savedInstanceState)
     {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        screenWidth = getWindowManager().getDefaultDisplay().getWidth();
-        screenHeight = getWindowManager().getDefaultDisplay().getHeight();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
 
+        screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
         {
@@ -318,6 +319,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         {
             Log.i("BHO", "NOT PAUSED AND NOT PLAYING");
             seekBarUpdateHandler.removeCallbacks(updateSeekbar);
+            screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+            screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
             playVideo(screenWidth, screenHeight);
             playPauseButton.setImageResource(R.drawable.pause);
         }
@@ -353,6 +356,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         mediaPlayer.release();
         playing = false;
     }
+
 
     @Override
     public boolean onSupportNavigateUp()
