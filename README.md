@@ -1,6 +1,6 @@
 # Bophelo-Haeso-Open
 Haeso API Technical Documentation <br/>
-<u><b>Setting up the API</b></u> <br/>
+<h1>Setting up the API</h1>
 The API is currently fully implemented in its own package called HaesoAPI. <br/>
 
 <b>To use the API:</b>
@@ -9,7 +9,7 @@ The API is currently fully implemented in its own package called HaesoAPI. <br/>
 2)	Place the Haeso API folder in your desired Project folder <br/>
 3)	Import classes from the Haeso API eg. “import capstone.bophelohaesoopen.HaesoAPI”
 
-<u><b>Initializing API</b></u> <br/>
+<h1>Initializing API</h1> <br/>
 Before calling on the API functionality, some optional configurations can be set for the API.<br/>
 <b>App Folder configuration</b><br/>
 The folder names can be specified so the API knows what folders to save files in. <br/>
@@ -23,19 +23,22 @@ Set the app identifier prefix<br/>
 The API distinguishes related app files with a specified prefix. This prefix must be set before use of the API or else all media files on the device would be recognized as App files. <br/>
 To set the identifier prefix: <br/>
 Media.setIdentifierPrefix(identifierPrefix);<br/>
-<b>Getting specific media files from device</b><br/>
+
+<h1>Getting specific media files from device</h1><br/>
 To retrieve the files of app specific media files, the FileUtils class must be used. Use this method with the app prefix and the extension of the type of file you want to retrieve. <br/>
 ArrayList<? extends Media> getMediaCollectionFromStorage(String prefix, String extension)<br/>
 Eg:  <br/>
   videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("chw_", Video.mediaExtension); <br/>
-<b>Media Playback</b> <br/>
+  
+<h1>Media Playback</h1> <br/>
 To play media back using the API, First initialize the MediaPlayer class and then use the play media method : <br/>
 mediaPlayer = new MediaPlayer(MediaPlayerName); <br/>
 playMedia(Media mediaFile, SurfaceView mediaView, final int screenWidth, final int screenHeight) <br/>
 Eg:
 mediaPlayer = new MediaPlayer("BHO"); <br/>
 mediaPlayer.playMedia(video, videoView, width, height);  <br/>
-<b>Logging</b> <br/>
+
+<h1>Logging</h1> <br/>
 Logging in the API is done through the use of a SQLiteDatabase in the app. To start logging the database first needs to be initialized: <br/>
   databaseUtils = new DatabaseUtils(this);<br/>
 To log a specific action, create a log entry and then pass it the databaseUtils instance. <br/>
@@ -46,7 +49,8 @@ LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Main Screen", nu
         { <br/>
             DatabaseUtils.getInstance().addLog(logEntry); <br/>
         } <br/>
-<b>Bluetooth Sharing<br/> </b>
+        
+<h1>Bluetooth Sharing<br/> </h1>
 <b> Initialization<br/> </b>
 Bluetooth Sharing in the API is done mainly through event listeners. The BluetoothUtils class needs to first be initialized with the current Views context and activity instance: <br/>
 BluetoothUtils( Context context, Activity activity ) <br/>
@@ -92,7 +96,8 @@ To send Media through the BluetoothUtils after the connection is successful, the
 sendMediaFile(Media mediaFile) <br/>
 eg: <br/>
 bluetoothUtils.sendMedia(Media mediaFile); <br/>
-<b>Recording</b><br/>
+
+<h1>Recording</h1><br/>
 The Audio recorder needs to be initialized: <br/>
 audioRecorder = new AudioRecorder(); <br/>
 Then when need to record, call these methods to start:<br/>
