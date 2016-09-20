@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED"/>
     <uses-permission android:name="android.permission.CAMERA"
-        android:required="true"/>
+                     android:required="true"/>
     <uses-feature android:name="android.hardware.camera" android:required="true" />
 
     <application
@@ -21,6 +21,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -29,21 +30,41 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".AudioGalleryActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_audio_gallery">
         </activity>
+
         <activity android:name=".VideoPlayerActivity"
                   android:label="@string/title_activity_video_player">
         </activity>
+
         <activity android:name=".AudioPlayerActivity"
+                  android:screenOrientation="portrait"
                   android:label="@string/title_activity_audio_player">
         </activity>
-        <activity android:name=".LogListActivity">
-        </activity>
+
         <activity
             android:name=".PictureGalleryActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_picture_gallery">
+        </activity>
+
+        <activity
+            android:name=".AudioRecorderActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_audio_recording">
+        </activity>
+
+        <activity android:name=".PictureActivity"
+                  android:screenOrientation="portrait"
+                  android:label="@string/title_activity_picture">
+        </activity>
+
+        <activity android:name=".CameraActivity"
+                  android:screenOrientation="portrait">
         </activity>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -53,15 +74,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
 
-        <activity
-            android:name=".AudioRecorderActivity"
-            android:label="@string/title_activity_audio_recording">
-        </activity>
-        <activity android:name=".PictureActivity"
-                  android:label="@string/title_activity_picture">
-        </activity>
-        <activity android:name=".CameraActivity">
-        </activity>
+
     </application>
 
 </manifest>
