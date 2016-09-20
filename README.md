@@ -1,7 +1,7 @@
 # Bophelo-Haeso-Open
-Haeso API Technical Documentation
-Setting up the API 
-The API is currently fully implemented in its own package called HaesoAPI. 
+Haeso API Technical Documentation <br/>
+<u><b>Setting up the API</b></u> <br/>
+The API is currently fully implemented in its own package called HaesoAPI. <br/>
 
 <b>To use the API:</b>
 
@@ -9,7 +9,7 @@ The API is currently fully implemented in its own package called HaesoAPI.
 2)	Place the Haeso API folder in your desired Project folder <br/>
 3)	Import classes from the Haeso API eg. “import capstone.bophelohaesoopen.HaesoAPI”
 
-<b>Initializing API</b> <br/>
+<u><b>Initializing API</b></u> <br/>
 Before calling on the API functionality, some optional configurations can be set for the API.<br/>
 <b>App Folder configuration</b><br/>
 The folder names can be specified so the API knows what folders to save files in. <br/>
