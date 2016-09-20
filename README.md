@@ -1,5 +1,5 @@
 # Bophelo-Haeso-Open
-Haeso API Technical Documentation <br/>
+Haeso API Technical Documentation
 <h1>Setting up the API</h1>
 The API is currently fully implemented in its own package called HaesoAPI. <br/>
 
@@ -9,7 +9,7 @@ The API is currently fully implemented in its own package called HaesoAPI. <br/>
 2)	Place the Haeso API folder in your desired Project folder <br/>
 3)	Import classes from the Haeso API eg. “import capstone.bophelohaesoopen.HaesoAPI”
 
-<h1>Initializing API</h1> <br/>
+<h1>Initializing API</h1>
 Before calling on the API functionality, some optional configurations can be set for the API.<br/>
 <b>App Folder configuration</b><br/>
 The folder names can be specified so the API knows what folders to save files in. <br/>
@@ -30,7 +30,7 @@ ArrayList<? extends Media> getMediaCollectionFromStorage(String prefix, String e
 Eg:  <br/>
   videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("chw_", Video.mediaExtension); <br/>
   
-<h1>Media Playback</h1> <br/>
+<h1>Media Playback</h1>
 To play media back using the API, First initialize the MediaPlayer class and then use the play media method : <br/>
 mediaPlayer = new MediaPlayer(MediaPlayerName); <br/>
 playMedia(Media mediaFile, SurfaceView mediaView, final int screenWidth, final int screenHeight) <br/>
@@ -38,7 +38,7 @@ Eg:
 mediaPlayer = new MediaPlayer("BHO"); <br/>
 mediaPlayer.playMedia(video, videoView, width, height);  <br/>
 
-<h1>Logging</h1> <br/>
+<h1>Logging</h1> 
 Logging in the API is done through the use of a SQLiteDatabase in the app. To start logging the database first needs to be initialized: <br/>
   databaseUtils = new DatabaseUtils(this);<br/>
 To log a specific action, create a log entry and then pass it the databaseUtils instance. <br/>
@@ -50,7 +50,7 @@ LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Main Screen", nu
             DatabaseUtils.getInstance().addLog(logEntry); <br/>
         } <br/>
         
-<h1>Bluetooth Sharing<br/> </h1>
+<h1>Bluetooth Sharing</h1>
 <b> Initialization<br/> </b>
 Bluetooth Sharing in the API is done mainly through event listeners. The BluetoothUtils class needs to first be initialized with the current Views context and activity instance: <br/>
 BluetoothUtils( Context context, Activity activity ) <br/>
@@ -97,14 +97,14 @@ sendMediaFile(Media mediaFile) <br/>
 eg: <br/>
 bluetoothUtils.sendMedia(Media mediaFile); <br/>
 
-<h1>Recording</h1><br/>
+<h1>Recording</h1>
 The Audio recorder needs to be initialized: <br/>
-audioRecorder = new AudioRecorder(); <br/>
+audioRecorder = new AudioRecorder(); <br/> <br/> 
 Then when need to record, call these methods to start:<br/>
 audioRecorder.prepareForRecording();<br/>
-audioRecorder.startRecording();<br/>
-And then to stop recording:<br/>
-audioRecorder.stopRecording();<br/>
+audioRecorder.startRecording();<br/> <br/> 
+And then to stop recording:<br/> 
+audioRecorder.stopRecording();<br/> <br/> 
 It is also to be noted that duration limit may be set on the audio recorder to prevent long recordings:<br/>
 audioRecorder.setRecordingDurationLimit(10000);
 
