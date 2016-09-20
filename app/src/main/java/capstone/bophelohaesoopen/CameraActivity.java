@@ -126,7 +126,7 @@ public class CameraActivity extends AppCompatActivity
             Log.i("APP", "Picture callback called");
 
             // An image file name will be created automatically
-            fileUtils.saveImage(bytes);
+            fileUtils.saveMedia(bytes, Media.MediaType.IMAGE, "");
 
         }
     };

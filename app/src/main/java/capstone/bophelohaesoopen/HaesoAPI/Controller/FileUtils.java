@@ -121,21 +121,11 @@ public class FileUtils
         System.out.println("BHO : DATE TIME NOW = "+dateTimeNow);
         File mediaStorageDirectory = getAppDirectory(
                 Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
-        if(!mediaStorageDirectory.exists())
-        {
-            if(!mediaStorageDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
+        if (mediaStorageDirectory == null) return null;
+
         File audioDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appRecordingsFolder);
-        if(!audioDirectory.exists())
-        {
-            if(!audioDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
+        if (audioDirectory == null) return null;
+
         return (audioDirectory.getAbsolutePath() + "/" + Media.identifierPrefix +"Report_" + dateTimeNow + ".3gp");
     }
 
@@ -143,6 +133,8 @@ public class FileUtils
     {
         mediaType = media;
         outputFileName = outFileName;
+
+        // Performs save operation asynchronously
         new SaveAsync().execute(toByteArray(data));
     }
 
@@ -212,12 +204,7 @@ public class FileUtils
     public void writeOut(byte[] bytes)
     {
         File outputFile = null;
-        if(mediaType == Media.MediaType.IMAGE)
-        {
-            Log.i("BHO", "Image file to be saved");
-            outputFile = getOutputImageFile();
-        }
-        else if(mediaType == Media.MediaType.VIDEO)
+        if(mediaType == Media.MediaType.VIDEO)
         {
             Log.i("BHO", "Video file to be saved");
             outputFile = getOutputVideoFile();
@@ -254,25 +241,11 @@ public class FileUtils
     {
         File mediaStorageDirectory = getAppDirectory(
                 Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
-        if(!mediaStorageDirectory.exists())
-        {
-            if(!mediaStorageDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
-//        if (mediaStorageDirectory == null) return null;
+        if (mediaStorageDirectory == null) return null;
 
         // Create the image directory if it does not exist
         File imageDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appImageFolder);
-        if(!imageDirectory.exists())
-        {
-            if(!imageDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
-//        if (imageDirectory == null) return null;
+        if (imageDirectory == null) return null;
 
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -287,24 +260,10 @@ public class FileUtils
     {
         File mediaStorageDirectory = getAppDirectory(
                 Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
-        if(!mediaStorageDirectory.exists())
-        {
-            if(!mediaStorageDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
-//        if (mediaStorageDirectory == null) return null;
+        if (mediaStorageDirectory == null) return null;
 
         File videoDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appVideosFolder);
-        if(!videoDirectory.exists())
-        {
-            if(!videoDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
-//        if (videoDirectory == null) return null;
+        if (videoDirectory == null) return null;
 
         File videoFile = new File(videoDirectory.getPath() + File.separator + outputFileName);
 
@@ -334,19 +293,10 @@ public class FileUtils
 
     @Nullable
     private static File getAppDirectory(String basePath, String directoryName) {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
 
         File mediaStorageDirectory = new File(basePath, directoryName);
+        if (mediaStorageDirectory == null) return null;
 
-        // Create the main app storage directory if it does not exist
-        if (!mediaStorageDirectory.exists())
-        {
-            if (!mediaStorageDirectory.mkdirs())
-            {
-                return null;
-            }
-        }
         return mediaStorageDirectory;
     }
 
@@ -357,7 +307,15 @@ public class FileUtils
         @Override
         protected Long doInBackground(Byte... bytes)
         {
-            writeOut(toPrimitiveByteArray(bytes));
+            if(mediaType == Media.MediaType.IMAGE)
+            {
+                saveImage(toPrimitiveByteArray(bytes));
+            }
+            else
+            {
+                writeOut(toPrimitiveByteArray(bytes));
+            }
+
             return null;
         }
     }
