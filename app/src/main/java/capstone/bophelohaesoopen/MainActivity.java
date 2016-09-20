@@ -35,7 +35,6 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
 {
     //region View declarations
     RelativeLayout mainMenu;
@@ -416,50 +415,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
-            // Close navigation drawer
-            drawer.closeDrawer(GravityCompat.START);
-        } else
-        {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item)
-    {
-        // Handle navigation view item clicks
-        int id = item.getItemId();
-        if (id == R.id.nav_view_logs)
-        {
-            Toast.makeText(this, "Opens activity to show list of logs", Toast.LENGTH_SHORT).show();
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        super.onBackPressed();
     }
 
     @Override
