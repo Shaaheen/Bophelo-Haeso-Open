@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            String title = getResources().getString(R.string.select_video);
+            String title = getResources().getString(R.string.title_select_video);
             setTitle(title);
             if (!menuHidden)
             {

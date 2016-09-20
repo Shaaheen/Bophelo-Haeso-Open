@@ -62,22 +62,6 @@
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp">
 
-                        <android.support.v7.widget.AppCompatButton
-                            android:layout_width="@dimen/menu_button_width"
-                            android:layout_height="@dimen/menu_button_height"
-                            android:text="Record Audio"
-                            android:id="@+id/recordAudioButton1"
-                            android:layout_marginTop="5dp"
-                            android:visibility="gone"/>
-
-                        <android.support.v7.widget.AppCompatButton
-                            android:layout_width="@dimen/menu_button_width"
-                            android:layout_height="@dimen/menu_button_height"
-                            android:text="Take picture"
-                            android:id="@+id/takePictureButton1"
-                            android:layout_marginTop="@dimen/main_menu_button_top_margin"
-                            android:visibility="gone"/>
-
 
                         <android.support.v7.widget.CardView
                             android:layout_width="@dimen/menu_button_width"
@@ -111,7 +95,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Record"
+                                        android:text="@string/record_button_text"
                                         android:id="@+id/textView3"/>
                                 </LinearLayout>
                             </RelativeLayout>
@@ -150,7 +134,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Take\npicture"
+                                        android:text="@string/picture_button_text"
                                         android:id="@+id/textView4"/>
                                 </LinearLayout>
                             </RelativeLayout>
@@ -200,7 +184,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Recordings"
+                                        android:text="@string/recordings_button_text"
                                         android:id="@+id/textView5"/>
                                 </LinearLayout>
                             </RelativeLayout>
@@ -240,28 +224,13 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Pictures"
+                                        android:text="@string/pictures_button_text"
                                         android:id="@+id/textView6"/>
                                 </LinearLayout>
                             </RelativeLayout>
                             </android.support.v7.widget.CardView>
 
 
-                        <android.support.v7.widget.AppCompatButton
-                            android:layout_width="@dimen/menu_button_width"
-                            android:layout_height="@dimen/menu_button_height"
-                            android:id="@+id/recordingsButton1"
-                            android:text="Audio files"
-                            android:layout_marginTop="@dimen/main_menu_button_top_margin"
-                            android:visibility="gone"/>
-
-                        <android.support.v7.widget.AppCompatButton
-                            android:layout_width="@dimen/menu_button_width"
-                            android:layout_height="@dimen/menu_button_height"
-                            android:text="Pictures"
-                            android:id="@+id/picturesButton1"
-                            android:layout_marginTop="@dimen/main_menu_button_top_margin"
-                            android:visibility="gone"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -302,7 +271,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Share"
+                                android:text="@string/share_button_share_text"
                                 android:id="@+id/shareText"
                                 android:layout_centerVertical="true"
                                 android:layout_toRightOf="@+id/shareIcon"/>

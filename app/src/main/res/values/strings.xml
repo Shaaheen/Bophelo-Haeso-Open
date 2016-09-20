@@ -6,9 +6,13 @@
     <string name="identifier_prefix">chw_</string>
     <string name="receiving_dialog_title">Receiving file</string>
     <string name="sending_dialog_title">Sending file</string>
-    <string name="select_video">Select video</string>
     <string name="share_button_share_text">Share</string>
-    <string name="share_button_cancel_text">Share</string>
+    <string name="share_button_cancel_text">Cancel</string>
+    <string name="picture_button_text">Take\nPicture</string>
+    <string name="record_button_text">Record</string>
+    <string name="recordings_button_text">Recordings</string>
+    <string name="pictures_button_text">Pictures</string>
+    <string name="title_select_video">Select video</string>
 
     <!--Picture Activity-->
     <string name="title_activity_picture">Image Viewer</string>
@@ -26,12 +30,13 @@
     <string name="title_activity_picture_gallery">Pictures</string>
 
     <!--Audio Gallery Activity-->
-    <string name="title_activity_audio_gallery">Audio files</string>
+    <string name="title_activity_audio_gallery">Recordings</string>
+    <string name="title_select_recording">Select recording</string>
 
     <!--Audio Recorder activity-->
     <string name="recording_indicator">Recording indicator</string>
     <string name="thumbnail">Thumbnail</string>
-    <string name="recording_duration_limit_minutes">1</string>
+    <string name="recording_duration_limit_minutes">5</string>
     <string name="title_activity_audio_recording">Audio Recorder</string>
     <string name="recording_duration_limit_message">The recording will now be saved.</string>
     <string name="recording_duration_limit_title">Recording limit reached</string>
@@ -42,7 +47,6 @@
     <string name="images_folder">Images</string>
     <string name="videos_folder">Videos</string>
     <string name="recordings_folder">Recordings</string>
-
 
     <string-array name="string_array_example">
         <item>15</item>
