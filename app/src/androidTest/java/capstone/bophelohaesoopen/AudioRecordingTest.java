@@ -21,11 +21,11 @@ import static junit.framework.Assert.assertNull;
 
 /**
  * Created by Jacob Ntesang on 9/2/2016.
- * This class unit tests the media production.
+ * This class unit tests the audio production.
  */
 
 @RunWith(AndroidJUnit4.class)
-public class MediaTest {
+public class AudioRecordingTest {
 
     AudioRecorder myAudio;
     Media media;
@@ -35,7 +35,7 @@ public class MediaTest {
     @Before
     public void setUp() {
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/chw_workout.3gp";
-        name =  "video";
+        name =  "audio";
         myAudio =  new AudioRecorder(outputFile);
         media = new Media(name, outputFile);
         myAudio.prepareForRecording();
