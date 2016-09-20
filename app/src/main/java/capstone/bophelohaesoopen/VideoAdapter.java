@@ -19,7 +19,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
     ArrayList<Video> videoList;
     MainActivity mainActivity;
     RecyclerView recView;
-    VideoViewHolder currentHolder;
 
     int selectedPosition = 0;
 
@@ -47,7 +46,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_item_layout, parent, false);
         VideoViewHolder viewHolder = new VideoViewHolder(itemView);
-        currentHolder = viewHolder;
 
         return viewHolder;
     }
@@ -81,7 +79,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoViewHolder>
             holder.selectionOverlay.setVisibility(View.INVISIBLE);
         }
 
-        final VideoViewHolder tempHolder = holder;
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
             @Override

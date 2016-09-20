@@ -6,12 +6,9 @@
     <string name="identifier_prefix">chw_</string>
     <string name="receiving_dialog_title">Receiving file</string>
     <string name="sending_dialog_title">Sending file</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="select_video">Select video</string>
+    <string name="share_button_share_text">Share</string>
+    <string name="share_button_cancel_text">Share</string>
 
     <!--Picture Activity-->
     <string name="title_activity_picture">Image Viewer</string>
@@ -39,8 +36,6 @@
     <string name="recording_duration_limit_message">The recording will now be saved.</string>
     <string name="recording_duration_limit_title">Recording limit reached</string>
     <string name="recording_duration_limit_positive_action">OK</string>
-
-    <!--Log list Activity-->
 
     <!--General app configuration-->
     <string name="root_folder">@string/app_name</string>

@@ -125,7 +125,7 @@ public class FileUtils
         {
             if(!mediaStorageDirectory.mkdirs())
             {
-
+                return null;
             }
         }
         File audioDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appRecordingsFolder);
@@ -133,7 +133,7 @@ public class FileUtils
         {
             if(!audioDirectory.mkdirs())
             {
-
+                return null;
             }
         }
         return (audioDirectory.getAbsolutePath() + "/" + Media.identifierPrefix +"Report_" + dateTimeNow + ".3gp");
@@ -258,7 +258,7 @@ public class FileUtils
         {
             if(!mediaStorageDirectory.mkdirs())
             {
-
+                return null;
             }
         }
 //        if (mediaStorageDirectory == null) return null;
@@ -291,7 +291,7 @@ public class FileUtils
         {
             if(!mediaStorageDirectory.mkdirs())
             {
-
+                return null;
             }
         }
 //        if (mediaStorageDirectory == null) return null;

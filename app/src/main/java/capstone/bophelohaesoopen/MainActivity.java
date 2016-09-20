@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity
     ImageView menuToggle;
     ImageView shareIcon;
     TextView shareText;
-    NavigationView navigationView;
-    DrawerLayout drawer;
 
     TextView noMediaText;
     RelativeLayout videosLoadingScreen;
@@ -75,7 +73,6 @@ public class MainActivity extends AppCompatActivity
 
     // region Primitives declarations
     boolean menuHidden = false;
-    boolean firstRun = true;
     private static int MENU_ANIMATION_DURATION = 300;
     private static int CHECK_DURATION = 1000;
     public boolean inSelectionMode = false;
@@ -93,13 +90,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        long time = System.currentTimeMillis();
 
         setContentView(R.layout.activity_main);
 
         // Initialize UI elements
         initialize();
-
 
         mediaLoadService.start();
         final Handler handler = new Handler();
@@ -111,12 +106,19 @@ public class MainActivity extends AppCompatActivity
 
                 if (mediaLoadService.mediaLoaded)
                 {
-//                    System.out.println("videos loaded!");
+                    // Get all videos from storage
                     videoList = mediaLoadService.getVideoList();
+
+                    // Get videos ordered  according to most watched
+                    ArrayList<Video> orderedList = getOrderedVideos(videoList);
+
+                    // Reset videoList
+                    videoList = orderedList;
+
                     videosLoadingScreen.setVisibility(View.INVISIBLE);
                     if(!videoList.isEmpty())
                     {
-                        videoAdapter.setVideos(videoList);
+                        videoAdapter.setVideos(orderedList);
                         videoAdapter.notifyDataSetChanged();
                     }
                     else
@@ -134,10 +136,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
         handler.postDelayed(runnable, CHECK_DURATION);
-        long endtime = System.currentTimeMillis();
-        System.out.println("Start up time = "+((endtime - time)/1000));
-
-
     }
 
 
@@ -172,16 +170,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
         noMediaText = (TextView)findViewById(R.id.noMediaText);
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         mainMenu = (RelativeLayout) findViewById(R.id.mainMenu);
         menuToggleBar = (RelativeLayout) findViewById(R.id.menuToggleBar);
@@ -282,8 +271,6 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-//        Toast.makeText(this, "Opens camera to take picture.", Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(this, CameraActivity.class);
         this.startActivity(intent);
     }
@@ -309,7 +296,8 @@ public class MainActivity extends AppCompatActivity
             setTitle(appName);
 
             shareIcon.setImageResource(R.drawable.share);
-            shareText.setText("Share");
+            String buttonText = getResources().getString(R.string.share_button_share_text);
+            shareText.setText(buttonText);
             inSelectionMode = false;
 
             // Hide video item tick overlay
@@ -318,13 +306,15 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            setTitle("Select video");
+            String title = getResources().getString(R.string.select_video);
+            setTitle(title);
             if (!menuHidden)
             {
                 hideMenu();
             }
             shareIcon.setImageResource(R.drawable.cancel);
-            shareText.setText("Cancel");
+            String buttonText = getResources().getString(R.string.share_button_cancel_text);
+            shareText.setText(buttonText);
             inSelectionMode = true;
         }
     }
@@ -416,7 +406,7 @@ public class MainActivity extends AppCompatActivity
 
     public void shareVideo(int position)
     {
-        videoToSend = videoList.get(position);
+        videoToSend = videoAdapter.videoList.get(position);
 
         mediaShareUserInterface.sendMedia(videoToSend);
     }
@@ -510,7 +500,7 @@ public class MainActivity extends AppCompatActivity
      */
     public void playVideo(int position)
     {
-        Video video = videoList.get(position);
+        Video video = videoAdapter.videoList.get(position);
         Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(VideoPlayerActivity.VIDEO_NAME, video.getName());
         intent.putExtra(VideoPlayerActivity.VIDEO_FILE_PATH, video.getFilePath());
