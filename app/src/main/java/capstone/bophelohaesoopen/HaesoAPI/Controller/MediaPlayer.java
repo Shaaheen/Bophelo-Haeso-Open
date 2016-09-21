@@ -173,6 +173,11 @@ public class MediaPlayer extends android.media.MediaPlayer{
         return prepared;
     }
 
+    public boolean mediaPlayerNull()
+    {
+        return (mediaPlayer == null);
+    }
+
 
 }
 

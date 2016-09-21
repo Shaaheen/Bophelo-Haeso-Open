@@ -62,7 +62,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     Handler handler;
     Runnable runnable;
-    Runnable updateSeekbar;
+    Runnable seekbarUpdater;
     Handler seekBarUpdateHandler;
 
     @Override
@@ -117,7 +117,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
 
         seekBarUpdateHandler = new Handler();
-        updateSeekbar = new Runnable()
+        seekbarUpdater = new Runnable()
         {
             @Override
             public void run()
@@ -145,8 +145,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
             }
         };
-        seekBarUpdateHandler.postDelayed(updateSeekbar, 0);
-
+        seekBarUpdateHandler.postDelayed(seekbarUpdater, 0);
     }
 
     private void initializeViews()
@@ -165,9 +164,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             {
                 if(fromUser)
                 {
-                    seekBarUpdateHandler.removeCallbacks(updateSeekbar);
+                    seekBarUpdateHandler.removeCallbacks(seekbarUpdater);
                     mediaPlayer.seekToPosition(progress);
-                    seekBarUpdateHandler.postDelayed(updateSeekbar, 0);
+                    seekBarUpdateHandler.postDelayed(seekbarUpdater, 0);
                 }
 
             }
@@ -204,20 +203,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         });
     }
 
-    private void playVideo(int width, int height)
-    {
-        playing = true;
-        paused = false;
-        try
-        {
-            mediaPlayer.playVideo(video, videoView, width, height); //Plays video on given view
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     // region SurfaceView overrides
     /**
      * Launches when video display is done loading
@@ -242,6 +227,49 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     }
     //endregion
+
+    // region Click Handlers
+
+    private void stopButtonClick()
+    {
+        playing = false;
+        stopVideo();
+
+        // Close Activity
+        finish();
+    }
+
+    private void playPauseButtonClick()
+    {
+        if(playing && !paused)
+        {
+            Log.i("BHO", "PLAYING AND NOT PAUSED");
+            seekBarUpdateHandler.removeCallbacks(seekbarUpdater);
+            pauseVideo();
+            playPauseButton.setImageResource(R.drawable.play);
+        }
+        else if(paused && playing)
+        {
+            Log.i("BHO", "PAUSED AND PLAYING");
+            resumeVideo();
+            seekBarUpdateHandler.postDelayed(seekbarUpdater, 0);
+            playPauseButton.setImageResource(R.drawable.pause);
+        }
+        else if(!paused && !playing)
+        {
+            Log.i("BHO", "NOT PAUSED AND NOT PLAYING");
+            seekBarUpdateHandler.removeCallbacks(seekbarUpdater);
+            screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+            screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+            playVideo(screenWidth, screenHeight);
+            playPauseButton.setImageResource(R.drawable.pause);
+        }
+
+    }
+
+    //endregion
+
+    //region Utility methods
 
     private void hideControls()
     {
@@ -283,48 +311,22 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         videoControlsVisible = true;
     }
 
-    @Override
-    public void onBackPressed()
+    // endregion
+
+    // region Video operations
+
+    private void playVideo(int width, int height)
     {
-        stopVideo();
-        super.onBackPressed();
-    }
-
-    private void stopButtonClick()
-    {
-        playing = false;
-        stopVideo();
-
-        // Close Activity
-        finish();
-    }
-
-    private void playPauseButtonClick()
-    {
-        if(playing && !paused)
+        playing = true;
+        paused = false;
+        try
         {
-            Log.i("BHO", "PLAYING AND NOT PAUSED");
-            seekBarUpdateHandler.removeCallbacks(updateSeekbar);
-            pauseVideo();
-            playPauseButton.setImageResource(R.drawable.play);
+            mediaPlayer.playVideo(video, videoView, width, height); //Plays video on given view
         }
-        else if(paused && playing)
+        catch (IOException e)
         {
-            Log.i("BHO", "PAUSED AND PLAYING");
-            resumeVideo();
-            seekBarUpdateHandler.postDelayed(updateSeekbar, 0);
-            playPauseButton.setImageResource(R.drawable.pause);
+            e.printStackTrace();
         }
-        else if(!paused && !playing)
-        {
-            Log.i("BHO", "NOT PAUSED AND NOT PLAYING");
-            seekBarUpdateHandler.removeCallbacks(updateSeekbar);
-            screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-            screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-            playVideo(screenWidth, screenHeight);
-            playPauseButton.setImageResource(R.drawable.pause);
-        }
-
     }
 
     private void pauseVideo()
@@ -351,12 +353,52 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     private void stopVideo()
     {
-        seekBarUpdateHandler.removeCallbacks(updateSeekbar);
+        seekBarUpdateHandler.removeCallbacks(seekbarUpdater);
         mediaPlayer.stopMedia();
         mediaPlayer.release();
         playing = false;
     }
 
+    //endregion
+
+    //region Activity overrides
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        if(!mediaPlayer.mediaPlayerNull())
+        {
+            pauseVideo();
+        }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if(!mediaPlayer.mediaPlayerNull())
+        {
+            resumeVideo();
+        }
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        if(!mediaPlayer.mediaPlayerNull())
+        {
+            stopVideo();
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        stopVideo();
+    }
 
     @Override
     public boolean onSupportNavigateUp()
@@ -364,6 +406,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         onBackPressed();
         return true;
     }
+    // endregion
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent)

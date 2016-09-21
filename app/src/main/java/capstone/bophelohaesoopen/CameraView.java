@@ -4,6 +4,7 @@ package capstone.bophelohaesoopen;
 import android.content.Context;
 
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -47,6 +48,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder)
     {
+        Log.i("BHO", "Surface created");
         try
         {
             camera.setDisplayOrientation(90);
@@ -68,6 +70,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2)
     {
+        Log.i("BHO", "Surface changed");
         if(holder.getSurface() == null)
         {
             return;
@@ -101,7 +104,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder)
     {
-        camera.release();
+        Log.i("BHO", "Surface destroyed");
     }
 
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h)

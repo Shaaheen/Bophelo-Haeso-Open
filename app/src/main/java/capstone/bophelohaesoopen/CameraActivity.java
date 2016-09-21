@@ -101,6 +101,7 @@ public class CameraActivity extends AppCompatActivity
     private void setUpCameraView()
     {
         camera = getCameraInstance();
+        cameraView = null;
         cameraView = new CameraView(this, camera);
 
         FrameLayout preview = (FrameLayout)findViewById(R.id.camera_preview);
@@ -189,11 +190,17 @@ public class CameraActivity extends AppCompatActivity
 
     //region Activity overrides
 
+    @Override
+    protected void onStop()
+    {
+        Log.i("BHO", "ON STOP");
+        super.onStop();
+    }
+
 
     @Override
     public void onBackPressed()
     {
-        camera.release();
         finish();
         super.onBackPressed();
     }
@@ -201,19 +208,8 @@ public class CameraActivity extends AppCompatActivity
     @Override
     protected void onDestroy()
     {
+        Log.i("BHO", "ON DESTROY");
         super.onDestroy();
-    }
-
-    @Override
-    protected void onRestart()
-    {
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
     }
 
     @Override
@@ -236,25 +232,31 @@ public class CameraActivity extends AppCompatActivity
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
 
-        switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
-            case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
+        switch (rotation)
+        {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
         }
 
         int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
+        {
             result = (info.orientation + degrees) % 360;
             result = (360 - result) % 360;  // compensate the mirror
-        } else {  // back-facing
+        } else
+        {  // back-facing
             result = (info.orientation - degrees + 360) % 360;
         }
         camera.setDisplayOrientation(result);
     }
-
-
-
-
-
 }
