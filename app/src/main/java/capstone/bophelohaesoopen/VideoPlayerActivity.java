@@ -2,6 +2,7 @@ package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -44,6 +45,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     RelativeLayout videoControls;
 
+    float videoControlsY;
+
     boolean videoControlsVisible = true;
     private static int ANIMATION_DURATION = 600;
     private static int CONTROLS_VISIBLE_DURATION = 4000;
@@ -68,6 +71,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.i("BHO", "ON CREATE");
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
@@ -91,7 +95,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         vidName = intent.getStringExtra(VIDEO_NAME); // Uses these keys to get values
         vidPath = intent.getStringExtra(VIDEO_FILE_PATH);
 
-        video = new Video( vidName, vidPath );
+        video = new Video(vidName, vidPath);
         paused = false;
 
         mediaPlayer = new MediaPlayer("BHO");
@@ -115,14 +119,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         };
         handler.postDelayed(runnable, CONTROLS_VISIBLE_DURATION);
 
-
         seekBarUpdateHandler = new Handler();
         seekbarUpdater = new Runnable()
         {
             @Override
             public void run()
             {
-                Log.i("BHO", "Update runnable called");
                 if(mediaPlayer.isPrepared())
                 {
                     isPlaying = mediaPlayer.isMediaPlaying();
@@ -212,7 +214,15 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     public void surfaceCreated(SurfaceHolder holder)
     {
-        playVideo(screenHeight, screenWidth);
+        if(paused)
+        {
+            resumeVideo();
+        }
+        else
+        {
+            playVideo(screenHeight, screenWidth);
+        }
+        videoControlsY = videoControls.getY();
     }
 
     @Override
@@ -264,7 +274,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             playVideo(screenWidth, screenHeight);
             playPauseButton.setImageResource(R.drawable.pause);
         }
-
     }
 
     //endregion
@@ -364,8 +373,32 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     //region Activity overrides
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        Log.i("BHO", "ON CONFIGURATION CHANGED");
+        super.onConfigurationChanged(newConfig);
+        videoControls.invalidate();
+
+//        recreate();
+
+//        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+//        {
+//            videoControls.setY(videoControlsY);
+//        }
+
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        Log.i("BHO", "ON RESTART");
+        super.onRestart();
+    }
+
+    @Override
     protected void onPause()
     {
+        Log.i("BHO", "ON PAUSE");
         super.onPause();
         if(!mediaPlayer.mediaPlayerNull())
         {
@@ -376,6 +409,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     protected void onResume()
     {
+        Log.i("BHO", "ON RESUME");
         super.onResume();
         if(!mediaPlayer.mediaPlayerNull())
         {
@@ -386,6 +420,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     protected void onStop()
     {
+        Log.i("BHO", "ON STOP");
         super.onStop();
         if(!mediaPlayer.mediaPlayerNull())
         {
