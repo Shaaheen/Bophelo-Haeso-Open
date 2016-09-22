@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity
 
         String identifierPrefix = getResources().getString(R.string.identifier_prefix);
         Media.setIdentifierPrefix(identifierPrefix);
+        FileUtils.setFolderNames(appRootFolder,appVideosFolder,appRecordingsFolder,appImageFolder);
         fileUtils = new FileUtils(this);
 
         mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
@@ -466,7 +467,13 @@ public class MainActivity extends AppCompatActivity
 
     private ArrayList<Video> getOrderedVideos(ArrayList<Video> unordered)
     {
+      // List of ordered most watched videos
         ArrayList<Video> ordered = new ArrayList<>();
+
+        // List of videos to  be removed from the unordered list since they will be added to the ordered list
+        ArrayList<Video> tobeRemoved = new ArrayList<>();
+
+        ArrayList<Video> unorderedTemp= new ArrayList<>();
 
         // Using a TreeMap to obtain the map objects sorted according to their values
         TreeMap<String, Integer> playFrequencies = databaseUtils.getMostPlayedVideos();
@@ -485,7 +492,7 @@ public class MainActivity extends AppCompatActivity
                     if(name.equals(video.getFileName()))
                     {
                         ordered.add(video);
-                        unordered.remove(video);
+                        tobeRemoved.add(video);
                     }
                 }
             }
@@ -496,6 +503,29 @@ public class MainActivity extends AppCompatActivity
             count++;
         }
 
+        // Exclude videos to be removed from unordered list
+        for(Video v : unordered)
+        {
+            boolean found = false;
+            for(Video video : tobeRemoved)
+            {
+                if(video.equals(v))
+                {
+                    found = true;
+                }
+            }
+
+            if(!found)
+            {
+                unorderedTemp.add(v);
+            }
+        }
+
+        unordered.clear;
+        unordered = unorderedTemp;
+        unorderedTemp = null;
+
+        // Generate tree of alphabetically ordered video file names
         TreeSet<String> alphabeticallyOrdered = new TreeSet<>();
         for(Video video : unordered)
         {

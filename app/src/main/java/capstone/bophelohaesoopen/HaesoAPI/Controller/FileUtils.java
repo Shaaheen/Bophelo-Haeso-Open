@@ -24,7 +24,6 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
-import capstone.bophelohaesoopen.MainActivity;
 import capstone.bophelohaesoopen.R;
 
 public class FileUtils
@@ -34,6 +33,12 @@ public class FileUtils
     Media.MediaType mediaType;
     String outputFileName;
 
+    //Default values set
+    private static String appRootFolder = "HaesoAPI";
+    private static String appRecordingsFolder = "Recordings";
+    private static String appImageFolder = "Images";
+    private static String appVideosFolder = "Videos";
+
     public static String LOG_FILE_NAME = "UserLog.csv";
 
     public FileUtils(Activity activityGiven)
@@ -42,6 +47,13 @@ public class FileUtils
     }
 
     public FileUtils() {}
+
+    public static void setFolderNames(String appRoot, String appVideo, String appRecording, String appImage){
+          appRootFolder = appRoot;
+          appRecordingsFolder = appRecording;
+          appVideosFolder = appVideo;
+          appRecordingsFolder = appRecording;
+      }
 
     /**
      * Scans device file directory for media files and creates an array of Media objects from the videos found
@@ -120,10 +132,10 @@ public class FileUtils
         String dateTimeNow =  dateFormat.format(new Date());
         System.out.println("BHO : DATE TIME NOW = "+dateTimeNow);
         File mediaStorageDirectory = getAppDirectory(
-                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+                Environment.getExternalStorageDirectory().getAbsolutePath() , appRootFolder);
         if (mediaStorageDirectory == null) return null;
 
-        File audioDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appRecordingsFolder);
+        File audioDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), appRecordingsFolder);
         if (audioDirectory == null) return null;
 
         return (audioDirectory.getAbsolutePath() + "/" + Media.identifierPrefix +"Report_" + dateTimeNow + ".3gp");
@@ -240,11 +252,11 @@ public class FileUtils
     public File getOutputImageFile()
     {
         File mediaStorageDirectory = getAppDirectory(
-                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+                Environment.getExternalStorageDirectory().getAbsolutePath() , appRootFolder);
         if (mediaStorageDirectory == null) return null;
 
         // Create the image directory if it does not exist
-        File imageDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appImageFolder);
+        File imageDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), appImageFolder);
         if (imageDirectory == null) return null;
 
         // Create an image file name
@@ -259,10 +271,10 @@ public class FileUtils
     private File getOutputVideoFile()
     {
         File mediaStorageDirectory = getAppDirectory(
-                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+                Environment.getExternalStorageDirectory().getAbsolutePath() , appRootFolder);
         if (mediaStorageDirectory == null) return null;
 
-        File videoDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), MainActivity.appVideosFolder);
+        File videoDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), appVideosFolder);
         if (videoDirectory == null) return null;
 
         File videoFile = new File(videoDirectory.getPath() + File.separator + outputFileName);
@@ -272,9 +284,9 @@ public class FileUtils
 
     public static void writeToLogFile(List<LogEntry> logEntriesToWrite){
         Log.v("DB",Environment.getExternalStorageDirectory().getAbsolutePath());
-        Log.v("DB",MainActivity.appRootFolder);
+        Log.v("DB",appRootFolder);
         File mediaStorageDirectory = getAppDirectory(
-                Environment.getExternalStorageDirectory().getAbsolutePath() , MainActivity.appRootFolder);
+                Environment.getExternalStorageDirectory().getAbsolutePath() , appRootFolder);
         if (mediaStorageDirectory == null) return ;
 
         File logFile = new File(mediaStorageDirectory.getPath() + File.separator + LOG_FILE_NAME);
