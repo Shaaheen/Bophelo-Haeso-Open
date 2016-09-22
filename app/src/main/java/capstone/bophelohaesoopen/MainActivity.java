@@ -520,7 +520,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        unordered.clear;
+        unordered.clear();
         unordered = unorderedTemp;
         unorderedTemp = null;
 

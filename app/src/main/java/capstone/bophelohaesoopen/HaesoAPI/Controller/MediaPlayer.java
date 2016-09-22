@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
-import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
  * Created by Shaaheen on 8/8/2016.
