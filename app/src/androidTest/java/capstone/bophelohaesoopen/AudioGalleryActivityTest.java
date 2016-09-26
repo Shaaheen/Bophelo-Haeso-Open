@@ -23,7 +23,7 @@ import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by Jacob Ntesang on 9/16/2016.
- * This class will test the start of the AudioGalleryActivity by the MainActivity using recordings button.
+ * This class will test the start of the AudioGalleryActivity by the MainActivity using recordings_black button.
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -56,7 +56,7 @@ public class AudioGalleryActivityTest {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // click recordings button and open audioGalleryActivity.
+                // click recordings_black button and open audioGalleryActivity.
                 recordingsButton.performClick();
             }
         });

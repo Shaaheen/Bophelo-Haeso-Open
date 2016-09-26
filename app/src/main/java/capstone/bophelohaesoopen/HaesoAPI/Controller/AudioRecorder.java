@@ -10,7 +10,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 /**
  * Created by Shaaheen on 8/8/2016.
  * Implemented by Jacob on 12/8/2016.
- * A class that will make audio recordings for our Haeso app.
+ * A class that will make audio recordings_black for our Haeso app.
  */
 public class AudioRecorder {
 
@@ -27,7 +27,7 @@ public class AudioRecorder {
     }
 
     /**
-     *Prepare the application for recording.
+     *Prepare the application for recording_black.
      */
     public void prepareForRecording() {
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -58,7 +58,7 @@ public class AudioRecorder {
     }
 
     /**
-     * Prepare the audioRecorder and start recording
+     * Prepare the audioRecorder and start recording_black
      * @throws IOException
      */
     public void startRecording() throws IOException {
@@ -67,13 +67,13 @@ public class AudioRecorder {
 
         //Log playing of video
         if ( DatabaseUtils.isDatabaseSetup() ){
-            LogEntry logEntry = new LogEntry(LogEntry.LogType.RECORDING,"Started recording");
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.RECORDING,"Started recording_black");
             DatabaseUtils.getInstance().addLog(logEntry);
         }
     }
 
     /**
-     * Stop recording and release the audio Recorder instance.
+     * Stop recording_black and release the audio Recorder instance.
      */
     public void stopRecording() {
         myAudioRecorder.stop();
@@ -82,7 +82,7 @@ public class AudioRecorder {
 
         //Log playing of audio
         if ( DatabaseUtils.isDatabaseSetup() ){
-            LogEntry logEntry = new LogEntry(LogEntry.LogType.RECORDING,"Stopped recording");
+            LogEntry logEntry = new LogEntry(LogEntry.LogType.RECORDING,"Stopped recording_black");
             DatabaseUtils.getInstance().addLog(logEntry);
         }
 

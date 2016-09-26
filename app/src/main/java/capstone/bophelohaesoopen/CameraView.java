@@ -62,7 +62,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback
         }
         catch(IOException e)
         {
-            System.out.println("Error setting camera preview : "+e.getMessage());
+            System.out.println("Error setting camera_black preview : "+e.getMessage());
         }
 
     }
@@ -97,7 +97,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback
         }
         catch(Exception e)
         {
-            System.out.println("Error setting camera preview : "+e.getMessage());
+            System.out.println("Error setting camera_black preview : "+e.getMessage());
         }
     }
 

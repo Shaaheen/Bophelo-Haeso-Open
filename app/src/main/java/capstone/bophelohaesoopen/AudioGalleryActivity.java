@@ -21,7 +21,6 @@ import java.util.ArrayList;
 //import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
-import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
  * Activity where recorded audio files are listed / shown
@@ -78,7 +77,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
                 if (mediaLoadService.mediaLoaded)
                 {
-//                    System.out.println("recordings loaded!");
+//                    System.out.println("recordings_black loaded!");
                     audioList = mediaLoadService.getAudioList();
                     audioLoadingScreen.setVisibility(View.INVISIBLE);
                     if(!audioList.isEmpty())
@@ -146,7 +145,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
             setTitle(appName);
 
-            shareIcon.setImageResource(R.drawable.share);
+            shareIcon.setImageResource(R.drawable.share_black);
             shareText.setText("Share");
             inSelectionMode = false;
 
@@ -156,8 +155,8 @@ public class AudioGalleryActivity extends AppCompatActivity
         }
         else
         {
-            setTitle("Select recording");
-            shareIcon.setImageResource(R.drawable.cancel);
+            setTitle("Select recording_black");
+            shareIcon.setImageResource(R.drawable.cancel_black);
             shareText.setText("Cancel");
             inSelectionMode = true;
         }

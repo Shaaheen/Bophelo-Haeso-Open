@@ -40,7 +40,7 @@ public class PictureGalleryActivityTest {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // click recordings button and open audioGalleryActivity.
+                // click recordings_black button and open audioGalleryActivity.
                 picturesButton.performClick();
             }
         });

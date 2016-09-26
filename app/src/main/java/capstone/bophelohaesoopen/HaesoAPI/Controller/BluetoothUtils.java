@@ -270,7 +270,7 @@ public class BluetoothUtils {
                 }
                 else{
                     //Initial message received indicates the file size so we know
-                    // when to stop reading in bytes that are being received
+                    // when to stop_black reading in bytes that are being received
                     if (data.contains("file_size" + SENDING_SEPARATOR)){
                         bluetoothListener.onStartReceiving(); //launch event - Receving started
                         receivingProgress = 0.0;

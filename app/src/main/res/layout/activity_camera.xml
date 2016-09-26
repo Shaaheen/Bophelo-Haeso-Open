@@ -28,7 +28,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
-        android:src="@drawable/camera"
+        android:src="@drawable/camera_black"
         android:id="@+id/capture"
         app:elevation="0dp"/>
 

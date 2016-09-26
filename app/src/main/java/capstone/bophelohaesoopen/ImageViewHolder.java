@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 /**
- * Custom image view holder class for the RecyclerView used to display gallery of images
+ * Custom image view holder class for the RecyclerView used to display gallery_black of images
  */
 public class ImageViewHolder extends RecyclerView.ViewHolder
 {

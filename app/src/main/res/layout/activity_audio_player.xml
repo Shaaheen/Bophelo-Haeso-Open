@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,8 +36,7 @@
                 android:layout_height="@dimen/video_player_button_dimen"
                 android:id="@+id/playPauseButton"
                 app:elevation="0dp"
-                android:src="@drawable/pause"
-                app:backgroundTint="#868787"
+                android:src="@drawable/pause_black"
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="20dp"/>
 
@@ -46,8 +46,7 @@
                 android:layout_height="@dimen/video_player_button_dimen"
                 android:id="@+id/stopButton"
                 app:elevation="0dp"
-                android:src="@drawable/stop"
-                app:backgroundTint="#868787"
+                android:src="@drawable/stop_black"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@+id/playPauseButton"
                 android:layout_marginLeft="20dp"/>
@@ -66,7 +65,7 @@
             android:layout_height="100dp"
             android:id="@+id/imageView6"
             android:layout_centerInParent="true"
-            android:src="@drawable/recordings"/>
+            android:src="@drawable/recordings_black"/>
     </RelativeLayout>
 
 </RelativeLayout>

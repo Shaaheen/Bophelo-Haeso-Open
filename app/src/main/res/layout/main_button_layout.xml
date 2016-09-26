@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -9,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/menu_toggle_bar_height"
-        android:background="#606060"
+        android:background="?attr/colorPrimary"
         android:id="@+id/menuToggleBar">
 
         <ImageView
@@ -17,7 +18,7 @@
             android:layout_height="60dp"
             android:id="@+id/menuToggle"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/arrow_down"
+            android:src="@drawable/arrow_down_black"
             android:scaleType="centerCrop"
             />
 
@@ -34,7 +35,6 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:layout_marginTop="@dimen/menu_toggle_bar_height"
-            android:background="@color/main_menu_background"
             >
 
             <RelativeLayout
@@ -57,7 +57,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|center_horizontal"
                         android:layout_alignParentLeft="false"
-                        android:background="@color/main_menu_background"
                         android:layout_weight="1"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp">
@@ -66,10 +65,10 @@
                         <android.support.v7.widget.CardView
                             android:layout_width="@dimen/menu_button_width"
                             android:layout_height="@dimen/menu_button_height"
-                            card_view:cardBackgroundColor="@color/button_color"
                             card_view:cardElevation="@dimen/card_elevation"
                             android:layout_margin="5dp"
-                            android:id="@+id/recordAudioButton">
+                            android:id="@+id/recordAudioButton"
+                            card_view:cardBackgroundColor="?android:attr/textColorPrimaryInverse">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -89,14 +88,15 @@
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:id="@+id/imageView2"
-                                        android:src="@drawable/record"
+                                        android:src="@drawable/mic_white"
                                         android:padding="7dp"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/record_button_text"
-                                        android:id="@+id/textView3"/>
+                                        android:id="@+id/textView3"
+                                        android:textColor="?android:attr/textColorPrimary"/>
                                 </LinearLayout>
                             </RelativeLayout>
                         </android.support.v7.widget.CardView>
@@ -105,7 +105,7 @@
                         <android.support.v7.widget.CardView
                             android:layout_width="@dimen/menu_button_width"
                             android:layout_height="@dimen/menu_button_height"
-                            card_view:cardBackgroundColor="@color/button_color"
+                            card_view:cardBackgroundColor="?android:attr/textColorPrimaryInverse"
                             card_view:cardElevation="@dimen/card_elevation"
                             android:layout_margin="5dp"
                             android:id="@+id/takePictureButton">
@@ -113,7 +113,6 @@
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#a4a4a4"
                                 android:layout_margin="5dp"
                                 >
 
@@ -128,14 +127,15 @@
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:id="@+id/imageView3"
-                                        android:src="@drawable/camera"
+                                        android:src="@drawable/camera_white"
                                         android:padding="7dp"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/picture_button_text"
-                                        android:id="@+id/textView4"/>
+                                        android:id="@+id/textView4"
+                                        android:textColor="?android:attr/textColorPrimary"/>
                                 </LinearLayout>
                             </RelativeLayout>
                             </android.support.v7.widget.CardView>
@@ -147,7 +147,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|center_horizontal"
-                        android:background="@color/main_menu_background"
                         android:layout_weight="1"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp">
@@ -155,7 +154,7 @@
                         <android.support.v7.widget.CardView
                             android:layout_width="@dimen/menu_button_width"
                             android:layout_height="@dimen/menu_button_height"
-                            card_view:cardBackgroundColor="@color/button_color"
+                            card_view:cardBackgroundColor="?android:attr/textColorPrimaryInverse"
 
                             card_view:cardElevation="@dimen/card_elevation"
                             android:layout_margin="5dp"
@@ -163,7 +162,6 @@
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#a4a4a4"
 
                                 >
 
@@ -178,14 +176,15 @@
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:id="@+id/imageView4"
-                                        android:src="@drawable/recordings"
+                                        android:src="@drawable/recordings_white"
                                         android:padding="5dp"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/recordings_button_text"
-                                        android:id="@+id/textView5"/>
+                                        android:id="@+id/textView5"
+                                        android:textColor="?android:attr/textColorPrimary"/>
                                 </LinearLayout>
                             </RelativeLayout>
                         </android.support.v7.widget.CardView>
@@ -196,14 +195,13 @@
                             android:layout_width="@dimen/menu_button_width"
                             android:layout_height="@dimen/menu_button_height"
                             android:padding="5dp"
-                            card_view:cardBackgroundColor="@color/button_color"
+                            card_view:cardBackgroundColor="?android:attr/textColorPrimaryInverse"
                             card_view:cardElevation="@dimen/card_elevation"
                             android:layout_margin="5dp"
                             android:id="@+id/picturesButton">
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#a4a4a4"
                                 android:layout_margin="5dp"
                                 >
 
@@ -218,14 +216,15 @@
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:id="@+id/imageView5"
-                                        android:src="@drawable/gallery"
+                                        android:src="@drawable/gallery_white"
                                         android:padding="7dp"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/pictures_button_text"
-                                        android:id="@+id/textView6"/>
+                                        android:id="@+id/textView6"
+                                        android:textColor="?android:attr/textColorPrimary"/>
                                 </LinearLayout>
                             </RelativeLayout>
                             </android.support.v7.widget.CardView>
@@ -243,7 +242,7 @@
                     android:padding="5dp"
                     android:id="@+id/shareMediaBar"
                     android:layout_below="@+id/buttonContainer"
-                    card_view:cardBackgroundColor="@color/button_color"
+                    card_view:cardBackgroundColor="?android:attr/textColorPrimaryInverse"
                     android:layout_centerHorizontal="true"
                     card_view:cardElevation="@dimen/card_elevation"
                     android:layout_marginLeft="@dimen/share_button_margin"
@@ -264,7 +263,7 @@
                                 android:layout_width="55dp"
                                 android:layout_height="55dp"
                                 android:id="@+id/shareIcon"
-                                android:src="@drawable/share"
+                                android:src="@drawable/share_white"
                                 android:scaleType="centerCrop"
                                 android:padding="14dp"/>
 
@@ -273,8 +272,10 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/share_button_share_text"
                                 android:id="@+id/shareText"
+                                android:textColor="?android:attr/textColorPrimary"
                                 android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/shareIcon"/>
+                                android:layout_toRightOf="@+id/shareIcon"
+                                />
                         </RelativeLayout>
                     </RelativeLayout>
                     </android.support.v7.widget.CardView>

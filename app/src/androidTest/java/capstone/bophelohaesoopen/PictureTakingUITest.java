@@ -39,7 +39,7 @@ public class PictureTakingUITest {
         takePictureButton = (CardView) mActivity.findViewById(R.id.takePictureButton);
     }
 
-    // This makes sure that the our current screen has a record button that we need clicked.
+    // This makes sure that the our current screen has a record_black button that we need clicked.
     @Test
     public void preConditions() {
         assertNotNull(takePictureButton);
@@ -50,7 +50,7 @@ public class PictureTakingUITest {
         // Click the takePictureButton button.
         onView(withId(R.id.takePictureButton)).perform(click());
 
-        // Check if the camera screen is displayed by checking the screen title and
+        // Check if the camera_black screen is displayed by checking the screen title and
         // making sure it has the capture button and that the button is clickable.
         onView(withId(R.id.capture)).check(matches(isDisplayed()));
         onView(withId(R.id.capture)).check(matches(isClickable()));

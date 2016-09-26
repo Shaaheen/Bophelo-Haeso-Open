@@ -13,14 +13,14 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
  * Created by Shaaheen on 8/8/2016.
- * Class to act as the Haeso media player - plays,pause,seek videos and logs all this information
+ * Class to act as the Haeso media player - plays,pause_black,seek videos and logs all this information
  */
 public class MediaPlayer extends android.media.MediaPlayer{
     String nameOfApp;
     android.media.MediaPlayer mediaPlayer;
 
 //    SurfaceView surfaceView;
-    // Stores play position of video when it is paused
+    // Stores play_black position of video when it is paused
     int currentPosition = 0;
     public boolean prepared = false;
 
@@ -31,7 +31,7 @@ public class MediaPlayer extends android.media.MediaPlayer{
 
     /**
      * Plays a media file on a given view
-     * @param mediaFile - The Media object containing the media want to play
+     * @param mediaFile - The Media object containing the media want to play_black
      * @param mediaView - The view that the media will show on
      * @throws IOException
      */

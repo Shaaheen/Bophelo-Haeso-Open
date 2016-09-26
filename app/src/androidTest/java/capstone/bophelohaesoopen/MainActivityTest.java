@@ -53,7 +53,7 @@ public class MainActivityTest {
         assertNotNull(viewPicture);
     }
 
-    // Test the presence of the share media bar.
+    // Test the presence of the share_black media bar.
     public void testShareMediaBarPresence() {
         //Get the shareMediaBar on the current activity.
         shareMediaBar = (CardView) mActivity.findViewById(R.id.shareMediaBar);
@@ -64,14 +64,14 @@ public class MainActivityTest {
     public void testShareMediaBarTextChange() {
         TextView shareText = (TextView) mActivity.findViewById(R.id.shareText);
 
-        //First check the shareText on the bar before it is clicked.
+        //First check_black the shareText on the bar before it is clicked.
         assertEquals("Share", shareText.toString());
 
         //perform button click.
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // click recordings button and open audioGalleryActivity.
+                // click recordings_black button and open audioGalleryActivity.
                 shareMediaBar.performClick();
             }
         });

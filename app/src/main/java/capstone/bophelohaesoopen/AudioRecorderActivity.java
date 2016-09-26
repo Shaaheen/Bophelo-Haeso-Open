@@ -19,8 +19,8 @@ import java.io.IOException;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.AudioRecorder;
 
 /**
- * Activity for recording audio
- * Starts recording audio automatically when activity is started
+ * Activity for recording_black audio
+ * Starts recording_black audio automatically when activity is started
  */
 
 public class AudioRecorderActivity extends AppCompatActivity
@@ -114,7 +114,7 @@ public class AudioRecorderActivity extends AppCompatActivity
     }
 
     /**
-     * Animates blinking indicator when recording is active
+     * Animates blinking indicator when recording_black is active
      */
     private void animateIndicator()
     {

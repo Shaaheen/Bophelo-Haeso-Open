@@ -16,7 +16,6 @@ import java.io.IOException;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaPlayer;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
-import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
  * Activity for playing audio files
@@ -177,21 +176,21 @@ public class AudioPlayerActivity extends AppCompatActivity
             Log.i("BHO", "PLAYING AND NOT PAUSED");
             seekBarUpdateHandler.removeCallbacks(updateSeekbar);
             pauseAudio();
-            playPauseButton.setImageResource(R.drawable.play);
+            playPauseButton.setImageResource(R.drawable.play_black);
         }
         else if(paused && playing)
         {
             Log.i("BHO", "PAUSED AND PLAYING");
             resumeAudio();
             seekBarUpdateHandler.postDelayed(updateSeekbar, 0);
-            playPauseButton.setImageResource(R.drawable.pause);
+            playPauseButton.setImageResource(R.drawable.pause_black);
         }
         else if(!paused && !playing)
         {
             Log.i("BHO", "NOT PAUSED AND NOT PLAYING");
             seekBarUpdateHandler.removeCallbacks(updateSeekbar);
             playAudio();
-            playPauseButton.setImageResource(R.drawable.pause);
+            playPauseButton.setImageResource(R.drawable.pause_black);
         }
 
     }

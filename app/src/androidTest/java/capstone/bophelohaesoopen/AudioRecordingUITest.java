@@ -23,7 +23,7 @@ import static junit.framework.Assert.assertNotNull;
 
 /**
  * Created by Jacob Ntesang on 9/18/2016.
- * This class tests the UI of the Audio Recorder screen when the record button is clicked.
+ * This class tests the UI of the Audio Recorder screen when the record_black button is clicked.
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -40,7 +40,7 @@ public class AudioRecordingUITest {
         recordButton = (CardView) mActivity.findViewById(R.id.recordAudioButton);
     }
 
-    // This makes sure that the our current screen has a record button that we need clicked.
+    // This makes sure that the our current screen has a record_black button that we need clicked.
     @Test
     public void preConditions() {
         assertNotNull(recordButton);
@@ -48,17 +48,17 @@ public class AudioRecordingUITest {
 
     @Test
     public void clickRecordButton_opensAudioRecordingUI() {
-        // Click the record button.
+        // Click the record_black button.
         onView(withId(R.id.recordAudioButton)).perform(click());
 
-        // Check if the recording screen is displayed by checking the screen title and
+        // Check if the recording_black screen is displayed by checking the screen title and
         // making sure it has all the components expected.
         SystemClock.sleep(1000); // This is to make the app wait until timeView is loaded.
         onView(withId(R.id.timeView)).check(matches(isDisplayed()));
         onView(withId(R.id.recordingIndicator)).check(matches(isDisplayed()));
         onView(withId(R.id.stopButton)).check(matches(isDisplayed()));
 
-        // stop the recording.
+        // stop_black the recording_black.
         onView(withId(R.id.stopButton)).perform(click());
     }
 

@@ -4,24 +4,16 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -296,7 +288,7 @@ public class MainActivity extends AppCompatActivity
 
             setTitle(appName);
 
-            shareIcon.setImageResource(R.drawable.share);
+            shareIcon.setImageResource(R.drawable.share_black);
             String buttonText = getResources().getString(R.string.share_button_share_text);
             shareText.setText(buttonText);
             inSelectionMode = false;
@@ -313,7 +305,7 @@ public class MainActivity extends AppCompatActivity
             {
                 hideMenu();
             }
-            shareIcon.setImageResource(R.drawable.cancel);
+            shareIcon.setImageResource(R.drawable.cancel_black);
             String buttonText = getResources().getString(R.string.share_button_cancel_text);
             shareText.setText(buttonText);
             inSelectionMode = true;
@@ -362,7 +354,7 @@ public class MainActivity extends AppCompatActivity
 
         // Enable scrolling on the video list since the list is in full view
         gridLayoutManager.setScrollEnabled(true);
-        menuToggle.setImageResource(R.drawable.arrow_up);
+        menuToggle.setImageResource(R.drawable.arrow_up_black);
 
     }
 
@@ -402,7 +394,7 @@ public class MainActivity extends AppCompatActivity
         // Scroll video list to the top in case it was scrolled down, in order to show the 4 videos at the top
         recyclerView.smoothScrollToPosition(0);
 
-        menuToggle.setImageResource(R.drawable.arrow_down);
+        menuToggle.setImageResource(R.drawable.arrow_down_black);
     }
 
     public void shareVideo(int position)

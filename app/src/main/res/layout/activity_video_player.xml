@@ -42,7 +42,7 @@
                 android:layout_height="@dimen/video_player_button_dimen"
                 android:id="@+id/playPauseButton"
                 app:elevation="0dp"
-                android:src="@drawable/pause"
+                android:src="@drawable/pause_black"
                 app:backgroundTint="#868787"
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="20dp"/>
@@ -53,7 +53,7 @@
                 android:layout_height="@dimen/video_player_button_dimen"
                 android:id="@+id/stopButton"
                 app:elevation="0dp"
-                android:src="@drawable/stop"
+                android:src="@drawable/stop_black"
                 app:backgroundTint="#868787"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@+id/playPauseButton"

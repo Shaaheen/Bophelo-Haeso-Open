@@ -25,7 +25,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaPlayer;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 
 /**
- * Activity for video playback - allows, play, pause, resume functionality
+ * Activity for video playback - allows, play_black, pause_black, resume functionality
  * Starts playing video automatically when activity is started
  */
 
@@ -101,7 +101,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         mediaPlayer = new MediaPlayer("BHO");
         videoControlsVisible = true;
 
-        // Ensures the video display is loaded before the video tries to play
+        // Ensures the video display is loaded before the video tries to play_black
         SurfaceHolder holder = videoView.getHolder();
         holder.addCallback(this);
 
@@ -208,7 +208,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     // region SurfaceView overrides
     /**
      * Launches when video display is done loading
-     * Will start to play video when video holder is done loading
+     * Will start to play_black video when video holder is done loading
      * @param holder - The video holder display
      */
     @Override
@@ -256,14 +256,14 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             Log.i("BHO", "PLAYING AND NOT PAUSED");
             seekBarUpdateHandler.removeCallbacks(seekbarUpdater);
             pauseVideo();
-            playPauseButton.setImageResource(R.drawable.play);
+            playPauseButton.setImageResource(R.drawable.play_black);
         }
         else if(paused && playing)
         {
             Log.i("BHO", "PAUSED AND PLAYING");
             resumeVideo();
             seekBarUpdateHandler.postDelayed(seekbarUpdater, 0);
-            playPauseButton.setImageResource(R.drawable.pause);
+            playPauseButton.setImageResource(R.drawable.pause_black);
         }
         else if(!paused && !playing)
         {
@@ -272,7 +272,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
             screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
             playVideo(screenWidth, screenHeight);
-            playPauseButton.setImageResource(R.drawable.pause);
+            playPauseButton.setImageResource(R.drawable.pause_black);
         }
     }
 

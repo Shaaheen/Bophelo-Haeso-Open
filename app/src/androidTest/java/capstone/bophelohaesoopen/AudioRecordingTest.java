@@ -52,7 +52,7 @@ public class AudioRecordingTest {
     @Test
     public void audioRecordingTest() throws IOException{
         myAudio.startRecording();
-        //While the app is recording, the mediaRecorder instance is not null;
+        //While the app is recording_black, the mediaRecorder instance is not null;
         assertNotNull(myAudio.myAudioRecorder);
     }
 
