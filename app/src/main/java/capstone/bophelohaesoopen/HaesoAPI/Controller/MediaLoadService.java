@@ -9,13 +9,10 @@ import android.app.Activity;
 
 import java.util.ArrayList;
 
-import capstone.bophelohaesoopen.AudioGalleryActivity;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
-import capstone.bophelohaesoopen.MainActivity;
-import capstone.bophelohaesoopen.PictureGalleryActivity;
 
 public class MediaLoadService extends Service
 {
@@ -43,10 +40,8 @@ public class MediaLoadService extends Service
         this.mediaType = mediaType;
     }
 
-    public MediaLoadService()
-    {
+    public MediaLoadService(){}
 
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
@@ -70,7 +65,7 @@ public class MediaLoadService extends Service
 
     public void start()
     {
-        new LoadTask().execute(fileUtils);
+        new LoadTask().execute(new Void[]{});
     }
 
     public void loadVideoList()
@@ -110,11 +105,11 @@ public class MediaLoadService extends Service
         return audioList;
     }
 
-    public class LoadTask extends AsyncTask<FileUtils, Integer, Long>
+    public class LoadTask extends AsyncTask<Void, Void, Void>
     {
 
         @Override
-        protected Long doInBackground(FileUtils... fileUtilses)
+        protected Void doInBackground(Void... voidObj)
         {
             if(mediaType == Media.MediaType.IMAGE)
             {

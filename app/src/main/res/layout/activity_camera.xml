@@ -23,14 +23,13 @@
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
-        android:src="@drawable/camera_black"
+        android:src="@drawable/camera"
         android:id="@+id/capture"
         app:elevation="0dp"
-        app:backgroundTint="@color/accent"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
 
 </RelativeLayout>
