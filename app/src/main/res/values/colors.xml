@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="red">#f33535</color>
-    <color name="green">#0bb312</color>
+    <color name="green">#43b447</color>
     <color name="main_menu_background">#FF868787</color>
-    <color name="button_color">#A4A4A4</color>
+
     <color name="navy_blue">#114355</color>
     <color name="light_navy_blue">#315768</color>
     <color name="dark_navy_blue">#0e3746</color>
     <color name="primary_text_material_light">#d5d6d6</color>
     <color name="secondary_text_material_dark">#b3000000</color>
+    <color name="white">#d5d6d6</color>
+    <color name="black">#b3000000</color>
+
+    <color name="button_color">@color/light_navy_blue</color>
+    <color name="background_dark">@color/dark_navy_blue</color>
+    <color name="background">@color/navy_blue</color>
+    <color name="background_extra_light">#80315768</color>
+    <color name="accent">@color/green</color>
+    <color name="text_color_primary">@color/white</color>
+    <color name="text_color_inverse">@color/background</color>
 </resources>

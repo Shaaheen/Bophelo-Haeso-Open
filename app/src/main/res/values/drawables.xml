@@ -1,8 +1,13 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <item name="ic_menu_camera" type="drawable">@android:drawable/ic_menu_camera</item>
-    <item name="ic_menu_gallery" type="drawable">@android:drawable/ic_menu_gallery</item>
-    <item name="ic_menu_slideshow" type="drawable">@android:drawable/ic_menu_slideshow</item>
-    <item name="ic_menu_manage" type="drawable">@android:drawable/ic_menu_manage</item>
-    <item name="ic_menu_share" type="drawable">@android:drawable/ic_menu_share</item>
-    <item name="ic_menu_send" type="drawable">@android:drawable/ic_menu_send</item>
+    <item name="arrow_down1" type="drawable" >@drawable/arrow_down_white</item>
+    <item name="arrow_up" type="drawable">@drawable/arrow_up_white</item>
+    <item name="camera" type="drawable">@drawable/camera_white</item>
+    <item name="record" type="drawable">@drawable/mic_white</item>
+    <item name="recordings" type="drawable">@drawable/recordings_white</item>
+    <item name="pictures" type="drawable">@drawable/gallery_white</item>
+    <item name="share" type="drawable">@drawable/share_white</item>
+    <item name="cancel" type="drawable">@drawable/cancel_white</item>
+    <item name="pause" type="drawable">@drawable/pause_white</item>
+    <item name="stop" type="drawable">@drawable/stop_white</item>
+    <drawable name="arrow_down" type="drawable">@drawable/arrow_down_white</drawable>
 </resources>

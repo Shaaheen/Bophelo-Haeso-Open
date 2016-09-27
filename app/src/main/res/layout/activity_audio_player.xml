@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_alignParentBottom="true"
-        android:background="#80000000"
+        android:background="@color/background_extra_light"
         android:id="@+id/audioControls"
         >
 
@@ -36,9 +36,10 @@
                 android:layout_height="@dimen/video_player_button_dimen"
                 android:id="@+id/playPauseButton"
                 app:elevation="0dp"
-                android:src="@drawable/pause_black"
+                android:src="@drawable/pause"
                 android:layout_alignParentBottom="true"
-                android:layout_marginRight="20dp"/>
+                android:layout_marginRight="20dp"
+                />
 
             <android.support.design.widget.FloatingActionButton
                 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -46,7 +47,7 @@
                 android:layout_height="@dimen/video_player_button_dimen"
                 android:id="@+id/stopButton"
                 app:elevation="0dp"
-                android:src="@drawable/stop_black"
+                android:src="@drawable/stop"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@+id/playPauseButton"
                 android:layout_marginLeft="20dp"/>
@@ -58,7 +59,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/videoControls">
+        android:layout_above="@+id/audioControls">
 
         <ImageView
             android:layout_width="100dp"

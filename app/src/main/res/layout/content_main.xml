@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="capstone.bophelohaesoopen.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    >
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -42,17 +41,15 @@
             android:layout_height="40dp"
             android:id="@+id/progressBar"
             android:indeterminate="true"
-            android:indeterminateBehavior="repeat"
-            android:indeterminateOnly="true"/>
+            android:indeterminateBehavior="repeat"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Loading videos"
+            android:textColor="@color/text_color_inverse"
             android:id="@+id/textView7"
-            android:layout_marginLeft="10dp"
-            android:theme="@styles/ThemeOne"
-            style="@style/ThemeOne"/>
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
 </RelativeLayout>
 

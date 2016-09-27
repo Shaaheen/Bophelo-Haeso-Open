@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
@@ -10,12 +11,13 @@
         android:layout_width="@dimen/image_item_width"
         android:layout_height="@dimen/image_item_height"
         android:layout_centerHorizontal="true"
-        card_view:elevation="@dimen/card_elevation">
+        card_view:elevation="@dimen/card_elevation"
+        card_view:cardBackgroundColor="@color/button_color">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#838181">
+            android:background="?android:attr/textColorPrimaryInverse">
 
             <ImageView
                 android:layout_width="fill_parent"

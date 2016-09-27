@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/navy_blue</item>
 
     </style>
 
@@ -15,15 +16,24 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="ThemeOne" parent="AppTheme">
-        <item name="colorAccent">@android:color/holo_green_light</item>
+    <style name="NavyBlue" parent="AppTheme">
+        <item name="colorAccent">@color/green</item>
         <item name="android:colorBackground">@color/navy_blue</item>
         <item name="colorPrimary">@color/dark_navy_blue</item>
-        <item name="buttonColor">@color/light_navy_blue</item>
         <item name="android:textColorPrimaryInverse">@color/light_navy_blue</item>
         <item name="android:textColorPrimary">@color/primary_text_material_light</item>
         <item name="android:textColorSecondaryInverse">@color/secondary_text_material_dark</item>
-
     </style>
+
+    <style name="Maroon" parent="AppTheme">
+        <item name="colorAccent">@color/green</item>
+        <item name="android:colorBackground">@color/navy_blue</item>
+        <item name="colorPrimary">@color/dark_navy_blue</item>
+        <item name="android:textColorPrimaryInverse">@color/light_navy_blue</item>
+        <item name="android:textColorPrimary">@color/primary_text_material_light</item>
+        <item name="android:textColorSecondaryInverse">@color/secondary_text_material_dark</item>
+    </style>
+
+    <style name="ThemeOne" parent="AppTheme"/>
 
 </resources>

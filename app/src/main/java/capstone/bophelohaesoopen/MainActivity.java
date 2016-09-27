@@ -160,9 +160,6 @@ public class MainActivity extends AppCompatActivity
 
         mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         noMediaText = (TextView)findViewById(R.id.noMediaText);
 
         mainMenu = (RelativeLayout) findViewById(R.id.mainMenu);
@@ -288,7 +285,7 @@ public class MainActivity extends AppCompatActivity
 
             setTitle(appName);
 
-            shareIcon.setImageResource(R.drawable.share_black);
+            shareIcon.setImageResource(R.drawable.share);
             String buttonText = getResources().getString(R.string.share_button_share_text);
             shareText.setText(buttonText);
             inSelectionMode = false;
@@ -305,7 +302,7 @@ public class MainActivity extends AppCompatActivity
             {
                 hideMenu();
             }
-            shareIcon.setImageResource(R.drawable.cancel_black);
+            shareIcon.setImageResource(R.drawable.cancel);
             String buttonText = getResources().getString(R.string.share_button_cancel_text);
             shareText.setText(buttonText);
             inSelectionMode = true;
@@ -354,7 +351,7 @@ public class MainActivity extends AppCompatActivity
 
         // Enable scrolling on the video list since the list is in full view
         gridLayoutManager.setScrollEnabled(true);
-        menuToggle.setImageResource(R.drawable.arrow_up_black);
+        menuToggle.setImageResource(R.drawable.arrow_up);
 
     }
 
@@ -394,7 +391,7 @@ public class MainActivity extends AppCompatActivity
         // Scroll video list to the top in case it was scrolled down, in order to show the 4 videos at the top
         recyclerView.smoothScrollToPosition(0);
 
-        menuToggle.setImageResource(R.drawable.arrow_down_black);
+        menuToggle.setImageResource(R.drawable.arrow_down);
     }
 
     public void shareVideo(int position)
