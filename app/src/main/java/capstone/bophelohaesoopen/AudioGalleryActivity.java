@@ -36,7 +36,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     ArrayList<Audio> audioList = new ArrayList<>();
 
-//    MediaShareUtils mediaShareUtils;
+    MediaShareUserInterface mediaShareUserInterface;
 
     MediaLoadService mediaLoadService;
 
@@ -47,6 +47,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     boolean inSelectionMode = false;
     private static int CHECK_DURATION = 1000;
+    private static int SHARE_STATE_CHECK_INTERVAL = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -105,7 +106,7 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     private void initialize()
     {
-//        mediaShareUtils = new MediaShareUtils(getApplicationContext(), this);
+        mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
         mediaLoadService = new MediaLoadService(this);
         startService(new Intent(this, MediaLoadService.class));
 
@@ -141,26 +142,36 @@ public class AudioGalleryActivity extends AppCompatActivity
 //        Toast.makeText(this, "Sends a selected audio file", Toast.LENGTH_SHORT).show();
         if (inSelectionMode)
         {
-            String appName = getResources().getString(R.string.app_name);
-
-            setTitle(appName);
-
-            shareIcon.setImageResource(R.drawable.share_black);
-            shareText.setText("Share");
-            inSelectionMode = false;
-
-            // Hide video item tick overlay
-            audioAdapter.setItemClicked(false);
-            audioAdapter.notifyDataSetChanged();
+            hideSelectionContext();
         }
         else
         {
-            setTitle("Select recording_black");
-            shareIcon.setImageResource(R.drawable.cancel_black);
-            shareText.setText("Cancel");
-            inSelectionMode = true;
+            showSelectionContext();
         }
 
+    }
+
+    private void showSelectionContext()
+    {
+        setTitle("Select recording");
+        shareIcon.setImageResource(R.drawable.cancel);
+        shareText.setText("Cancel");
+        inSelectionMode = true;
+    }
+
+    private void hideSelectionContext()
+    {
+        String appName = getResources().getString(R.string.app_name);
+
+        setTitle(appName);
+
+        shareIcon.setImageResource(R.drawable.share);
+        shareText.setText("Share");
+        inSelectionMode = false;
+
+        // Hide video item tick overlay
+        audioAdapter.setItemClicked(false);
+        audioAdapter.notifyDataSetChanged();
     }
 
     public void playAudio(int position)
@@ -174,7 +185,30 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     public void shareAudio(int position)
     {
-        Toast.makeText(this, "Shares audio file", Toast.LENGTH_SHORT).show();
+        Audio audioToSend = audioAdapter.audioList.get(position);
+
+        mediaShareUserInterface.sendMedia(audioToSend);
+        Runnable checkState;
+        final Handler stateChecker;
+        stateChecker = new Handler();
+        checkState = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if(mediaShareUserInterface.state == MediaShareUserInterface.State.FAILED ||
+                        mediaShareUserInterface.state == MediaShareUserInterface.State.SENDING_COMPLETE)
+                {
+                    hideSelectionContext();
+                    stateChecker.removeCallbacks(this);
+                }
+                else
+                {
+                    stateChecker.postDelayed(this, SHARE_STATE_CHECK_INTERVAL);
+                }
+            }
+        };
+        stateChecker.postDelayed(checkState, 0);
     }
 
     @Override

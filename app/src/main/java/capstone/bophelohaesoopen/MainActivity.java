@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     boolean menuHidden = false;
     private static int MENU_ANIMATION_DURATION = 300;
     private static int CHECK_DURATION = 1000;
+    private static int SHARE_STATE_CHECK_INTERVAL = 500;
     public boolean inSelectionMode = false;
 
     public boolean videosLoaded = false;
@@ -281,32 +283,42 @@ public class MainActivity extends AppCompatActivity
     {
         if (inSelectionMode)
         {
-            String appName = getResources().getString(R.string.app_name);
-
-            setTitle(appName);
-
-            shareIcon.setImageResource(R.drawable.share);
-            String buttonText = getResources().getString(R.string.share_button_share_text);
-            shareText.setText(buttonText);
-            inSelectionMode = false;
-
-            // Hide video item tick overlay
-            videoAdapter.setItemClicked(false);
-            videoAdapter.notifyDataSetChanged();
+            hideSelectionContext();
         }
         else
         {
-            String title = getResources().getString(R.string.title_select_video);
-            setTitle(title);
-            if (!menuHidden)
-            {
-                hideMenu();
-            }
-            shareIcon.setImageResource(R.drawable.cancel);
-            String buttonText = getResources().getString(R.string.share_button_cancel_text);
-            shareText.setText(buttonText);
-            inSelectionMode = true;
+            showSelectionContext();
         }
+    }
+
+    private void showSelectionContext()
+    {
+        String title = getResources().getString(R.string.title_select_video);
+        setTitle(title);
+        if (!menuHidden)
+        {
+            hideMenu();
+        }
+        shareIcon.setImageResource(R.drawable.cancel);
+        String buttonText = getResources().getString(R.string.share_button_cancel_text);
+        shareText.setText(buttonText);
+        inSelectionMode = true;
+    }
+
+    private void hideSelectionContext()
+    {
+        String appName = getResources().getString(R.string.app_name);
+
+        setTitle(appName);
+
+        shareIcon.setImageResource(R.drawable.share);
+        String buttonText = getResources().getString(R.string.share_button_share_text);
+        shareText.setText(buttonText);
+        inSelectionMode = false;
+
+        // Hide video item tick overlay
+        videoAdapter.setItemClicked(false);
+        videoAdapter.notifyDataSetChanged();
     }
 
     private void recordAudioButtonClick()
@@ -399,6 +411,28 @@ public class MainActivity extends AppCompatActivity
         videoToSend = videoAdapter.videoList.get(position);
 
         mediaShareUserInterface.sendMedia(videoToSend);
+
+        Runnable checkState;
+        final Handler stateChecker;
+        stateChecker = new Handler();
+        checkState = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if(mediaShareUserInterface.state == MediaShareUserInterface.State.FAILED ||
+                        mediaShareUserInterface.state == MediaShareUserInterface.State.SENDING_COMPLETE)
+                {
+                    hideSelectionContext();
+                    stateChecker.removeCallbacks(this);
+                }
+                else
+                {
+                    stateChecker.postDelayed(this, SHARE_STATE_CHECK_INTERVAL);
+                }
+            }
+        };
+        stateChecker.postDelayed(checkState, 0);
     }
 
     // region Activity overrides

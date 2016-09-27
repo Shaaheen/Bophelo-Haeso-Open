@@ -23,6 +23,9 @@ public class MediaShareUserInterface
 {
     public BluetoothUtils bluetoothUtils;
 
+    public enum State {IDLE, SENDING, SCANNING, FAILED, SENDING_COMPLETE, RECEIVING};
+
+    public State state = State.IDLE;
     private boolean sendMedia;
     private Media mediaToSend;
 
@@ -52,6 +55,7 @@ public class MediaShareUserInterface
                 indeterminatePD.setCancelable(false);
                 indeterminatePD.setIndeterminate(true);
                 indeterminatePD.show();
+                state = State.SCANNING;
             }
 
             @Override
@@ -68,6 +72,7 @@ public class MediaShareUserInterface
 
                 if (btDevices == null || btDevices.isEmpty())
                 {
+                    state = State.FAILED;
                     Toast.makeText(ctx, "No devices found", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -117,6 +122,7 @@ public class MediaShareUserInterface
             public void onDisconnected()
             {
                 Toast.makeText(ctx, "Disconnected", Toast.LENGTH_SHORT).show();
+                state = State.FAILED;
                 //sendMedia = false;
             }
 
@@ -124,6 +130,7 @@ public class MediaShareUserInterface
 
             public void onStartReceiving()
             {
+                state = State.RECEIVING;
                 //Toast.makeText(ctx, "Receving file...", Toast.LENGTH_SHORT).show();
                 //Toast.makeText(activity, "Receiving", Toast.LENGTH_SHORT).show();
                 String receivingDialogTitle = activityM.getResources().getString(R.string.receiving_dialog_title);
@@ -131,7 +138,9 @@ public class MediaShareUserInterface
             }
 
             @Override
-            public void onStartSending() {
+            public void onStartSending()
+            {
+                state = State.SENDING;
                 createProgressDialogue("Sending File...");
             }
 
