@@ -45,29 +45,29 @@
     <!--<color name="text_color_inverse">@color/background</color>-->
 
     <!-- Uncomment below for Navy Blue Theme and comment out any uncommented theme -->
-    <!--<color name="button_color">@color/light_navy_blue</color>-->
-    <!--<color name="background_dark">@color/dark_navy_blue</color>-->
-    <!--<color name="background">@color/navy_blue</color>-->
-    <!--<color name="background_extra_light">@color/extra_light_navy_blue</color>-->
-    <!--<color name="accent">@color/blue</color>-->
-    <!--<color name="text_color_primary">@color/white</color>-->
-    <!--<color name="text_color_inverse">@color/background</color>-->
+    <color name="button_color">@color/light_navy_blue</color>
+    <color name="background_dark">@color/dark_navy_blue</color>
+    <color name="background">@color/navy_blue</color>
+    <color name="background_extra_light">@color/extra_light_navy_blue</color>
+    <color name="accent">@color/orange</color>
+    <color name="text_color_primary">@color/white</color>
+    <color name="text_color_inverse">@color/background</color>
 
     <!-- Uncomment below for Purple Theme and comment out any uncommented theme -->
     <!--<color name="button_color">@color/light_purple</color>-->
     <!--<color name="background_dark">@color/dark_purple</color>-->
     <!--<color name="background">@color/purple</color>-->
     <!--<color name="background_extra_light">@color/extra_light_purple</color>-->
-    <!--<color name="accent">@color/blue</color>-->
+    <!--<color name="accent">@color/orange</color>-->
     <!--<color name="text_color_primary">@color/white</color>-->
     <!--<color name="text_color_inverse">@color/background</color>-->
 
-    <!-- Uncomment below for Purple Theme and comment out any uncommented theme -->
-    <color name="button_color">@color/light_grey</color>
-    <color name="background_dark">@color/dark_grey</color>
-    <color name="background">@color/grey</color>
-    <color name="background_extra_light">@color/extra_light_grey</color>
-    <color name="accent">@color/blue</color>
-    <color name="text_color_primary">@color/white</color>
-    <color name="text_color_inverse">@color/background</color>
+    <!-- Uncomment below for Grey Theme and comment out any uncommented theme -->
+    <!--<color name="button_color">@color/light_grey</color>-->
+    <!--<color name="background_dark">@color/dark_grey</color>-->
+    <!--<color name="background">@color/grey</color>-->
+    <!--<color name="background_extra_light">@color/extra_light_grey</color>-->
+    <!--<color name="accent">@color/blue</color>-->
+    <!--<color name="text_color_primary">@color/white</color>-->
+    <!--<color name="text_color_inverse">@color/background</color>-->
 </resources>

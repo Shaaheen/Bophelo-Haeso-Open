@@ -22,6 +22,18 @@
         android:id="@+id/videoControls"
         >
 
+        <TextView
+            android:text="00:00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_primary"
+            android:layout_marginLeft="20dp"
+            android:layout_centerInParent="false"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="true"
+            android:textSize="18sp"
+            android:id="@+id/counter"/>
+
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +47,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="20dp"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:id="@+id/buttons"
+            android:layout_centerVertical="true">
 
             <android.support.design.widget.FloatingActionButton
                 xmlns:app="http://schemas.android.com/apk/res-auto"

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -28,6 +29,8 @@ public class AudioPlayerActivity extends AppCompatActivity
 
     FloatingActionButton stopButton;
     FloatingActionButton playPauseButton;
+
+    TextView counter;
 
     RelativeLayout videoControls;
 
@@ -85,6 +88,7 @@ public class AudioPlayerActivity extends AppCompatActivity
                     isPlaying = mediaPlayer.isMediaPlaying();
                     int position = mediaPlayer.getCurrentPlayPosition();
 
+                    updateCounter(position);
                     final int duration = mediaPlayer.getVideoDuration();
                     seekBar.setMax(duration);
 
@@ -140,6 +144,8 @@ public class AudioPlayerActivity extends AppCompatActivity
 
             }
         });
+
+        counter = (TextView)findViewById(R.id.counter);
 
         playPauseButton.setOnClickListener(new View.OnClickListener()
         {
@@ -242,6 +248,37 @@ public class AudioPlayerActivity extends AppCompatActivity
         mediaPlayer.stopMedia();
         mediaPlayer.release();
         playing = false;
+    }
+
+    private void updateCounter(long time)
+    {
+        time = time/1000;
+        int minutes = (int)time / 60;
+
+        int seconds = (int)time % 60;
+
+        String minuteText = "";
+        if(minutes < 10)
+        {
+            minuteText = "0"+minutes;
+        }
+        else
+        {
+            minuteText = ""+minutes;
+        }
+
+        String secondsText = "";
+        if(seconds < 10)
+        {
+            secondsText = "0"+seconds;
+        }
+        else
+        {
+            secondsText = ""+seconds;
+        }
+
+        String timeText = minuteText+":"+secondsText;
+        counter.setText(timeText);
     }
 
     @Override

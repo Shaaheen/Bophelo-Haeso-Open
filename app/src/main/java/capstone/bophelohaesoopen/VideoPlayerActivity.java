@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -39,6 +40,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     Video video;
 
     SeekBar seekBar;
+
+    TextView counter;
 
     FloatingActionButton stopButton;
     FloatingActionButton playPauseButton;
@@ -131,6 +134,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
                     int position = mediaPlayer.getCurrentPlayPosition();
 
                     final int duration = mediaPlayer.getVideoDuration();
+                    updateCounter(position);
+
                     seekBar.setMax(duration);
 
                     if(position > duration)
@@ -156,6 +161,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         videoView.setOnTouchListener(this);
         playPauseButton = (FloatingActionButton)findViewById(R.id.playPauseButton);
         stopButton = (FloatingActionButton)findViewById(R.id.stopButton);
+
+        counter = (TextView)findViewById(R.id.counter);
 
         videoControls = (RelativeLayout)findViewById(R.id.videoControls);
         seekBar = (SeekBar)findViewById(R.id.seekBar);
@@ -318,6 +325,37 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         });
         anim.start();
         videoControlsVisible = true;
+    }
+
+    private void updateCounter(long time)
+    {
+        time = time/1000;
+        int minutes = (int)time / 60;
+
+        int seconds = (int)time % 60;
+
+        String minuteText = "";
+        if(minutes < 10)
+        {
+            minuteText = "0"+minutes;
+        }
+        else
+        {
+            minuteText = ""+minutes;
+        }
+
+        String secondsText = "";
+        if(seconds < 10)
+        {
+            secondsText = "0"+seconds;
+        }
+        else
+        {
+            secondsText = ""+seconds;
+        }
+
+        String timeText = minuteText+":"+secondsText;
+        counter.setText(timeText);
     }
 
     // endregion

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/background_extra_light"
+        android:background="@color/background"
         android:id="@+id/audioControls"
         >
 
@@ -19,8 +19,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/seekBar"
-            android:padding="10dp"
-            />
+            android:padding="10dp"/>
+
+
+        <TextView
+            android:text="00:00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_primary"
+            android:layout_marginLeft="20dp"
+            android:layout_centerInParent="false"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="true"
+            android:textSize="18sp"
+            android:id="@+id/counter"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -38,8 +50,8 @@
                 app:elevation="0dp"
                 android:src="@drawable/pause"
                 android:layout_alignParentBottom="true"
-                android:layout_marginRight="20dp"
-                />
+                android:layout_marginRight="20dp"/>
+
 
             <android.support.design.widget.FloatingActionButton
                 xmlns:app="http://schemas.android.com/apk/res-auto"
