@@ -7,10 +7,8 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -77,6 +75,10 @@ public class MainActivity extends AppCompatActivity
 
     MediaShareUserInterface mediaShareUserInterface;
 
+    Handler videoLoadHandler;
+    Runnable videoLoadRunnable;
+
+
     //Logging db
     public static DatabaseUtils databaseUtils;
 
@@ -91,13 +93,12 @@ public class MainActivity extends AppCompatActivity
         initialize();
 
         mediaLoadService.start();
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable()
+        videoLoadHandler = new Handler();
+        videoLoadRunnable = new Runnable()
         {
             @Override
             public void run()
             {
-
                 if (mediaLoadService.mediaLoaded)
                 {
                     // Get all videos from storage
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity
 
                     // Reset videoList
                     videoList = orderedList;
-
+                    recyclerView.setVisibility(View.VISIBLE);
                     videosLoadingScreen.setVisibility(View.INVISIBLE);
                     if(!videoList.isEmpty())
                     {
@@ -120,16 +121,18 @@ public class MainActivity extends AppCompatActivity
                         noMediaText.setVisibility(View.VISIBLE);
                     }
 
-                    handler.removeCallbacks(this);
+                    videoLoadHandler.removeCallbacks(this);
+
+                    stopService(new Intent(getApplicationContext(), MediaLoadService.class));
                 }
                 else
                 {
-                    handler.postDelayed(this, CHECK_DURATION);
+                    videoLoadHandler.postDelayed(this, CHECK_DURATION);
                 }
 
             }
         };
-        handler.postDelayed(runnable, CHECK_DURATION);
+        videoLoadHandler.postDelayed(videoLoadRunnable, CHECK_DURATION);
     }
 
 
@@ -422,10 +425,22 @@ public class MainActivity extends AppCompatActivity
             {
                 if(mediaShareUserInterface.state == MediaShareUserInterface.State.FAILED ||
                         mediaShareUserInterface.state == MediaShareUserInterface.State.CANCELLED ||
-                        mediaShareUserInterface.state == MediaShareUserInterface.State.SENDING_COMPLETE)
+                        mediaShareUserInterface.state == MediaShareUserInterface.State.SENT)
                 {
                     hideSelectionContext();
                     stateChecker.removeCallbacks(this);
+                }
+                else if(mediaShareUserInterface.state == MediaShareUserInterface.State.RECEIVED)
+                {
+                    hideSelectionContext();
+                    stateChecker.removeCallbacks(this);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    videosLoadingScreen.setVisibility(View.VISIBLE);
+
+                    startService(new Intent(getApplicationContext(), MediaLoadService.class));
+                    mediaLoadService.start();
+
+                    videoLoadHandler.postDelayed(videoLoadRunnable, CHECK_DURATION);
                 }
                 else
                 {

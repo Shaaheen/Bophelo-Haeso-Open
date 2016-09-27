@@ -24,7 +24,7 @@ public class MediaShareUserInterface
 {
     public BluetoothUtils bluetoothUtils;
 
-    public enum State {IDLE, SENDING, SCANNING, FAILED, SENDING_COMPLETE, RECEIVING, CANCELLED};
+    public enum State {IDLE, SENDING, SCANNING, FAILED, SENT, RECEIVING, CANCELLED, RECEIVED};
 
     public State state = State.IDLE;
     private boolean sendMedia;
@@ -114,6 +114,7 @@ public class MediaShareUserInterface
             public void onConnected()
             {
                 Toast.makeText(ctx, "Connected, Send : " + sendMedia, Toast.LENGTH_SHORT).show();
+                state = State.IDLE;
                 //if want to send after connection
                 if (sendMedia)
                 {
@@ -164,6 +165,7 @@ public class MediaShareUserInterface
                     sendMedia = false;
                     determinatePD.dismiss();
                     Toast.makeText(ctx, "Received file", Toast.LENGTH_SHORT).show();
+                    state = State.RECEIVED;
                 }
 
                 Log.v("BT", "Received " + progress + "% ");

@@ -14,7 +14,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,7 +32,7 @@ public class AudioGalleryActivity extends AppCompatActivity
     RecyclerView recyclerView;
     AudioAdapter audioAdapter;
 
-    RelativeLayout audioLoadingScreen;
+    RelativeLayout recordingsLoadingScreen;
 
     ArrayList<Audio> audioList = new ArrayList<>();
 
@@ -49,6 +48,9 @@ public class AudioGalleryActivity extends AppCompatActivity
     boolean inSelectionMode = false;
     private static int CHECK_DURATION = 1000;
     private static int SHARE_STATE_CHECK_INTERVAL = 500;
+
+    Handler recordingsLoadHandler;
+    Runnable recordingsLoadRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,8 +72,8 @@ public class AudioGalleryActivity extends AppCompatActivity
         initialize();
 
         mediaLoadService.start();
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable()
+        recordingsLoadHandler = new Handler();
+        recordingsLoadRunnable = new Runnable()
         {
             @Override
             public void run()
@@ -81,7 +83,8 @@ public class AudioGalleryActivity extends AppCompatActivity
                 {
 //                    System.out.println("recordings_black loaded!");
                     audioList = mediaLoadService.getAudioList();
-                    audioLoadingScreen.setVisibility(View.INVISIBLE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recordingsLoadingScreen.setVisibility(View.INVISIBLE);
                     if(!audioList.isEmpty())
                     {
                         audioAdapter.setRecordings(audioList);
@@ -92,17 +95,18 @@ public class AudioGalleryActivity extends AppCompatActivity
                     {
                         noMediaText.setVisibility(View.VISIBLE);
                     }
-                    handler.removeCallbacks(this);
+                    recordingsLoadHandler.removeCallbacks(this);
 
+                    stopService(new Intent(getApplicationContext(), MediaLoadService.class));
                 }
                 else
                 {
-                    handler.postDelayed(this, CHECK_DURATION);
+                    recordingsLoadHandler.postDelayed(this, CHECK_DURATION);
                 }
 
             }
         };
-        handler.postDelayed(runnable, CHECK_DURATION);
+        recordingsLoadHandler.postDelayed(recordingsLoadRunnable, CHECK_DURATION);
     }
 
     private void initialize()
@@ -111,7 +115,7 @@ public class AudioGalleryActivity extends AppCompatActivity
         mediaLoadService = new MediaLoadService(this, Media.MediaType.AUDIO);
         startService(new Intent(this, MediaLoadService.class));
 
-        audioLoadingScreen = (RelativeLayout)findViewById(R.id.audioLoadingScreen);
+        recordingsLoadingScreen = (RelativeLayout)findViewById(R.id.audioLoadingScreen);
 
         shareMediaBar = (CardView) findViewById(R.id.shareMediaBar);
         shareMediaBar.setOnClickListener(new View.OnClickListener()
@@ -199,10 +203,23 @@ public class AudioGalleryActivity extends AppCompatActivity
             {
                 if(mediaShareUserInterface.state == MediaShareUserInterface.State.FAILED ||
                         mediaShareUserInterface.state == MediaShareUserInterface.State.CANCELLED ||
-                        mediaShareUserInterface.state == MediaShareUserInterface.State.SENDING_COMPLETE)
+                        mediaShareUserInterface.state == MediaShareUserInterface.State.SENT)
+
                 {
                     hideSelectionContext();
                     stateChecker.removeCallbacks(this);
+                }
+                else if(mediaShareUserInterface.state == MediaShareUserInterface.State.RECEIVED)
+                {
+                    hideSelectionContext();
+                    stateChecker.removeCallbacks(this);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    recordingsLoadingScreen.setVisibility(View.VISIBLE);
+
+                    startService(new Intent(getApplicationContext(), MediaLoadService.class));
+                    mediaLoadService.start();
+
+                    recordingsLoadHandler.postDelayed(recordingsLoadRunnable, CHECK_DURATION);
                 }
                 else
                 {
