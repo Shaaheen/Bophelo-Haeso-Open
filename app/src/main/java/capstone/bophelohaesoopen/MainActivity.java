@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity
             DatabaseUtils.getInstance().addLog(logEntry);
         }
 
-        mediaLoadService = new MediaLoadService(this);
+        mediaLoadService = new MediaLoadService(this, Media.MediaType.VIDEO);
         startService(new Intent(this, MediaLoadService.class));
 
         videosLoadingScreen = (RelativeLayout)findViewById(R.id.videosLoadingScreen);
@@ -421,6 +421,7 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 if(mediaShareUserInterface.state == MediaShareUserInterface.State.FAILED ||
+                        mediaShareUserInterface.state == MediaShareUserInterface.State.CANCELLED ||
                         mediaShareUserInterface.state == MediaShareUserInterface.State.SENDING_COMPLETE)
                 {
                     hideSelectionContext();

@@ -3,6 +3,7 @@ package capstone.bophelohaesoopen;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ public class MediaShareUserInterface
 {
     public BluetoothUtils bluetoothUtils;
 
-    public enum State {IDLE, SENDING, SCANNING, FAILED, SENDING_COMPLETE, RECEIVING};
+    public enum State {IDLE, SENDING, SCANNING, FAILED, SENDING_COMPLETE, RECEIVING, CANCELLED};
 
     public State state = State.IDLE;
     private boolean sendMedia;
@@ -81,6 +82,16 @@ public class MediaShareUserInterface
                 //All are clickable
                 final MaterialDialog dialog = new MaterialDialog.Builder(activityM)
                         .title("Devices")
+                        .canceledOnTouchOutside(false)
+                        .dismissListener(new DialogInterface.OnDismissListener()
+                        {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface)
+                            {
+                                state = State.CANCELLED;
+                            }
+                        })
+                        .cancelable(true)
                         .items(btDevices)
                         .itemsCallback(new MaterialDialog.ListCallback()
                         {

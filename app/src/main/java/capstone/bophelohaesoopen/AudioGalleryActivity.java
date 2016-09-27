@@ -21,6 +21,7 @@ import java.util.ArrayList;
 //import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaShareUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
 /**
  * Activity where recorded audio files are listed / shown
@@ -107,7 +108,7 @@ public class AudioGalleryActivity extends AppCompatActivity
     private void initialize()
     {
         mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
-        mediaLoadService = new MediaLoadService(this);
+        mediaLoadService = new MediaLoadService(this, Media.MediaType.AUDIO);
         startService(new Intent(this, MediaLoadService.class));
 
         audioLoadingScreen = (RelativeLayout)findViewById(R.id.audioLoadingScreen);
@@ -197,6 +198,7 @@ public class AudioGalleryActivity extends AppCompatActivity
             public void run()
             {
                 if(mediaShareUserInterface.state == MediaShareUserInterface.State.FAILED ||
+                        mediaShareUserInterface.state == MediaShareUserInterface.State.CANCELLED ||
                         mediaShareUserInterface.state == MediaShareUserInterface.State.SENDING_COMPLETE)
                 {
                     hideSelectionContext();
@@ -209,6 +211,13 @@ public class AudioGalleryActivity extends AppCompatActivity
             }
         };
         stateChecker.postDelayed(checkState, 0);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        mediaShareUserInterface = null;
+        super.onDestroy();
     }
 
     @Override

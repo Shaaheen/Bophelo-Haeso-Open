@@ -5,29 +5,27 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.app.Activity;
 
 import java.util.ArrayList;
 
 import capstone.bophelohaesoopen.AudioGalleryActivity;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Video;
 import capstone.bophelohaesoopen.MainActivity;
 import capstone.bophelohaesoopen.PictureGalleryActivity;
 
 public class MediaLoadService extends Service
 {
-    MainActivity mainActivity;
-    PictureGalleryActivity galleryActivity;
-    AudioGalleryActivity audioGalleryActivity;
+    Activity activity;
     FileUtils fileUtils;
     ArrayList<Video> videoList;
     ArrayList<Image> imageList;
     ArrayList<Audio> audioList;
 
-    private enum MediaType{IMAGE, VIDEO, AUDIO}
-
-    MediaType mediaType;
+    Media.MediaType mediaType;
 
     public boolean mediaLoaded = false;
 
@@ -39,25 +37,10 @@ public class MediaLoadService extends Service
         super.onCreate();
     }
 
-    public MediaLoadService(MainActivity activity)
+    public MediaLoadService(Activity activity, Media.MediaType mediaType)
     {
-        mainActivity = activity;
-        videoList = new ArrayList<>();
-        mediaType = MediaType.VIDEO;
-    }
-
-    public MediaLoadService(PictureGalleryActivity activity)
-    {
-        galleryActivity = activity;
-        imageList = new ArrayList<>();
-        mediaType = MediaType.IMAGE;
-    }
-
-    public MediaLoadService(AudioGalleryActivity activity)
-    {
-        audioGalleryActivity = activity;
-        imageList = new ArrayList<>();
-        mediaType = MediaType.AUDIO;
+        this.activity = activity;
+        this.mediaType = mediaType;
     }
 
     public MediaLoadService()
@@ -92,22 +75,22 @@ public class MediaLoadService extends Service
 
     public void loadVideoList()
     {
-        fileUtils = new FileUtils(mainActivity);
+        fileUtils = new FileUtils(activity);
         videoList = (ArrayList<Video>)fileUtils.getMediaCollectionFromStorage("chw_", Video.mediaExtension);
         mediaLoaded = true;
     }
 
     public void loadImageList()
     {
-        fileUtils = new FileUtils(galleryActivity);
-        imageList = (ArrayList<Image>)fileUtils.getMediaCollectionFromStorage("chw_", Image.mediaExtension);
+        fileUtils = new FileUtils(activity);
+        imageList = fileUtils.getImagesFromStorage();
         mediaLoaded = true;
     }
 
     public void loadAudioList()
     {
-        fileUtils = new FileUtils(galleryActivity);
-        audioList = (ArrayList<Audio>)fileUtils.getMediaCollectionFromStorage("chw_", Audio.mediaExtension);
+        fileUtils = new FileUtils(activity);
+        audioList = fileUtils.getRecordingsFromStorage();
         mediaLoaded = true;
     }
 
@@ -133,16 +116,19 @@ public class MediaLoadService extends Service
         @Override
         protected Long doInBackground(FileUtils... fileUtilses)
         {
-            if(mediaType == MediaType.IMAGE)
+            if(mediaType == Media.MediaType.IMAGE)
             {
+                imageList = new ArrayList<>();
                 loadImageList();
             }
-            else if(mediaType == MediaType.AUDIO)
+            else if(mediaType == Media.MediaType.AUDIO)
             {
+                audioList = new ArrayList<>();
                 loadAudioList();
             }
-            else if(mediaType == MediaType.VIDEO)
+            else if(mediaType == Media.MediaType.VIDEO)
             {
+                videoList = new ArrayList<>();
                 loadVideoList();
             }
 

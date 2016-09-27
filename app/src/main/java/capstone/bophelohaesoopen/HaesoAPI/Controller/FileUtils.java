@@ -76,6 +76,62 @@ public class FileUtils
         return mediaFiles;
     }
 
+    public ArrayList<Image> getImagesFromStorage()
+    {
+        ArrayList<Image> images = new ArrayList<>();
+
+        File mediaStorageDirectory = getAppDirectory(
+                Environment.getExternalStorageDirectory().getAbsolutePath() , appRootFolder);
+        if (mediaStorageDirectory == null) return null;
+
+        // Create the image directory if it does not exist
+        File imageDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), appImageFolder);
+        if (imageDirectory == null) return null;
+
+        File[] files = imageDirectory.listFiles();
+
+        for(File f : files)
+        {
+            Image image = new Image(f.getName(), f.getAbsolutePath());
+
+            int width = (int)activity.getResources().getDimension(R.dimen.image_item_width);
+            int height = (int)activity.getResources().getDimension(R.dimen.image_item_height);
+            Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(f.getAbsolutePath()), width, height);
+            image.thumb = thumb;
+            images.add(image);
+        }
+
+        return images;
+    }
+
+    public ArrayList<Audio> getRecordingsFromStorage()
+    {
+        ArrayList<Audio> recordings = new ArrayList<>();
+        File mediaStorageDirectory = getAppDirectory(
+                Environment.getExternalStorageDirectory().getAbsolutePath() , appRootFolder);
+        if (mediaStorageDirectory == null) return null;
+
+        // Create the recordings directory if it does not exist
+        File imageDirectory = getAppDirectory(mediaStorageDirectory.getAbsolutePath(), appRecordingsFolder);
+        if (imageDirectory == null) return null;
+
+        File[] files = imageDirectory.listFiles();
+
+        for(File f : files)
+        {
+            Audio audio = new Audio(f.getName(), f.getAbsolutePath());
+            MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+            metaRetriever.setDataSource(f.getAbsolutePath());
+            String durationString = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            long duration = Long.valueOf(durationString);
+            audio.duration = duration;
+            metaRetriever.release();
+            recordings.add(audio);
+        }
+
+        return recordings;
+    }
+
     /**
      * Checks all files and subdir in a given directory for specfic extension files with specified prefix
      * @param directory list of files/subdir

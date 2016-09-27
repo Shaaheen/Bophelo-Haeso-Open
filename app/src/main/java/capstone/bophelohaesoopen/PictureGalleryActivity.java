@@ -22,6 +22,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.MediaLoadService;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
+import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
 /**
  * Activity where pictures taken are listed / shown
@@ -105,7 +106,7 @@ public class PictureGalleryActivity extends AppCompatActivity
         }
 
         mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
-        mediaLoadService = new MediaLoadService(this);
+        mediaLoadService = new MediaLoadService(this, Media.MediaType.IMAGE);
         startService(new Intent(this, MediaLoadService.class));
 
         imagesLoadingScreen = (RelativeLayout)findViewById(R.id.imagesLoadingScreen);
@@ -128,6 +129,13 @@ public class PictureGalleryActivity extends AppCompatActivity
         Intent intent = new Intent(this, PictureActivity.class);
         intent.putExtra(PictureActivity.IMAGE_NAME, image.getFilePath());
         this.startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        mediaShareUserInterface = null;
+        super.onDestroy();
     }
 
     @Override
