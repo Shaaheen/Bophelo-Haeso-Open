@@ -153,7 +153,7 @@ public class MediaShareUserInterface
             public void onStartSending()
             {
                 state = State.SENDING;
-                createProgressDialogue("Sending File...");
+                createProgressDialogue("Sending file...");
             }
 
             @Override
@@ -205,6 +205,18 @@ public class MediaShareUserInterface
         determinatePD.setTitle(dialogueText);
         determinatePD.setProgress(0);
         determinatePD.setMax(100);
+        determinatePD.setButton(ProgressDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                indeterminatePD.dismiss();
+
+                // Cancel whatever operation is being performed
+                state = State.CANCELLED;
+                bluetoothUtils.end();
+            }
+        });
         determinatePD.show();
     }
 

@@ -1,5 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <item name="arrow_down1" type="drawable" >@drawable/arrow_down_white</item>
+    <item name="arrow_down" type="drawable" >@drawable/arrow_down_white</item>
     <item name="arrow_up" type="drawable">@drawable/arrow_up_white</item>
     <item name="camera" type="drawable">@drawable/camera_white</item>
     <item name="record" type="drawable">@drawable/mic_white</item>
@@ -9,5 +9,6 @@
     <item name="cancel" type="drawable">@drawable/cancel_white</item>
     <item name="pause" type="drawable">@drawable/pause_white</item>
     <item name="stop" type="drawable">@drawable/stop_white</item>
-    <drawable name="arrow_down" type="drawable">@drawable/arrow_down_white</drawable>
+    <item name="play" type="drawable">@drawable/play_white</item>
+
 </resources>

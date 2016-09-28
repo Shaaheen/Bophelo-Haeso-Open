@@ -263,14 +263,14 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             Log.i("BHO", "PLAYING AND NOT PAUSED");
             seekBarUpdateHandler.removeCallbacks(seekbarUpdater);
             pauseVideo();
-            playPauseButton.setImageResource(R.drawable.play_black);
+            playPauseButton.setImageResource(R.drawable.play);
         }
         else if(paused && playing)
         {
             Log.i("BHO", "PAUSED AND PLAYING");
             resumeVideo();
             seekBarUpdateHandler.postDelayed(seekbarUpdater, 0);
-            playPauseButton.setImageResource(R.drawable.pause_black);
+            playPauseButton.setImageResource(R.drawable.pause);
         }
         else if(!paused && !playing)
         {
@@ -279,7 +279,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
             screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
             playVideo(screenWidth, screenHeight);
-            playPauseButton.setImageResource(R.drawable.pause_black);
+            playPauseButton.setImageResource(R.drawable.pause);
         }
     }
 
