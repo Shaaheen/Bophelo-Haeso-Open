@@ -46,31 +46,7 @@ public class AudioRecorderActivity extends AppCompatActivity
     private static int ANIM_DURATION = 500;
     private Bundle savedInstance;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 2: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setUpRecordingActivity(savedInstance);
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
 
-                } else {
-                    Log.w("Rec","Permission denied");
-                    onBackPressed();
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -115,6 +91,31 @@ public class AudioRecorderActivity extends AppCompatActivity
         }
         else{
             setUpRecordingActivity(savedInstanceState);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 2: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setUpRecordingActivity(savedInstance);
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    Log.w("Rec","Permission denied");
+                    onBackPressed();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 
