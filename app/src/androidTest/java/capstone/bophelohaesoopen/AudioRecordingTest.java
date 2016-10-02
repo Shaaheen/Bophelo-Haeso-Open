@@ -21,15 +21,15 @@ import static junit.framework.Assert.assertNull;
 
 /**
  * Created by Jacob Ntesang on 9/2/2016.
- * This class unit tests the audio production.
+ * This class unit tests the audio recording module.
  */
 
 @RunWith(AndroidJUnit4.class)
 public class AudioRecordingTest {
 
-    AudioRecorder myAudio;
-    Media media;
-    String name, outputFile;
+    private AudioRecorder myAudio;
+    private Media media;
+    private String name, outputFile;
 
     //This method will be executed before each test in the class, so as to execute some preconditions necessary for the test.
     @Before
@@ -59,7 +59,7 @@ public class AudioRecordingTest {
     //Confirm the media name and the output filePath.
     @Test
     public void confirmMediaDetails() {
-        assertEquals(media.getName(), "workout");
+        assertEquals(media.getName(), "chw_workout");
         assertEquals(media.getFilePath(), outputFile);
     }
 
