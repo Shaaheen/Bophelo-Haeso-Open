@@ -29,7 +29,9 @@ public class LogEntryTesting {
     private Date timestamp;
     private  String formatTimeStamp = "";
 
-
+    /**
+     * Object and variables setup.
+     */
     @Before
     public void setUp() {
         logEntryType = logEntryType.MEDIA_PLAYER;
