@@ -163,7 +163,7 @@ public class AudioRecorderActivity extends AppCompatActivity
 
                             String recordingLimitMessage = getResources().getString(R.string.recording_duration_limit_message);
                             String recordingLimitTitle = getResources().getString(R.string.recording_duration_limit_title);
-                            String okText = getResources().getString(R.string.recording_duration_limit_positive_action);
+                            String okText = getResources().getString(R.string.positive_action_button_text);
                             alert.setTitle(recordingLimitTitle);
                             alert.setMessage(recordingLimitMessage);
                             alert.setPositiveButton(okText, new DialogInterface.OnClickListener()

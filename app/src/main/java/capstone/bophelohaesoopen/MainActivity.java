@@ -1,6 +1,8 @@
 package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     //region Custom class declarations
     VideoAdapter videoAdapter;
     FileUtils fileUtils;
-    CustomGridLayoutManager gridLayoutManager;
+    GridLayoutManager gridLayoutManager;
     Video videoToSend;
     MediaLoadService mediaLoadService;
     MediaShareUserInterface mediaShareUserInterface;
@@ -202,7 +205,7 @@ public class MainActivity extends AppCompatActivity
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        gridLayoutManager = new CustomGridLayoutManager(this, 2);
+        gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
 
@@ -264,8 +267,15 @@ public class MainActivity extends AppCompatActivity
 
     private void takePictureButtonClick()
     {
-        Intent intent = new Intent(this, CameraActivity.class);
-        this.startActivity(intent);
+        if(storageAvailable())
+        {
+            Intent intent = new Intent(this, CameraActivity.class);
+            this.startActivity(intent);
+        }
+        else
+        {
+            displayUnavailableStorageDialog();
+        }
     }
 
     private void recordingsButtonClick()
@@ -292,6 +302,37 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void recordAudioButtonClick()
+    {
+        if(storageAvailable())
+        {
+            Intent intent = new Intent(this, AudioRecorderActivity.class);
+            this.startActivity(intent);
+        }
+        else
+        {
+            displayUnavailableStorageDialog();
+        }
+
+    }
+
+    private void menuToggleClick()
+    {
+        if (!menuHidden)
+        {
+            hideMenu();
+        }
+        else
+        {
+            showMenu();
+        }
+    }
+
+    // endregion
+
+    /**
+     * Put the screen into share mode by showing the relevant text and icons for sharing
+     */
     private void showSelectionContext()
     {
         String title = getResources().getString(R.string.title_select_video);
@@ -306,6 +347,9 @@ public class MainActivity extends AppCompatActivity
         inSelectionMode = true;
     }
 
+    /**
+     * Put the screen into normal mode by hiding the text and icons shown when sharing
+     */
     private void hideSelectionContext()
     {
         String appName = getResources().getString(R.string.app_name);
@@ -322,25 +366,7 @@ public class MainActivity extends AppCompatActivity
         videoAdapter.notifyDataSetChanged();
     }
 
-    private void recordAudioButtonClick()
-    {
-        Intent intent = new Intent(this, AudioRecorderActivity.class);
-        this.startActivity(intent);
-    }
 
-    private void menuToggleClick()
-    {
-        if (!menuHidden)
-        {
-            hideMenu();
-        }
-        else
-        {
-            showMenu();
-        }
-    }
-
-    // endregion
 
     /**
      * Slides button drawer down
@@ -366,7 +392,6 @@ public class MainActivity extends AppCompatActivity
         menuHidden = true;
 
         // Enable scrolling on the video list since the list is in full view
-        gridLayoutManager.setScrollEnabled(true);
         menuToggle.setImageResource(R.drawable.arrow_up);
 
     }
@@ -393,19 +418,6 @@ public class MainActivity extends AppCompatActivity
         anim.start();
 
         menuHidden = false;
-
-        // Delay to allow the video list to scroll to the top before scrolling is disabled
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                // Disable scrolling so that the 4 videos at the top stay in view
-                gridLayoutManager.setScrollEnabled(false);
-            }
-        }, 200);
-
 
         // Scroll video list to the top in case it was scrolled down, in order to show the 4 videos at the top
         recyclerView.smoothScrollToPosition(0);
@@ -460,37 +472,6 @@ public class MainActivity extends AppCompatActivity
         };
         stateChecker.postDelayed(checkState, 0);
     }
-
-    // region Activity overrides
-
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        videosLoaded = false;
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onRestart()
-    {
-        videosLoaded = false;
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume()
-    {
-        videosLoaded = false;
-        super.onResume();
-    }
-
-    // endregion
 
     /**
      * Starts the VideoPlayerActivity with the video at the position (in the video list) given
@@ -596,8 +577,67 @@ public class MainActivity extends AppCompatActivity
         return ordered;
     }
 
+    private boolean storageAvailable()
+    {
+        boolean available = true;
+        long freeBytes = new File(getExternalFilesDir(null).toString()).getFreeSpace();
+        long freeMegs = freeBytes / (1024 * 1024);
+
+        if(freeMegs < 8)
+        {
+            available = false;
+        }
+
+        return available;
+    }
+
     private void displayUnavailableStorageDialog()
     {
-
+        AlertDialog.Builder storageAlert = new AlertDialog.Builder(this);;
+        String storageAlertMessage = getResources().getString(R.string.storage_alert_message);
+        String storageAlertTitle = getResources().getString(R.string.storage_alert_title);
+        String okText = getResources().getString(R.string.positive_action_button_text);
+        storageAlert.setTitle(storageAlertTitle);
+        storageAlert.setMessage(storageAlertMessage);
+        storageAlert.setPositiveButton(okText, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                dialogInterface.dismiss();
+            }
+        });
+        storageAlert.show();
     }
+
+    // region Activity overrides
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        videosLoaded = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        videosLoaded = false;
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        videosLoaded = false;
+        super.onResume();
+    }
+
+    // endregion
 }
