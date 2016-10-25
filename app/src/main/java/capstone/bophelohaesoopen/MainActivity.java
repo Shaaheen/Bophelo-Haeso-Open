@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     Video videoToSend;
     MediaLoadService mediaLoadService;
     MediaShareUserInterface mediaShareUserInterface;
+    private Bundle savedInstance;
     //endregion
 
     // region Primitives declarations
