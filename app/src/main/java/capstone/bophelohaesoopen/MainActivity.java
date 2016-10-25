@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         // Initialize activity view components
         initializeViews();
 
-        mediaShareUserInterface = new MediaShareUserInterface(this, this);
+        mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
         mediaLoadService.start();
         videoLoadHandler = new Handler();
         videoLoadRunnable = new Runnable()
