@@ -33,8 +33,6 @@ public class MediaShareUserInterface
     ProgressDialog indeterminatePD;
     ProgressDialog determinatePD;
 
-    // Dialog to display while scanning for devices
-    private MaterialDialog scanningDialog;
     private Activity activityM;
 
     public MediaShareUserInterface(final Context ctx, final Activity activity)
@@ -50,7 +48,7 @@ public class MediaShareUserInterface
             @Override
             public void onStartScan()
             {
-                //Dialog displaying scanning
+                // Dialog displayed during scanning
                 indeterminatePD = new ProgressDialog(activityM);
                 indeterminatePD.setMessage("Scanning for devices");
                 indeterminatePD.setCancelable(false);
@@ -62,7 +60,6 @@ public class MediaShareUserInterface
             @Override
             public void onStopScan()
             {
-//                scanningDialog.hide();
                 indeterminatePD.dismiss();
             }
 
@@ -78,8 +75,8 @@ public class MediaShareUserInterface
                     return;
                 }
 
-                //Create pop up dialogue that displays a list of all the found devices
-                //All are clickable
+                // Create pop up dialogue that displays a list of all the found devices
+                // All are clickable
                 final MaterialDialog dialog = new MaterialDialog.Builder(activityM)
                         .title("Devices")
                         .canceledOnTouchOutside(false)
@@ -99,8 +96,8 @@ public class MediaShareUserInterface
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text)
                             {
                                 Toast.makeText(ctx, "Device No. " + which + " : " + text + " selected ", Toast.LENGTH_SHORT).show();
-                                //Connects to selected device
-                                //simpleBluetooth.connectToBluetoothServer(deviceList.get(which).getAddress());
+
+                                // Connects to selected device
                                 bluetoothUtils.connectToAddress(btDevices.get(which).getAddress());
 
                             }
@@ -115,13 +112,14 @@ public class MediaShareUserInterface
             {
                 Toast.makeText(ctx, "Connected, Send : " + sendMedia, Toast.LENGTH_SHORT).show();
                 state = State.IDLE;
-                //if want to send after connection
+                // if we'd like to send after connection has occurred
                 if (sendMedia)
                 {
                     try
                     {
-                        Thread.sleep(700); //Sleeps to wait for bluetooth to set up
-                    } catch (InterruptedException e)
+                        Thread.sleep(700); // Sleeps to wait for bluetooth to set up
+                    }
+                    catch (InterruptedException e)
                     {
                         e.printStackTrace();
                     }
@@ -135,7 +133,6 @@ public class MediaShareUserInterface
             {
                 Toast.makeText(ctx, "Disconnected", Toast.LENGTH_SHORT).show();
                 state = State.FAILED;
-                //sendMedia = false;
             }
 
             @Override
@@ -189,7 +186,6 @@ public class MediaShareUserInterface
             }
 
         };
-
     }
 
     /**
@@ -242,7 +238,8 @@ public class MediaShareUserInterface
         scanForDevices();
     }
 
-    public void end(){
+    public void end()
+    {
         mediaToSend = null;
         determinatePD = null;
         sendMedia = false;

@@ -24,7 +24,7 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
 /**
  * Activity where recorded audio files are listed / shown
- * */
+ */
 
 public class AudioGalleryActivity extends AppCompatActivity
 {
@@ -49,7 +49,9 @@ public class AudioGalleryActivity extends AppCompatActivity
     private static int CHECK_DURATION = 1000;
     private static int SHARE_STATE_CHECK_INTERVAL = 500;
 
+    // Handler to run the Runnable below every CHECK_DURATION milliseconds
     Handler recordingsLoadHandler;
+    // Runnable containing the code that checks whether recordings have been loaded
     Runnable recordingsLoadRunnable;
 
     @Override
@@ -69,10 +71,14 @@ public class AudioGalleryActivity extends AppCompatActivity
             Log.i("APP", "Action bar null");
         }
 
-        initialize();
+        // Initialize activity view components
+        initializeViews();
 
         mediaLoadService.start();
+
+        // Handler to run the Runnable below every CHECK_DURATION milliseconds
         recordingsLoadHandler = new Handler();
+        // Runnable that contains the code that checks whether recordings have been loaded
         recordingsLoadRunnable = new Runnable()
         {
             @Override
@@ -81,7 +87,6 @@ public class AudioGalleryActivity extends AppCompatActivity
 
                 if (mediaLoadService.mediaLoaded)
                 {
-//                    System.out.println("recordings_black loaded!");
                     audioList = mediaLoadService.getAudioList();
                     recyclerView.setVisibility(View.VISIBLE);
                     recordingsLoadingScreen.setVisibility(View.INVISIBLE);
@@ -109,7 +114,10 @@ public class AudioGalleryActivity extends AppCompatActivity
         recordingsLoadHandler.postDelayed(recordingsLoadRunnable, CHECK_DURATION);
     }
 
-    private void initialize()
+    /**
+     * Initialises view components of the activity
+     */
+    private void initializeViews()
     {
         mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
         mediaLoadService = new MediaLoadService(this, Media.MediaType.AUDIO);
@@ -144,7 +152,6 @@ public class AudioGalleryActivity extends AppCompatActivity
 
     private void shareMediaButtonClick()
     {
-//        Toast.makeText(this, "Sends a selected audio file", Toast.LENGTH_SHORT).show();
         if (inSelectionMode)
         {
             hideSelectionContext();
@@ -153,25 +160,32 @@ public class AudioGalleryActivity extends AppCompatActivity
         {
             showSelectionContext();
         }
-
     }
 
+    /**
+     * Put the screen into share mode by showing the relevant text and icons for sharing
+     */
     private void showSelectionContext()
     {
-        setTitle("Select recording");
+        String title = getResources().getString(R.string.title_select_recording);
+        setTitle(title);
         shareIcon.setImageResource(R.drawable.cancel);
-        shareText.setText("Cancel");
+        String cancel = getResources().getString(R.string.share_button_cancel_text);
+        shareText.setText(cancel);
         inSelectionMode = true;
     }
 
+    /**
+     * Put the screen into normal mode by hiding the text and icons shown when sharing
+     */
     private void hideSelectionContext()
     {
         String appName = getResources().getString(R.string.app_name);
-
         setTitle(appName);
 
         shareIcon.setImageResource(R.drawable.share);
-        shareText.setText("Share");
+        String share = getResources().getString(R.string.share_button_share_text);
+        shareText.setText(share);
         inSelectionMode = false;
 
         // Hide video item tick overlay

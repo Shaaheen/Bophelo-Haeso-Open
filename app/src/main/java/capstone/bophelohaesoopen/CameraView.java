@@ -97,7 +97,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback
         }
         catch(Exception e)
         {
-            System.out.println("Error setting camera_black preview : "+e.getMessage());
+            System.out.println("Error setting camera preview : "+e.getMessage());
         }
     }
 
@@ -118,7 +118,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback
         }
 
         Camera.Size optimalSize = null;
-        double minDiff = Double.MAX_VALUE;
+        double minimumDifference = Double.MAX_VALUE;
 
         int targetHeight = h;
 
@@ -129,22 +129,22 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback
             {
                 continue;
             }
-            if (Math.abs(size.height - targetHeight) < minDiff)
+            if (Math.abs(size.height - targetHeight) < minimumDifference)
             {
                 optimalSize = size;
-                minDiff = Math.abs(size.height - targetHeight);
+                minimumDifference = Math.abs(size.height - targetHeight);
             }
         }
 
         if (optimalSize == null)
         {
-            minDiff = Double.MAX_VALUE;
+            minimumDifference = Double.MAX_VALUE;
             for (Camera.Size size : sizes)
             {
-                if (Math.abs(size.height - targetHeight) < minDiff)
+                if (Math.abs(size.height - targetHeight) < minimumDifference)
                 {
                     optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight);
+                    minimumDifference = Math.abs(size.height - targetHeight);
                 }
             }
         }

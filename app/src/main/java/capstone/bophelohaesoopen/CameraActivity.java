@@ -2,14 +2,9 @@ package capstone.bophelohaesoopen;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.hardware.Camera;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,25 +16,18 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import capstone.bophelohaesoopen.HaesoAPI.Controller.DatabaseUtils;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.FileUtils;
-import capstone.bophelohaesoopen.HaesoAPI.Model.Image;
 import capstone.bophelohaesoopen.HaesoAPI.Model.LogEntry;
 import capstone.bophelohaesoopen.HaesoAPI.Model.Media;
 
+/**
+ * Activity for taking photos
+ */
+
 public class CameraActivity extends AppCompatActivity
 {
-
     private Camera camera;
     private CameraView cameraView;
     FloatingActionButton capture;
@@ -71,10 +59,14 @@ public class CameraActivity extends AppCompatActivity
 
         fileUtils = new FileUtils(this);
 
-        initialize();
+        // Initialize activity view components
+        initializeViews();
     }
 
-    private void initialize()
+    /**
+     * Initialises view components of the activity
+     */
+    private void initializeViews()
     {
         
         LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Camera", null);
@@ -162,14 +154,12 @@ public class CameraActivity extends AppCompatActivity
         });
         animator.start();
 
-//        captureScreen.setAlpha(0.6f);
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable()
         {
             @Override
             public void run()
             {
-//                captureScreen.setAlpha(0);
                 ValueAnimator animator = ValueAnimator.ofFloat(0.6f, 0);
                 animator.setDuration(CAPTURE_ANIM_DURATION);
                 animator.setInterpolator(new LinearInterpolator());
@@ -252,8 +242,9 @@ public class CameraActivity extends AppCompatActivity
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
         {
             result = (info.orientation + degrees) % 360;
-            result = (360 - result) % 360;  // compensate the mirror
-        } else
+            result = (360 - result) % 360;  // compensate for the mirror effect
+        }
+        else
         {  // back-facing
             result = (info.orientation - degrees + 360) % 360;
         }

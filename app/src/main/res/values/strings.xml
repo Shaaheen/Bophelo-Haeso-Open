@@ -13,6 +13,8 @@
     <string name="recordings_button_text">Recordings</string>
     <string name="pictures_button_text">Pictures</string>
     <string name="title_select_video">Select video</string>
+    <string name="no_videos_found">No videos found</string>
+    <string name="loading_videos">Loading videos</string>
 
     <!--Picture Activity-->
     <string name="title_activity_picture">Image Viewer</string>
@@ -47,14 +49,6 @@
     <string name="images_folder">Images</string>
     <string name="videos_folder">Videos</string>
     <string name="recordings_folder">Recordings</string>
-
-    <string-array name="string_array_example">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
+    <string name="cancel">Cancel</string>
 
 </resources>

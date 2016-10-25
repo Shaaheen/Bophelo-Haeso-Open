@@ -47,6 +47,9 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioViewHolder>
         String durationText = getFormattedDuration(duration);
         holder.duration.setText(durationText);
 
+
+        // If the selected position is the same as that of the current view
+        // draw the current view with the selection overlay
         if(selectedPosition == position && itemClicked)
         {
             holder.selectionOverlay.setVisibility(View.VISIBLE);
@@ -64,7 +67,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioViewHolder>
                 setItemClicked(true);
                 if(audioGalleryActivity.inSelectionMode)
                 {
-                    notifyItemChanged(selectedPosition);
+//                    notifyItemChanged(selectedPosition);
                     selectedPosition = position;
                     notifyItemChanged(selectedPosition);
                     audioGalleryActivity.shareAudio(position);

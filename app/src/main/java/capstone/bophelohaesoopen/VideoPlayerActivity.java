@@ -66,10 +66,17 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     int screenWidth;
     int screenHeight;
 
+    // This handler schedules the Runnable below to be run after CONTROLS_VISIBLE_DURATION milliseconds
+    // It is not run as a continuous loop as with the other handlers in other activities
     Handler handler;
+    // Runnable that contains the code to show/hide the video controls.
     Runnable runnable;
-    Runnable seekbarUpdater;
+
+    // Handler to run the Runnable below every UPDATE_INTERVAL milliseconds
     Handler seekBarUpdateHandler;
+    // Runnable that contains the code to update the seek position of the seekBar
+    Runnable seekbarUpdater;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -216,6 +223,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     /**
      * Launches when video display is done loading
      * Will start to play_black video when video holder is done loading
+     *
      * @param holder - The video holder display
      */
     @Override
@@ -258,6 +266,10 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     private void playPauseButtonClick()
     {
+        // NB: The playing variable is only changed when the play button is pressed,
+        // when stop button is pressed and when the video has ended
+
+        // If the video is currently active and not paused i.e. the video is progressing
         if(playing && !paused)
         {
             Log.i("BHO", "PLAYING AND NOT PAUSED");
@@ -265,6 +277,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             pauseVideo();
             playPauseButton.setImageResource(R.drawable.play);
         }
+
+        // If the video is currently active but paused
         else if(paused && playing)
         {
             Log.i("BHO", "PAUSED AND PLAYING");
@@ -272,6 +286,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             seekBarUpdateHandler.postDelayed(seekbarUpdater, 0);
             playPauseButton.setImageResource(R.drawable.pause);
         }
+
+        // If the video is not active and has not been paused
         else if(!paused && !playing)
         {
             Log.i("BHO", "NOT PAUSED AND NOT PLAYING");
@@ -362,6 +378,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     // region Video operations
 
+    /**
+     * Starts playing video
+     *
+     * @param width The width of the view on which the video will be played
+     * @param height The height of the view on which the video will be played
+     */
     private void playVideo(int width, int height)
     {
         playing = true;
@@ -410,20 +432,15 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     //region Activity overrides
 
+    // Used for when device orientation is changed
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
         Log.i("BHO", "ON CONFIGURATION CHANGED");
         super.onConfigurationChanged(newConfig);
+
+        // Redraw controls
         videoControls.invalidate();
-
-//        recreate();
-
-//        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-//        {
-//            videoControls.setY(videoControlsY);
-//        }
-
     }
 
     @Override
@@ -488,7 +505,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
         {
             case MotionEvent.ACTION_DOWN:
 
-                // Stop any running Runnable
+                // Stop any running instances of the given runnable
                 handler.removeCallbacks(runnable);
 
                 if(videoControlsVisible)

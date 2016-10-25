@@ -20,7 +20,6 @@ import capstone.bophelohaesoopen.HaesoAPI.Model.Audio;
 
 /**
  * Activity for playing audio files
- * NB: Not implemented in the prototype
  */
 
 public class AudioPlayerActivity extends AppCompatActivity
@@ -37,8 +36,10 @@ public class AudioPlayerActivity extends AppCompatActivity
     MediaPlayer mediaPlayer;
     Audio audio;
 
+    // Keys to be used to obtain intent values
     public static String AUDIO_NAME = "RECORDING_NAME";
     public static String AUDIO_FILE_PATH = "RECORDING_FILE_PATH";
+
     private static int UPDATE_INTERVAL = 300;
 
     boolean playing = false;
@@ -48,7 +49,9 @@ public class AudioPlayerActivity extends AppCompatActivity
     String recName;
     String recPath;
 
+    // Handler to run the Runnable below every UPDATE_INTERVAL milliseconds
     Runnable updateSeekbar;
+    // Runnable containing the code that updates the seek position of the seekBar
     Handler seekBarUpdateHandler;
 
     @Override
@@ -72,9 +75,14 @@ public class AudioPlayerActivity extends AppCompatActivity
         audio = new Audio(recName, recPath);
         paused = false;
 
+        // The name given to the media player is irrelevant to its application
         mediaPlayer = new MediaPlayer("BHO");
-        playAudio();
+
+        // Initialize activity view components
         initializeViews();
+
+        // Start playing audio
+        playAudio();
 
         seekBarUpdateHandler = new Handler();
         updateSeekbar = new Runnable()
@@ -111,6 +119,9 @@ public class AudioPlayerActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Initialises view components of the activity
+     */
     private void initializeViews()
     {
         playPauseButton = (FloatingActionButton)findViewById(R.id.playPauseButton);
@@ -176,6 +187,10 @@ public class AudioPlayerActivity extends AppCompatActivity
 
     private void playPauseButtonClick()
     {
+        // NB: The playing variable is only changed when the play button is pressed,
+        // when stop button is pressed and when the audio playing has ended
+
+        // If the audio is currently active and not paused i.e. the audio is progressing
         if(playing && !paused)
         {
             Log.i("BHO", "PLAYING AND NOT PAUSED");
@@ -183,6 +198,8 @@ public class AudioPlayerActivity extends AppCompatActivity
             pauseAudio();
             playPauseButton.setImageResource(R.drawable.play);
         }
+
+        // If the audio is currently active but paused
         else if(paused && playing)
         {
             Log.i("BHO", "PAUSED AND PLAYING");
@@ -190,6 +207,8 @@ public class AudioPlayerActivity extends AppCompatActivity
             seekBarUpdateHandler.postDelayed(updateSeekbar, 0);
             playPauseButton.setImageResource(R.drawable.pause);
         }
+
+        // If the audio is not active and has not been paused
         else if(!paused && !playing)
         {
             Log.i("BHO", "NOT PAUSED AND NOT PLAYING");

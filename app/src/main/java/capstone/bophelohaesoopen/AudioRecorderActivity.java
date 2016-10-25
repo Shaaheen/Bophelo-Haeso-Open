@@ -19,8 +19,8 @@ import java.io.IOException;
 import capstone.bophelohaesoopen.HaesoAPI.Controller.AudioRecorder;
 
 /**
- * Activity for recording_black audio
- * Starts recording_black audio automatically when activity is started
+ * Activity for recording audio
+ * Starts recording audio automatically when activity is started
  */
 
 public class AudioRecorderActivity extends AppCompatActivity
@@ -44,7 +44,6 @@ public class AudioRecorderActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        // Get action bar if not present
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_recorder);
@@ -52,6 +51,7 @@ public class AudioRecorderActivity extends AppCompatActivity
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Initialize activity view components
         initializeViews();
 
         alert = new AlertDialog.Builder(this);
@@ -81,6 +81,9 @@ public class AudioRecorderActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Initialises view components of the activity
+     */
     private void initializeViews()
     {
         stopButton = (FloatingActionButton)findViewById(R.id.stopButton);
@@ -114,12 +117,15 @@ public class AudioRecorderActivity extends AppCompatActivity
     }
 
     /**
-     * Animates blinking indicator when recording_black is active
+     * Animates blinking indicator when recording is happening
      */
     private void animateIndicator()
     {
         final long startTime = System.currentTimeMillis();
+
+        // Handler to run the Runnable below every ANIM_DURATION milliseconds
         handler = new Handler();
+        // Runnable containing the code to hide/show the recording indicator
         runnable = new Runnable()
         {
             @Override

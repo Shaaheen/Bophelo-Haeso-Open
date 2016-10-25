@@ -2,6 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="NavyBlueTheme">
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="NavyBlueTheme" parent="Theme.AppCompat.Light.DarkActionBar">

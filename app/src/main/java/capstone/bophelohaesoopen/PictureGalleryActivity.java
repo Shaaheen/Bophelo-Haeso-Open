@@ -61,7 +61,10 @@ public class PictureGalleryActivity extends AppCompatActivity
         initialize();
 
         mediaLoadService.start();
+
+        // Handler to run the Runnable below every CHECK_DURATION milliseconds
         final Handler handler = new Handler();
+        // Runnable that contains the code that checks whether pictures have been loaded
         final Runnable runnable = new Runnable()
         {
             @Override
@@ -70,7 +73,6 @@ public class PictureGalleryActivity extends AppCompatActivity
 
                 if (mediaLoadService.mediaLoaded)
                 {
-//                    System.out.println("images loaded!");
                     imageList = mediaLoadService.getImageList();
                     imagesLoadingScreen.setVisibility(View.INVISIBLE);
                     if(!imageList.isEmpty())

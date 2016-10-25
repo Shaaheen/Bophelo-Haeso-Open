@@ -31,35 +31,28 @@ public class MainActivity extends AppCompatActivity
     //region View declarations
     RelativeLayout mainMenu;
     RelativeLayout menuToggleBar;
-    CardView shareMediaBar;
+    RelativeLayout videosLoadingScreen;
+
     RecyclerView recyclerView;
     ImageView menuToggle;
     ImageView shareIcon;
     TextView shareText;
-
     TextView noMediaText;
-    RelativeLayout videosLoadingScreen;
 
-    MediaLoadService mediaLoadService;
-
+    CardView shareMediaBar;
     CardView recordAudioButton;
     CardView takePictureButton;
     CardView recordingsButton;
     CardView picturesButton;
     // endregion
 
-    public static String appRootFolder;
-    public static String appImageFolder;
-    public static String appRecordingsFolder;
-    public static String appVideosFolder;
-
-    //endregion
-
-    //region Other class declarations
+    //region Custom class declarations
     VideoAdapter videoAdapter;
     FileUtils fileUtils;
     CustomGridLayoutManager gridLayoutManager;
     Video videoToSend;
+    MediaLoadService mediaLoadService;
+    MediaShareUserInterface mediaShareUserInterface;
     //endregion
 
     // region Primitives declarations
@@ -68,18 +61,19 @@ public class MainActivity extends AppCompatActivity
     private static int CHECK_DURATION = 1000;
     private static int SHARE_STATE_CHECK_INTERVAL = 500;
     public boolean inSelectionMode = false;
-
     public boolean videosLoaded = false;
 
+    public static String appRootFolder;
+    public static String appImageFolder;
+    public static String appRecordingsFolder;
+    public static String appVideosFolder;
+    //endregion
+
     ArrayList<Video> videoList = new ArrayList<>();
-
-    MediaShareUserInterface mediaShareUserInterface;
-
     Handler videoLoadHandler;
     Runnable videoLoadRunnable;
 
-
-    //Logging db
+    // Logging DB
     public static DatabaseUtils databaseUtils;
 
     @Override
@@ -89,9 +83,10 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        // Initialize UI elements
-        initialize();
+        // Initialize activity view components
+        initializeViews();
 
+        mediaShareUserInterface = new MediaShareUserInterface(this, this);
         mediaLoadService.start();
         videoLoadHandler = new Handler();
         videoLoadRunnable = new Runnable()
@@ -136,34 +131,38 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void initialize()
+    /**
+     * Initialises view components of the activity
+     */
+    private void initializeViews()
     {
-        //region
+        //region Folder Names
         appRootFolder = getResources().getString(R.string.root_folder);
         appImageFolder = getResources().getString(R.string.images_folder);
         appRecordingsFolder = getResources().getString(R.string.recordings_folder);
         appVideosFolder = getResources().getString(R.string.videos_folder);
         //endregion
+        FileUtils.setFolderNames(appRootFolder,appVideosFolder,appRecordingsFolder,appImageFolder);
 
         databaseUtils = new DatabaseUtils(this); // Connect to database
 
+        // Logging class instance
         LogEntry logEntry = new LogEntry(LogEntry.LogType.PAGE_VISITS, "Main Screen", null);
         if(DatabaseUtils.isDatabaseSetup())
         {
             DatabaseUtils.getInstance().addLog(logEntry);
         }
 
+        // Start service that loads videos in the background
         mediaLoadService = new MediaLoadService(this, Media.MediaType.VIDEO);
         startService(new Intent(this, MediaLoadService.class));
 
-        videosLoadingScreen = (RelativeLayout)findViewById(R.id.videosLoadingScreen);
-
         String identifierPrefix = getResources().getString(R.string.identifier_prefix);
         Media.setIdentifierPrefix(identifierPrefix);
-        FileUtils.setFolderNames(appRootFolder,appVideosFolder,appRecordingsFolder,appImageFolder);
+
         fileUtils = new FileUtils(this);
 
-        mediaShareUserInterface = new MediaShareUserInterface(getApplicationContext(), this);
+        videosLoadingScreen = (RelativeLayout)findViewById(R.id.videosLoadingScreen);
 
         noMediaText = (TextView)findViewById(R.id.noMediaText);
 
@@ -207,7 +206,6 @@ public class MainActivity extends AppCompatActivity
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-//        populateVideoList();
         videoAdapter = new VideoAdapter(this, recyclerView, videoList);
         recyclerView.setAdapter(videoAdapter);
 
@@ -344,6 +342,9 @@ public class MainActivity extends AppCompatActivity
 
     // endregion
 
+    /**
+     * Slides button drawer down
+     */
     private void hideMenu()
     {
         float yPos = mainMenu.getY();
@@ -370,6 +371,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Slides button drawer up
+     */
     private void showMenu()
     {
         float yPos = mainMenu.getY();
@@ -409,6 +413,12 @@ public class MainActivity extends AppCompatActivity
         menuToggle.setImageResource(R.drawable.arrow_down);
     }
 
+
+    /**
+     * Initiates video sharing
+     *
+     * @param position a position of the video to be shared
+     */
     public void shareVideo(int position)
     {
         videoToSend = videoAdapter.videoList.get(position);
@@ -483,17 +493,9 @@ public class MainActivity extends AppCompatActivity
     // endregion
 
     /**
-     * Populates video list with the list of videos from storage
-     */
-    private void populateVideoList()
-    {
-        videoList = (ArrayList<Video>) fileUtils.getMediaCollectionFromStorage("chw_", Video.mediaExtension);
-    }
-
-    /**
      * Starts the VideoPlayerActivity with the video at the position (in the video list) given
      *
-     * @param position a position in the video list
+     * @param position position of the video to be played
      */
     public void playVideo(int position)
     {
@@ -504,6 +506,12 @@ public class MainActivity extends AppCompatActivity
         this.startActivity(intent);
     }
 
+    /**
+     * Takes in an unordered list of videos and returns a list
+     * of videos ordered according to the 4 most watched
+     *
+     * @param unordered a list of arbitrarily ordered videos
+     */
     private ArrayList<Video> getOrderedVideos(ArrayList<Video> unordered)
     {
       // List of ordered most watched videos
@@ -586,5 +594,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         return ordered;
+    }
+
+    private void displayUnavailableStorageDialog()
+    {
+
     }
 }
